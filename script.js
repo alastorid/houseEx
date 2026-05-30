@@ -735,9 +735,10 @@ function initMap() {
   if (state.map || !window.L) return;
   state.map = L.map("map", { zoomControl: false }).setView([23.8967, 120.5898], 15);
   L.control.zoom({ position: "bottomright" }).addTo(state.map);
-  L.tileLayer("https://tile.openstreetmap.jp/styles/osm-bright/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap contributors",
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    maxZoom: 20,
+    subdomains: "abcd",
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
     crossOrigin: true,
   }).addTo(state.map);
   state.markerLayer = L.layerGroup().addTo(state.map);
