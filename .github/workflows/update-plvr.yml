@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: plvr-data
@@ -32,20 +30,3 @@ jobs:
         with:
           commit_message: Update PLVR region shards
           file_pattern: data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz
-
-      - name: Remove raw PLVR cache before Pages upload
-        run: rm -rf downloads data/plvr/by-region data/plvr/by-source data/plvr/region-index.json
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
