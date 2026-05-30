@@ -1,0 +1,49 @@
+name: Update PLVR Open Data
+
+on:
+  schedule:
+    - cron: "23 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: plvr-data
+  cancel-in-progress: false
+
+jobs:
+  update-plvr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PLVR region shards
+        run: python3 scripts/fetch-plvr-open-data.py
+
+      - name: Build compressed web shards
+        run: python3 scripts/build-plvr-web-assets.py
+
+      - name: Commit updated PLVR data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update PLVR region shards
+          file_pattern: data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz
+
+      - name: Remove raw PLVR cache before Pages upload
+        run: rm -rf downloads data/plvr/by-region data/plvr/by-source data/plvr/region-index.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

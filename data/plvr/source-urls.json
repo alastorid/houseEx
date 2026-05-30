@@ -1,0 +1,384 @@
+{
+  "generated_at": "2026-05-30T07:54:55.208176+00:00",
+  "source_page": "https://plvr.land.moi.gov.tw/DownloadOpenData",
+  "sources": [
+    {
+      "id": "current",
+      "kind": "current",
+      "label": "本期下載",
+      "url": "https://plvr.land.moi.gov.tw/Download?type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "20260401",
+      "kind": "history",
+      "label": "前期下載 20260401",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260401"
+    },
+    {
+      "id": "20260411",
+      "kind": "history",
+      "label": "前期下載 20260411",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260411"
+    },
+    {
+      "id": "20260421",
+      "kind": "history",
+      "label": "前期下載 20260421",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260421"
+    },
+    {
+      "id": "20260501",
+      "kind": "history",
+      "label": "前期下載 20260501",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260501"
+    },
+    {
+      "id": "20260511",
+      "kind": "history",
+      "label": "前期下載 20260511",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260511"
+    },
+    {
+      "id": "115S1",
+      "kind": "season",
+      "label": "前季下載 115S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=115S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "114S4",
+      "kind": "season",
+      "label": "前季下載 114S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=114S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "114S3",
+      "kind": "season",
+      "label": "前季下載 114S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=114S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "114S2",
+      "kind": "season",
+      "label": "前季下載 114S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=114S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "114S1",
+      "kind": "season",
+      "label": "前季下載 114S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=114S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "113S4",
+      "kind": "season",
+      "label": "前季下載 113S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=113S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "113S3",
+      "kind": "season",
+      "label": "前季下載 113S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=113S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "113S2",
+      "kind": "season",
+      "label": "前季下載 113S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=113S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "113S1",
+      "kind": "season",
+      "label": "前季下載 113S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=113S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "112S4",
+      "kind": "season",
+      "label": "前季下載 112S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=112S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "112S3",
+      "kind": "season",
+      "label": "前季下載 112S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=112S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "112S2",
+      "kind": "season",
+      "label": "前季下載 112S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=112S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "112S1",
+      "kind": "season",
+      "label": "前季下載 112S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=112S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "111S4",
+      "kind": "season",
+      "label": "前季下載 111S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=111S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "111S3",
+      "kind": "season",
+      "label": "前季下載 111S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=111S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "111S2",
+      "kind": "season",
+      "label": "前季下載 111S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=111S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "111S1",
+      "kind": "season",
+      "label": "前季下載 111S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=111S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "110S4",
+      "kind": "season",
+      "label": "前季下載 110S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=110S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "110S3",
+      "kind": "season",
+      "label": "前季下載 110S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=110S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "110S2",
+      "kind": "season",
+      "label": "前季下載 110S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=110S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "110S1",
+      "kind": "season",
+      "label": "前季下載 110S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=110S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "109S4",
+      "kind": "season",
+      "label": "前季下載 109S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=109S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "109S3",
+      "kind": "season",
+      "label": "前季下載 109S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=109S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "109S2",
+      "kind": "season",
+      "label": "前季下載 109S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=109S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "109S1",
+      "kind": "season",
+      "label": "前季下載 109S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=109S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "108S4",
+      "kind": "season",
+      "label": "前季下載 108S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=108S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "108S3",
+      "kind": "season",
+      "label": "前季下載 108S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=108S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "108S2",
+      "kind": "season",
+      "label": "前季下載 108S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=108S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "108S1",
+      "kind": "season",
+      "label": "前季下載 108S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=108S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "107S4",
+      "kind": "season",
+      "label": "前季下載 107S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=107S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "107S3",
+      "kind": "season",
+      "label": "前季下載 107S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=107S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "107S2",
+      "kind": "season",
+      "label": "前季下載 107S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=107S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "107S1",
+      "kind": "season",
+      "label": "前季下載 107S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=107S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "106S4",
+      "kind": "season",
+      "label": "前季下載 106S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=106S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "106S3",
+      "kind": "season",
+      "label": "前季下載 106S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=106S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "106S2",
+      "kind": "season",
+      "label": "前季下載 106S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=106S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "106S1",
+      "kind": "season",
+      "label": "前季下載 106S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=106S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "105S4",
+      "kind": "season",
+      "label": "前季下載 105S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=105S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "105S3",
+      "kind": "season",
+      "label": "前季下載 105S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=105S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "105S2",
+      "kind": "season",
+      "label": "前季下載 105S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=105S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "105S1",
+      "kind": "season",
+      "label": "前季下載 105S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=105S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "104S4",
+      "kind": "season",
+      "label": "前季下載 104S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=104S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "104S3",
+      "kind": "season",
+      "label": "前季下載 104S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=104S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "104S2",
+      "kind": "season",
+      "label": "前季下載 104S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=104S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "104S1",
+      "kind": "season",
+      "label": "前季下載 104S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=104S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "103S4",
+      "kind": "season",
+      "label": "前季下載 103S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=103S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "103S3",
+      "kind": "season",
+      "label": "前季下載 103S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=103S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "103S2",
+      "kind": "season",
+      "label": "前季下載 103S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=103S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "103S1",
+      "kind": "season",
+      "label": "前季下載 103S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=103S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "102S4",
+      "kind": "season",
+      "label": "前季下載 102S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=102S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "102S3",
+      "kind": "season",
+      "label": "前季下載 102S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=102S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "102S2",
+      "kind": "season",
+      "label": "前季下載 102S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=102S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "102S1",
+      "kind": "season",
+      "label": "前季下載 102S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=102S1&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "101S4",
+      "kind": "season",
+      "label": "前季下載 101S4",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=101S4&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "101S3",
+      "kind": "season",
+      "label": "前季下載 101S3",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=101S3&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "101S2",
+      "kind": "season",
+      "label": "前季下載 101S2",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=101S2&type=zip&fileName=lvr_landcsv.zip"
+    },
+    {
+      "id": "101S1",
+      "kind": "season",
+      "label": "前季下載 101S1",
+      "url": "https://plvr.land.moi.gov.tw/DownloadSeason?season=101S1&type=zip&fileName=lvr_landcsv.zip"
+    }
+  ]
+}

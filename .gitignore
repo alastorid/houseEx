@@ -1,0 +1,8 @@
+.DS_Store
+downloads/
+data/plvr/by-region/
+data/plvr/by-source/
+data/plvr/queries/
+data/plvr/region-index.json
+__pycache__/
+*.pyc
