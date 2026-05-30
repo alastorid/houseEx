@@ -8,6 +8,12 @@
       name="description"
       content="用內政部實價登錄 Open Data 查詢區域、社區與門牌交易紀錄，追蹤價格趨勢與重複轉手。"
     />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIINfQmM0rJXJvl8B1xqZk1b6D3uMQO2G8w="
+      crossorigin=""
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -17,153 +23,198 @@
           <span class="brand-mark">PLVR</span>
           <span>實價登錄資料</span>
         </a>
-        <div class="nav-links">
-          <a href="#dashboard">儀表板</a>
+        <div class="toolbar">
+          <button class="icon-button" id="themeToggle" type="button" title="切換深色模式">◐</button>
           <a href="#repeatSales">重複轉手</a>
           <a href="#records">交易明細</a>
-          <a href="#summary">摘要</a>
+          <a href="#radar">市場雷達</a>
         </div>
       </nav>
     </header>
 
-    <main id="top">
-      <section class="workspace" id="dashboard">
-        <aside class="control-panel" aria-label="查詢控制">
-          <div class="panel-block">
-            <p class="eyebrow">Region</p>
-            <h1>社區交易資料</h1>
-            <p class="muted">
-              內政部實價登錄 Open Data，依縣市與鄉鎮市區切分。
-            </p>
-          </div>
+    <main id="top" class="app-shell">
+      <aside class="control-panel" aria-label="查詢控制">
+        <div class="panel-block">
+          <p class="eyebrow">Search</p>
+          <h1>實價登錄資料</h1>
+          <p class="muted">搜尋社區、地址、日期、價格、來源批次與原始欄位。</p>
+        </div>
 
-          <div class="form-grid">
-            <label>
-              <span>縣市</span>
-              <select id="citySelect"></select>
-            </label>
-            <label>
-              <span>鄉鎮市區</span>
-              <select id="townSelect"></select>
-            </label>
-          </div>
-
-          <label class="search-box">
-            <span>社區 / 路名 / 門牌</span>
-            <input id="queryInput" type="search" placeholder="高鐵湛、寶鴻、高鐵北二路、162號" />
+        <div class="form-grid sticky-filter">
+          <label>
+            <span>縣市</span>
+            <select id="citySelect"></select>
           </label>
+          <label>
+            <span>鄉鎮市區</span>
+            <select id="townSelect"></select>
+          </label>
+        </div>
 
-          <div class="quick-list" id="quickList" aria-label="快速社區"></div>
+        <label class="search-box">
+          <span>全資料搜尋</span>
+          <input id="queryInput" type="search" placeholder="高鐵湛、門牌、115S1、+4.5%、車位" />
+        </label>
+        <div class="suggest-list" id="suggestList" aria-label="搜尋建議"></div>
 
-          <button class="button primary" id="loadButton" type="button">載入區域資料</button>
-          <p class="status" id="loadStatus">正在讀取索引...</p>
-        </aside>
+        <div class="recent-head">
+          <span>最近搜尋</span>
+          <button id="clearRecent" type="button">清除</button>
+        </div>
+        <div class="recent-list" id="recentList"></div>
 
-        <section class="dashboard">
-          <div class="title-row">
+        <div class="filter-grid">
+          <label>
+            <span>最低總價</span>
+            <input id="minPrice" inputmode="numeric" placeholder="萬元" />
+          </label>
+          <label>
+            <span>最高總價</span>
+            <input id="maxPrice" inputmode="numeric" placeholder="萬元" />
+          </label>
+          <label>
+            <span>來源批次</span>
+            <select id="sourceFilter"></select>
+          </label>
+          <label>
+            <span>交易標的</span>
+            <select id="targetFilter"></select>
+          </label>
+        </div>
+
+        <div class="quick-list" id="quickList" aria-label="快速社區"></div>
+
+        <button class="button primary" id="loadButton" type="button">載入區域資料</button>
+        <p class="status" id="loadStatus">正在讀取索引...</p>
+      </aside>
+
+      <section class="main-stage">
+        <section class="map-stage" aria-label="地圖">
+          <div id="map"></div>
+          <div class="map-overlay">
             <div>
-              <p class="eyebrow">Community View</p>
+              <p class="eyebrow">Map</p>
               <h2 id="viewTitle">等待資料載入</h2>
-              <p class="muted" id="viewSubtitle">尚未載入資料。</p>
+              <p id="viewSubtitle">尚未載入資料。</p>
             </div>
             <div class="data-pill" id="dataPill">--</div>
           </div>
+          <div class="legend" id="legend"></div>
+        </section>
 
-          <div class="kpi-grid">
-            <article><span>成交筆數</span><strong id="kpiCount">--</strong></article>
-            <article><span>平均總價</span><strong id="kpiAvgPrice">--</strong></article>
-            <article><span>平均單價</span><strong id="kpiAvgUnit">--</strong></article>
-            <article><span>重複轉手門牌</span><strong id="kpiRepeat">--</strong></article>
-            <article><span>最高總價</span><strong id="kpiHigh">--</strong></article>
-            <article><span>最新成交</span><strong id="kpiLatest">--</strong></article>
+        <section class="kpi-grid" id="kpiGrid">
+          <button class="metric-card" data-action="metric" data-metric="count"><span>成交筆數</span><strong id="kpiCount">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="avgPrice"><span>平均總價</span><strong id="kpiAvgPrice">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="avgUnit"><span>平均單價</span><strong id="kpiAvgUnit">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="repeat"><span>重複轉手門牌</span><strong id="kpiRepeat">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="high"><span>最高總價</span><strong id="kpiHigh">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="latest"><span>最新成交</span><strong id="kpiLatest">--</strong></button>
+        </section>
+
+        <section class="chart-grid">
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>總價趨勢</h3>
+              <span id="priceTrendNote">--</span>
+            </div>
+            <canvas id="priceChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>單價趨勢</h3>
+              <select id="unitMode">
+                <option value="median">中位數</option>
+                <option value="avg">平均</option>
+                <option value="max">最高</option>
+                <option value="min">最低</option>
+              </select>
+            </div>
+            <canvas id="unitChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>月成交量</h3>
+              <span>點擊月份篩選</span>
+            </div>
+            <canvas id="volumeChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>交易標的</h3>
+              <span>點擊類型篩選</span>
+            </div>
+            <canvas id="mixChart" width="760" height="280"></canvas>
+          </article>
+        </section>
+
+        <section class="section" id="radar">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Radar</p>
+              <h2>市場雷達</h2>
+            </div>
+            <p class="muted">每張卡都會同步地圖、表格與右側明細。</p>
           </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </section>
 
-          <div class="chart-grid">
-            <section class="chart-card">
-              <div class="card-head">
-                <h3>總價趨勢</h3>
-                <span id="priceTrendNote">--</span>
-              </div>
-              <canvas id="priceChart" width="760" height="280"></canvas>
-            </section>
-            <section class="chart-card">
-              <div class="card-head">
-                <h3>單價趨勢</h3>
-                <span>元 / 平方公尺</span>
-              </div>
-              <canvas id="unitChart" width="760" height="280"></canvas>
-            </section>
-            <section class="chart-card">
-              <div class="card-head">
-                <h3>年度成交量</h3>
-                <span>依交易年月日</span>
-              </div>
-              <canvas id="volumeChart" width="760" height="280"></canvas>
-            </section>
-            <section class="chart-card">
-              <div class="card-head">
-                <h3>物件型態</h3>
-                <span>交易標的</span>
-              </div>
-              <canvas id="mixChart" width="760" height="280"></canvas>
-            </section>
+        <section class="section" id="repeatSales">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Repeat Sales</p>
+              <h2>同一門牌重複轉手</h2>
+            </div>
+            <div class="segmented">
+              <button class="active" type="button" data-repeat-sort="gain">漲幅</button>
+              <button type="button" data-repeat-sort="loss">跌幅</button>
+              <button type="button" data-repeat-sort="days">短期</button>
+            </div>
+          </div>
+          <div class="repeat-grid" id="repeatGrid"></div>
+        </section>
+
+        <section class="section" id="records">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Transactions</p>
+              <h2>交易明細</h2>
+            </div>
+            <div class="table-actions">
+              <button class="button ghost-dark" id="modeToggle" type="button">專業模式</button>
+              <button class="button ghost-dark" id="columnToggle" type="button">欄位</button>
+              <button class="button ghost-dark" id="toggleDetailRows" type="button">顯示土地/建物/車位明細</button>
+              <button class="button ghost-dark" id="downloadCsv" type="button">CSV</button>
+              <button class="button ghost-dark" id="downloadFiltered" type="button">JSON</button>
+            </div>
+          </div>
+          <div class="column-panel" id="columnPanel"></div>
+          <div class="table-meta" id="tableMeta">--</div>
+          <div class="table-wrap" id="tableWrap">
+            <table>
+              <thead id="recordHead"></thead>
+              <tbody id="recordRows"></tbody>
+            </table>
           </div>
         </section>
       </section>
-
-      <section class="section" id="repeatSales">
-        <div class="section-title">
-          <div>
-            <p class="eyebrow">Repeat Sales</p>
-            <h2>同一門牌重複轉手</h2>
-          </div>
-          <p class="muted">按完整門牌分組，快速看同戶是否多次交易、每次總價與持有期變化。</p>
-        </div>
-        <div class="repeat-grid" id="repeatGrid"></div>
-      </section>
-
-      <section class="section" id="records">
-        <div class="section-title">
-          <div>
-            <p class="eyebrow">Transactions</p>
-            <h2>交易明細</h2>
-          </div>
-          <div class="table-actions">
-            <button class="button ghost-dark" id="toggleDetailRows" type="button">顯示土地/建物/車位明細</button>
-            <button class="button ghost-dark" id="downloadFiltered" type="button">下載目前結果 JSON</button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>日期</th>
-                <th>門牌 / 位置</th>
-                <th>標的</th>
-                <th>總價</th>
-                <th>單價</th>
-                <th>建坪</th>
-                <th>屋齡</th>
-                <th>來源</th>
-              </tr>
-            </thead>
-            <tbody id="recordRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section" id="summary">
-        <div class="section-title">
-          <div>
-            <p class="eyebrow">Summary</p>
-            <h2>摘要清單</h2>
-          </div>
-          <p class="muted">最新、高總價與低單價資料。</p>
-        </div>
-        <div class="summary-grid" id="summaryGrid"></div>
-      </section>
     </main>
 
+    <aside class="detail-drawer" id="detailDrawer" aria-label="詳細資料" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow" id="drawerType">Detail</p>
+          <h2 id="drawerTitle">詳細資料</h2>
+        </div>
+        <button class="icon-button" id="closeDrawer" type="button" title="關閉">×</button>
+      </div>
+      <div id="drawerBody"></div>
+    </aside>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <script src="script.js" defer></script>
   </body>
 </html>
