@@ -471,6 +471,40 @@ input {
   background: var(--red);
 }
 
+.map-limit-control {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: min(300px, calc(100% - 32px));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--panel) 93%, transparent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.map-limit-control label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.map-limit-control strong {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.map-limit-control input {
+  min-height: auto;
+  padding: 0;
+  accent-color: var(--teal);
+}
+
 .map-data-label {
   pointer-events: none;
 }

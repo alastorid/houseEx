@@ -62,6 +62,7 @@ const state = {
   repeatSort: "gain",
   selectedRowId: "",
   selectedCommunity: null,
+  annotationLimit: 13,
   map: null,
   markerLayer: null,
   chartHits: new Map(),
@@ -509,6 +510,7 @@ function saveFilters() {
     source: el("#sourceFilter").value,
     target: el("#targetFilter").value,
     compactMode: state.compactMode,
+    annotationLimit: state.annotationLimit,
     dark: document.documentElement.classList.contains("dark"),
   };
   localStorage.setItem(FILTER_KEY, JSON.stringify(payload));
@@ -568,6 +570,10 @@ async function loadIndex() {
   const urlState = applyUrlState();
   const saved = readSavedFilters();
   if (saved.dark) document.documentElement.classList.add("dark");
+  const savedLimit = Number(saved.annotationLimit);
+  state.annotationLimit = Number.isFinite(savedLimit) ? Math.max(1, Math.min(9999, Math.round(savedLimit))) : 13;
+  el("#annotationLimit").value = String(state.annotationLimit);
+  el("#annotationLimitValue").textContent = numberFormat.format(state.annotationLimit);
   const fallback = knownCommunities[0];
   selectRegion(urlState.city || saved.city || fallback.city, urlState.township || saved.township || fallback.township);
   el("#queryInput").value = urlState.query || "高鐵湛";
@@ -757,7 +763,12 @@ function renderMap(rows) {
   initMap();
   if (!state.map) return;
   state.markerLayer.clearLayers();
-  const sample = rows.slice(-900);
+  const limit = Math.max(1, Math.min(9999, Number(state.annotationLimit) || 13));
+  const sortedForMap = sortRows(rows, { key: "date", dir: "desc" });
+  const selected = state.selectedRowId ? sortedForMap.find((row) => row.id === state.selectedRowId) : null;
+  const sample = selected
+    ? [selected, ...sortedForMap.filter((row) => row.id !== state.selectedRowId).slice(0, Math.max(0, limit - 1))]
+    : sortedForMap.slice(0, limit);
   if (!sample.length) return;
   const units = sample.map((row) => row.unitPrice).filter(Boolean);
   const minUnit = Math.min(...units, 0);
@@ -808,7 +819,8 @@ function renderMap(rows) {
     state.map.fitBounds(bounds.pad(0.25), { maxZoom: state.activeCommunity ? 16 : 14 });
     state.mapTouched = true;
   }
-  el("#legend").innerHTML = "<span></span>低單價 <span></span>中位 <span></span>高單價";
+  el("#annotationLimitValue").textContent = numberFormat.format(limit);
+  el("#legend").innerHTML = `<span></span>低單價 <span></span>中位 <span></span>高單價 · ${numberFormat.format(sample.length)} / ${numberFormat.format(rows.length)} 筆`;
 }
 
 function clusterRows(rows) {
@@ -1305,6 +1317,15 @@ function bindEvents() {
     el(`#${id}`).addEventListener("input", () => applyFilter());
     el(`#${id}`).addEventListener("change", () => applyFilter());
   }
+  el("#annotationLimit").addEventListener("input", (event) => {
+    state.annotationLimit = Math.max(1, Math.min(9999, Number(event.target.value) || 13));
+    el("#annotationLimitValue").textContent = numberFormat.format(state.annotationLimit);
+    renderMap(mainRows());
+  });
+  el("#annotationLimit").addEventListener("change", () => {
+    saveFilters();
+    renderMap(mainRows());
+  });
   el("#toggleDetailRows").addEventListener("click", () => {
     state.includeDetails = !state.includeDetails;
     el("#toggleDetailRows").textContent = state.includeDetails ? "只顯示主檔交易" : "顯示土地/建物/車位明細";
