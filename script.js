@@ -1,4 +1,5 @@
 const REGION_INDEX = "data/plvr/web-index.json";
+const COMMUNITY_INDEX = "data/plvr/community-index.json";
 const RECENT_KEY = "houseEx.recentSearches";
 const RECENT_LIMIT = 3;
 const FILTER_KEY = "houseEx.filters";
@@ -45,6 +46,9 @@ const townCenters = {
 
 const state = {
   index: null,
+  communityIndex: null,
+  cityCommunityData: null,
+  cityCommunities: [],
   city: "",
   township: "",
   region: null,
@@ -57,6 +61,7 @@ const state = {
   compactMode: true,
   repeatSort: "gain",
   selectedRowId: "",
+  selectedCommunity: null,
   map: null,
   markerLayer: null,
   chartHits: new Map(),
@@ -347,6 +352,65 @@ function renderRecentSearches() {
     : '<span class="empty-inline">尚無紀錄</span>';
 }
 
+function cityCommunityEntry(cityName = state.city) {
+  return state.communityIndex?.cities?.find((item) => item.city_name === cityName);
+}
+
+async function loadCommunityIndex() {
+  try {
+    state.communityIndex = await loadJson(COMMUNITY_INDEX);
+  } catch (error) {
+    console.warn("community index unavailable", error);
+    state.communityIndex = { cities: [] };
+  }
+}
+
+async function loadCityCommunities(cityName = state.city) {
+  const entry = cityCommunityEntry(cityName);
+  if (!entry) {
+    el("#communityStatus").textContent = "沒有社區索引";
+    state.cityCommunities = [];
+    renderCommunityList();
+    return;
+  }
+  el("#communityStatus").textContent = `正在載入 ${cityName}...`;
+  const payload = await loadJson(entry.shard);
+  state.cityCommunityData = payload;
+  state.cityCommunities = payload.communities || [];
+  el("#communityStatus").textContent = `${numberFormat.format(state.cityCommunities.length)} 個社區`;
+  renderCommunityList();
+}
+
+function renderCommunityList() {
+  const query = normalizeText(el("#communitySearch")?.value || el("#queryInput").value || "");
+  const items = state.cityCommunities
+    .filter((item) => !query || normalizeText(item.search_text || item.name).includes(query))
+    .slice(0, 80);
+  el("#communityList").innerHTML = items.length
+    ? items
+        .map((item) => {
+          const stats = item.stats || {};
+          return `
+            <button type="button" data-community-name="${escapeHtml(item.name)}">
+              <strong>${escapeHtml(item.name)}</strong>
+              <span>${escapeHtml(item.township)} · ${numberFormat.format(stats.count || 0)} 筆 · 中位 ${formatWan(stats.median_total_price || 0)}</span>
+            </button>
+          `;
+        })
+        .join("")
+    : '<p class="empty">沒有符合的社區。</p>';
+}
+
+function selectIndexedCommunity(name) {
+  const item = state.cityCommunities.find((community) => community.name === name);
+  if (!item) return;
+  state.selectedCommunity = item;
+  selectRegion(item.city, item.township);
+  el("#queryInput").value = item.name;
+  saveRecentSearch(item.name);
+  loadSelectedRegion();
+}
+
 function suggestionSources() {
   const rows = state.rows.length ? state.rows : [];
   const repeats = state.rows.length ? repeatGroups(mainRows()) : [];
@@ -355,6 +419,15 @@ function suggestionSources() {
     items.push({ label: community.name, meta: `${community.city}${community.township}`, query: community.name, rank: 100 });
     for (const alias of community.aliases) items.push({ label: alias, meta: community.name, query: alias, rank: 95 });
     for (const keyword of community.keywords) items.push({ label: keyword, meta: community.name, query: keyword, rank: 90 });
+  }
+  for (const community of state.cityCommunities.slice(0, 500)) {
+    const stats = community.stats || {};
+    items.push({
+      label: community.name,
+      meta: `${community.city}${community.township} · ${numberFormat.format(stats.count || 0)} 筆`,
+      query: community.name,
+      rank: 92,
+    });
   }
   if (state.city) items.push({ label: state.city, meta: "縣市", query: state.city, rank: 80 });
   if (state.township) items.push({ label: state.township, meta: "鄉鎮市區", query: state.township, rank: 80 });
@@ -490,6 +563,7 @@ async function loadJson(path) {
 
 async function loadIndex() {
   state.index = await loadJson(REGION_INDEX);
+  await loadCommunityIndex();
   populateCities();
   const urlState = applyUrlState();
   const saved = readSavedFilters();
@@ -502,6 +576,10 @@ async function loadIndex() {
   }
   renderQuickList();
   renderRecentSearches();
+  loadCityCommunities(state.city).catch((error) => {
+    console.warn(error);
+    el("#communityStatus").textContent = "社區索引載入失敗";
+  });
   setStatus(`索引已載入：${numberFormat.format(state.index.total_region_shards)} 個區域檔。`);
 }
 
@@ -657,9 +735,10 @@ function initMap() {
   if (state.map || !window.L) return;
   state.map = L.map("map", { zoomControl: false }).setView([23.8967, 120.5898], 15);
   L.control.zoom({ position: "bottomright" }).addTo(state.map);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://tile.openstreetmap.jp/styles/osm-bright/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: "&copy; OpenStreetMap",
+    attribution: "&copy; OpenStreetMap contributors",
+    crossOrigin: true,
   }).addTo(state.map);
   state.markerLayer = L.layerGroup().addTo(state.map);
   state.map.on("zoomend", () => renderMap(mainRows()));
@@ -699,7 +778,20 @@ function renderMap(rows) {
       weight: state.selectedRowId && rowsInPoint.some((row) => row.id === state.selectedRowId) ? 4 : 1.5,
       className: "price-marker",
     }).addTo(state.markerLayer);
-    marker.bindTooltip(`${escapeHtml(main.address || state.township)}<br>${count} 筆 · ${formatWan(avg(rowsInPoint.map((row) => row.totalPrice)))}`);
+    const medianUnit = median(rowsInPoint.map((row) => row.unitPrice));
+    const label = count > 1
+      ? `${count}筆<br>${formatUnit(medianUnit)}`
+      : `${formatWan(main.totalPrice)}<br>${formatUnit(main.unitPrice)}`;
+    L.marker(point.position, {
+      interactive: false,
+      icon: L.divIcon({
+        className: "map-data-label",
+        html: `<span>${label}</span>`,
+        iconSize: [72, 34],
+        iconAnchor: [36, -4],
+      }),
+    }).addTo(state.markerLayer);
+    marker.bindTooltip(`${escapeHtml(main.address || state.township)}<br>${count} 筆 · 中位單價 ${formatUnit(medianUnit)} · 均價 ${formatWan(avg(rowsInPoint.map((row) => row.totalPrice)))}`);
     marker.on("click", () => {
       if (count > 1 && zoom < 15) {
         openDrawer("cluster", rowsInPoint);
@@ -1140,6 +1232,13 @@ function bindEvents() {
     state.city = event.target.value;
     populateTowns(state.city);
     state.township = el("#townSelect").value;
+    state.cityCommunities = [];
+    el("#communityList").innerHTML = "";
+    el("#communityStatus").textContent = "尚未載入";
+    loadCityCommunities(state.city).catch((error) => {
+      console.warn(error);
+      el("#communityStatus").textContent = "社區索引載入失敗";
+    });
     saveFilters();
   });
   el("#townSelect").addEventListener("change", (event) => {
@@ -1151,6 +1250,7 @@ function bindEvents() {
     const inferred = inferCommunity(el("#queryInput").value);
     if (inferred && (state.city !== inferred.city || state.township !== inferred.township)) selectRegion(inferred.city, inferred.township);
     renderSuggestions();
+    renderCommunityList();
     if (state.records.length) debouncedApply();
   });
   el("#queryInput").addEventListener("search", () => applyFilter({ commitSearch: true }));
@@ -1170,6 +1270,12 @@ function bindEvents() {
     el("#queryInput").value = button.dataset.recent;
     applyFilter({ commitSearch: true });
     renderSuggestions();
+  });
+  el("#loadCityCommunities").addEventListener("click", () => loadCityCommunities(state.city));
+  el("#communitySearch").addEventListener("input", debounce(renderCommunityList, 120));
+  el("#communityList").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-community-name]");
+    if (button) selectIndexedCommunity(button.dataset.communityName);
   });
   el("#suggestList").addEventListener("click", (event) => {
     const button = event.target.closest("button[data-suggest]");
