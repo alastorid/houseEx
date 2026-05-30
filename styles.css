@@ -161,16 +161,11 @@ button {
   color: var(--muted);
 }
 
-.form-grid,
-.filter-grid {
+.form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin: 16px 0 12px;
-}
-
-.filter-grid {
-  margin-top: 12px;
 }
 
 label {
@@ -209,8 +204,7 @@ input {
   display: grid;
 }
 
-.suggest-list button,
-.recent-list button {
+.suggest-list button {
   border: 0;
   border-bottom: 1px solid var(--line);
   background: transparent;
@@ -225,7 +219,7 @@ input {
 }
 
 .suggest-list button:hover,
-.recent-list button:hover,
+.quick-chip:hover,
 .summary-card button:hover,
 .mini-list button:hover {
   background: var(--soft);
@@ -236,29 +230,6 @@ input {
   white-space: nowrap;
 }
 
-.recent-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 800;
-}
-
-.recent-head button {
-  border: 0;
-  color: var(--teal);
-  background: transparent;
-  font-size: 0.8rem;
-}
-
-.recent-list {
-  display: grid;
-  gap: 6px;
-  margin-top: 7px;
-}
-
-.recent-list button,
 .empty-inline {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -371,9 +342,40 @@ input {
 }
 
 .quick-chip {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 0;
+  background: var(--soft);
+  overflow: hidden;
+}
+
+.quick-run,
+.quick-delete {
+  border: 0;
+  background: transparent;
+}
+
+.quick-run {
+  min-width: 0;
   padding: 10px;
   text-align: left;
-  background: var(--soft);
+}
+
+.quick-delete {
+  align-self: start;
+  width: 26px;
+  height: 26px;
+  margin: 4px 4px 0 0;
+  border-radius: 50%;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.quick-delete:hover {
+  color: #fff;
+  background: var(--red);
 }
 
 .quick-chip strong,
@@ -441,34 +443,13 @@ input {
   right: 16px;
   bottom: 16px;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 10px;
+  border-radius: 999px;
+  padding: 5px 9px;
   color: var(--muted);
   background: color-mix(in srgb, var(--panel) 92%, transparent);
-  font-size: 0.82rem;
-}
-
-.legend span {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.legend span:nth-child(1) {
-  background: var(--teal);
-}
-
-.legend span:nth-child(2) {
-  background: var(--gold);
-}
-
-.legend span:nth-child(3) {
-  background: var(--red);
+  font-size: 0.78rem;
+  font-weight: 850;
 }
 
 .map-limit-control {
@@ -476,37 +457,35 @@ input {
   left: 16px;
   bottom: 16px;
   z-index: 10;
-  width: min(300px, calc(100% - 32px));
+  width: 170px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px;
-  background: color-mix(in srgb, var(--panel) 93%, transparent);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  border-radius: 999px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(10px);
 }
 
-.map-limit-control label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
-.map-limit-control strong {
+.map-limit-control span {
+  min-width: 26px;
   color: var(--ink);
-  font-size: 0.95rem;
+  font-size: 0.76rem;
+  font-weight: 850;
+  text-align: right;
 }
 
 .map-limit-control input {
   min-height: auto;
   padding: 0;
+  border: 0;
   accent-color: var(--teal);
 }
 
 .map-data-label {
-  pointer-events: none;
+  cursor: pointer;
 }
 
 .map-data-label span {
@@ -721,6 +700,41 @@ ul {
   gap: 8px;
 }
 
+.community-board {
+  padding-bottom: 14px;
+}
+
+.board-search {
+  width: min(320px, 100%);
+}
+
+.board-search span {
+  font-size: 0.78rem;
+}
+
+.board-table {
+  max-height: 460px;
+}
+
+.board-table table {
+  min-width: 920px;
+}
+
+.board-table th,
+.board-table td {
+  padding: 7px 9px;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.board-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--soft) 62%, transparent);
+}
+
+.board-table tbody tr:hover {
+  background: color-mix(in srgb, var(--teal) 14%, transparent);
+}
+
 .column-panel {
   display: none;
   grid-template-columns: repeat(6, minmax(120px, 1fr));
@@ -916,7 +930,6 @@ body:not(.pro-mode) .detail-row {
   }
 
   .form-grid,
-  .filter-grid,
   .chart-grid,
   .kpi-grid,
   .summary-grid,

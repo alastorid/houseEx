@@ -49,6 +49,8 @@ const state = {
   communityIndex: null,
   cityCommunityData: null,
   cityCommunities: [],
+  allCommunities: [],
+  allCommunitiesLoaded: false,
   city: "",
   township: "",
   region: null,
@@ -348,9 +350,7 @@ function saveRecentSearch(query) {
 
 function renderRecentSearches() {
   const recent = getRecentSearches();
-  el("#recentList").innerHTML = recent.length
-    ? recent.map((item) => `<button type="button" data-recent="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")
-    : '<span class="empty-inline">尚無紀錄</span>';
+  renderQuickList(recent);
 }
 
 function cityCommunityEntry(cityName = state.city) {
@@ -380,6 +380,25 @@ async function loadCityCommunities(cityName = state.city) {
   state.cityCommunities = payload.communities || [];
   el("#communityStatus").textContent = `${numberFormat.format(state.cityCommunities.length)} 個社區`;
   renderCommunityList();
+  renderCommunityTable();
+}
+
+async function loadAllCommunities() {
+  if (state.allCommunitiesLoaded) return state.allCommunities;
+  const entries = state.communityIndex?.cities || [];
+  const payloads = await Promise.all(
+    entries.map(async (entry) => {
+      try {
+        return await loadJson(entry.shard);
+      } catch (error) {
+        console.warn("community shard unavailable", entry.city_name, error);
+        return { communities: [] };
+      }
+    }),
+  );
+  state.allCommunities = payloads.flatMap((payload) => payload.communities || []);
+  state.allCommunitiesLoaded = true;
+  return state.allCommunities;
 }
 
 function renderCommunityList() {
@@ -402,14 +421,86 @@ function renderCommunityList() {
     : '<p class="empty">沒有符合的社區。</p>';
 }
 
+function communitySearchNeedle() {
+  return normalizeText(el("#communityTableSearch")?.value || el("#communitySearch")?.value || el("#queryInput").value || "");
+}
+
+function filteredCityCommunities() {
+  const needle = communitySearchNeedle();
+  return state.cityCommunities
+    .filter((item) => !needle || normalizeText(item.search_text || item.name).includes(needle))
+    .sort((a, b) => (b.stats?.count || 0) - (a.stats?.count || 0) || String(a.name).localeCompare(String(b.name), "zh-Hant"));
+}
+
+function primaryTarget(community) {
+  const targets = Object.entries(community.targets || {});
+  if (!targets.length) return "--";
+  const [target, count] = targets.sort((a, b) => b[1] - a[1])[0];
+  return `${target} ${numberFormat.format(count)}`;
+}
+
+function renderCommunityTable() {
+  const rows = filteredCityCommunities();
+  const shown = rows.slice(0, 800);
+  const tbody = el("#communityRows");
+  if (!tbody) return;
+  el("#communityTableMeta").textContent = `${state.city || "--"} · 顯示 ${numberFormat.format(shown.length)} / ${numberFormat.format(rows.length)} 個社區`;
+  tbody.innerHTML = shown
+    .map((community) => {
+      const stats = community.stats || {};
+      return `
+        <tr data-community-name="${escapeHtml(community.name)}">
+          <td><strong>${escapeHtml(community.name)}</strong></td>
+          <td>${escapeHtml(community.township || "--")}</td>
+          <td>${numberFormat.format(stats.count || 0)}</td>
+          <td>${formatWan(stats.median_total_price || 0)}</td>
+          <td>${formatUnit(stats.median_unit_price || 0)}</td>
+          <td>${formatWan(stats.max_total_price || 0)}</td>
+          <td>${escapeHtml(stats.latest_date || "--")}</td>
+          <td>${escapeHtml(primaryTarget(community))}</td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
 function selectIndexedCommunity(name) {
   const item = state.cityCommunities.find((community) => community.name === name);
   if (!item) return;
+  navigateToCommunity(item);
+}
+
+function navigateToCommunity(item) {
   state.selectedCommunity = item;
   selectRegion(item.city, item.township);
   el("#queryInput").value = item.name;
   saveRecentSearch(item.name);
   loadSelectedRegion();
+}
+
+async function resolveCommunitySearch(query) {
+  const clean = normalizeText(query);
+  if (!clean) return null;
+  const local = state.cityCommunities.find((item) => normalizeText(item.name) === clean);
+  if (local) return local;
+  const all = await loadAllCommunities();
+  const exact = all.filter((item) => normalizeText(item.name) === clean);
+  if (exact.length) return exact.sort((a, b) => (b.stats?.count || 0) - (a.stats?.count || 0))[0];
+  return null;
+}
+
+async function commitSearch() {
+  const query = el("#queryInput").value.trim();
+  const community = await resolveCommunitySearch(query);
+  if (community && (state.city !== community.city || state.township !== community.township)) {
+    navigateToCommunity(community);
+    return;
+  }
+  if (community) {
+    state.selectedCommunity = community;
+    el("#queryInput").value = community.name;
+  }
+  applyFilter({ commitSearch: true });
 }
 
 function suggestionSources() {
@@ -505,10 +596,6 @@ function saveFilters() {
   const payload = {
     city: state.city,
     township: state.township,
-    minPrice: el("#minPrice").value,
-    maxPrice: el("#maxPrice").value,
-    source: el("#sourceFilter").value,
-    target: el("#targetFilter").value,
     compactMode: state.compactMode,
     annotationLimit: state.annotationLimit,
     dark: document.documentElement.classList.contains("dark"),
@@ -530,10 +617,6 @@ function syncUrl() {
   if (state.township) params.set("town", state.township);
   const query = el("#queryInput").value.trim();
   if (query) params.set("q", query);
-  for (const id of ["minPrice", "maxPrice", "sourceFilter", "targetFilter"]) {
-    const value = el(`#${id}`).value;
-    if (value) params.set(id, value);
-  }
   history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
 }
 
@@ -543,10 +626,6 @@ function applyUrlState() {
     city: params.get("city"),
     township: params.get("town"),
     query: params.get("q"),
-    minPrice: params.get("minPrice"),
-    maxPrice: params.get("maxPrice"),
-    sourceFilter: params.get("sourceFilter"),
-    targetFilter: params.get("targetFilter"),
   };
 }
 
@@ -577,10 +656,6 @@ async function loadIndex() {
   const fallback = knownCommunities[0];
   selectRegion(urlState.city || saved.city || fallback.city, urlState.township || saved.township || fallback.township);
   el("#queryInput").value = urlState.query || "高鐵湛";
-  for (const id of ["minPrice", "maxPrice", "sourceFilter", "targetFilter"]) {
-    if (urlState[id] != null) el(`#${id}`).value = urlState[id];
-  }
-  renderQuickList();
   renderRecentSearches();
   loadCityCommunities(state.city).catch((error) => {
     console.warn(error);
@@ -630,7 +705,6 @@ async function loadSelectedRegion() {
     state.region = await loadJson(entry.shard);
     state.records = state.region.records || [];
     state.rows = state.records.map(parseRecord);
-    buildFilterOptions();
     setStatus(`已載入 ${state.city}${state.township}，${numberFormat.format(state.records.length)} 筆。`);
     applyFilter({ commitSearch: true });
   } finally {
@@ -639,26 +713,22 @@ async function loadSelectedRegion() {
   }
 }
 
-function buildFilterOptions() {
-  const sources = [...new Set(state.rows.map((row) => row.source).filter(Boolean))].sort((a, b) => sourceRank(b) - sourceRank(a));
-  const targets = [...new Set(state.rows.map((row) => row.target).filter(Boolean))].sort();
-  el("#sourceFilter").innerHTML = `<option value="">全部</option>${sources.map((source) => `<option>${escapeHtml(source)}</option>`).join("")}`;
-  el("#targetFilter").innerHTML = `<option value="">全部</option>${targets.map((target) => `<option>${escapeHtml(target)}</option>`).join("")}`;
-  const urlState = applyUrlState();
-  if (urlState.sourceFilter) el("#sourceFilter").value = urlState.sourceFilter;
-  if (urlState.targetFilter) el("#targetFilter").value = urlState.targetFilter;
-}
-
-function renderQuickList() {
-  el("#quickList").innerHTML = knownCommunities
-    .map(
-      (community) => `
-        <button class="quick-chip" type="button" data-community="${escapeHtml(community.name)}">
-          <strong>${escapeHtml(community.name)}</strong>
-          <span>${escapeHtml(community.city + community.township)} · ${escapeHtml(community.hint)}</span>
-        </button>
-      `,
-    )
+function renderQuickList(items = getRecentSearches()) {
+  const presets = items.length ? items : knownCommunities.slice(0, RECENT_LIMIT).map((community) => community.name);
+  el("#quickList").innerHTML = presets
+    .map((query) => {
+      const community = knownCommunities.find((item) => item.name === query || item.aliases.includes(query));
+      const meta = community ? `${community.city}${community.township} · ${community.hint}` : "搜尋預設";
+      return `
+        <div class="quick-chip" data-preset="${escapeHtml(query)}">
+          <button class="quick-run" type="button" data-preset-run="${escapeHtml(query)}">
+            <strong>${escapeHtml(query)}</strong>
+            <span>${escapeHtml(meta)}</span>
+          </button>
+          <button class="quick-delete" type="button" data-preset-delete="${escapeHtml(query)}" aria-label="刪除 ${escapeHtml(query)}">×</button>
+        </div>
+      `;
+    })
     .join("");
 }
 
@@ -670,18 +740,10 @@ function applyFilter({ commitSearch = false } = {}) {
     .split(/[,+，、]/)
     .map((term) => term.trim())
     .filter(Boolean);
-  const minPrice = toNumber(el("#minPrice").value) * 10000;
-  const maxPrice = toNumber(el("#maxPrice").value) * 10000;
-  const source = el("#sourceFilter").value;
-  const target = el("#targetFilter").value;
 
   state.filteredRows = state.rows.filter((row) => {
     if (inferred && !communityMatches(row, inferred)) return false;
     if (!inferred && terms.length && !terms.every((term) => row.searchText.includes(term))) return false;
-    if (minPrice && row.totalPrice < minPrice) return false;
-    if (maxPrice && row.totalPrice > maxPrice) return false;
-    if (source && row.source !== source) return false;
-    if (target && row.target !== target) return false;
     return true;
   });
 
@@ -794,8 +856,8 @@ function renderMap(rows) {
     const label = count > 1
       ? `${count}筆<br>${formatUnit(medianUnit)}`
       : `${formatWan(main.totalPrice)}<br>${formatUnit(main.unitPrice)}`;
-    L.marker(point.position, {
-      interactive: false,
+    const labelMarker = L.marker(point.position, {
+      interactive: true,
       icon: L.divIcon({
         className: "map-data-label",
         html: `<span>${label}</span>`,
@@ -803,6 +865,10 @@ function renderMap(rows) {
         iconAnchor: [36, -4],
       }),
     }).addTo(state.markerLayer);
+    labelMarker.on("click", () => {
+      if (count > 1) openDrawer("cluster", rowsInPoint);
+      else selectRow(main.id, { fly: false, open: true });
+    });
     marker.bindTooltip(`${escapeHtml(main.address || state.township)}<br>${count} 筆 · 中位單價 ${formatUnit(medianUnit)} · 均價 ${formatWan(avg(rowsInPoint.map((row) => row.totalPrice)))}`);
     marker.on("click", () => {
       if (count > 1 && zoom < 15) {
@@ -820,7 +886,7 @@ function renderMap(rows) {
     state.mapTouched = true;
   }
   el("#annotationLimitValue").textContent = numberFormat.format(limit);
-  el("#legend").innerHTML = `<span></span>低單價 <span></span>中位 <span></span>高單價 · ${numberFormat.format(sample.length)} / ${numberFormat.format(rows.length)} 筆`;
+  el("#legend").textContent = `${numberFormat.format(sample.length)} / ${numberFormat.format(rows.length)} 筆`;
 }
 
 function clusterRows(rows) {
@@ -1264,11 +1330,12 @@ function bindEvents() {
     if (inferred && (state.city !== inferred.city || state.township !== inferred.township)) selectRegion(inferred.city, inferred.township);
     renderSuggestions();
     renderCommunityList();
+    renderCommunityTable();
     if (state.records.length) debouncedApply();
   });
-  el("#queryInput").addEventListener("search", () => applyFilter({ commitSearch: true }));
+  el("#queryInput").addEventListener("search", () => commitSearch());
   el("#queryInput").addEventListener("keydown", (event) => {
-    if (event.key === "Enter") applyFilter({ commitSearch: true });
+    if (event.key === "Enter") commitSearch();
   });
   window.addEventListener("keydown", (event) => {
     if (event.key === "/" && document.activeElement !== el("#queryInput")) {
@@ -1277,43 +1344,50 @@ function bindEvents() {
     }
     if (event.key === "Escape") closeDrawer();
   });
-  el("#recentList").addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-recent]");
-    if (!button) return;
-    el("#queryInput").value = button.dataset.recent;
-    applyFilter({ commitSearch: true });
-    renderSuggestions();
-  });
   el("#loadCityCommunities").addEventListener("click", () => loadCityCommunities(state.city));
   el("#communitySearch").addEventListener("input", debounce(renderCommunityList, 120));
+  el("#communityTableSearch").addEventListener("input", debounce(renderCommunityTable, 120));
   el("#communityList").addEventListener("click", (event) => {
     const button = event.target.closest("button[data-community-name]");
     if (button) selectIndexedCommunity(button.dataset.communityName);
+  });
+  el("#communityRows").addEventListener("click", (event) => {
+    const row = event.target.closest("tr[data-community-name]");
+    if (row) selectIndexedCommunity(row.dataset.communityName);
   });
   el("#suggestList").addEventListener("click", (event) => {
     const button = event.target.closest("button[data-suggest]");
     if (!button) return;
     el("#queryInput").value = button.dataset.suggest;
     el("#suggestList").classList.remove("open");
-    applyFilter({ commitSearch: true });
+    commitSearch();
   });
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".control-panel")) el("#suggestList").classList.remove("open");
   });
-  el("#clearRecent").addEventListener("click", () => {
-    localStorage.removeItem(RECENT_KEY);
-    renderRecentSearches();
-  });
   el("#quickList").addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-community]");
-    if (!button) return;
-    const community = knownCommunities.find((item) => item.name === button.dataset.community);
-    selectRegion(community.city, community.township);
-    el("#queryInput").value = community.name;
+    const deleteButton = event.target.closest("button[data-preset-delete]");
+    if (deleteButton) {
+      const next = getRecentSearches().filter((item) => item !== deleteButton.dataset.presetDelete);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+      renderRecentSearches();
+      return;
+    }
+    const runButton = event.target.closest("button[data-preset-run]");
+    if (!runButton) return;
+    const query = runButton.dataset.presetRun;
+    const community = knownCommunities.find((item) => item.name === query || item.aliases.includes(query));
+    const needsRegionLoad = community && (state.city !== community.city || state.township !== community.township);
+    if (community) selectRegion(community.city, community.township);
+    el("#queryInput").value = query;
     el("#suggestList").classList.remove("open");
-    loadSelectedRegion();
+    if (needsRegionLoad) {
+      loadSelectedRegion();
+    } else {
+      commitSearch();
+    }
   });
-  for (const id of ["minPrice", "maxPrice", "sourceFilter", "targetFilter", "unitMode"]) {
+  for (const id of ["unitMode"]) {
     el(`#${id}`).addEventListener("input", () => applyFilter());
     el(`#${id}`).addEventListener("change", () => applyFilter());
   }
@@ -1417,8 +1491,12 @@ async function init() {
   bindEvents();
   try {
     await loadIndex();
-    const urlState = applyUrlState();
-    for (const id of ["minPrice", "maxPrice"]) if (urlState[id]) el(`#${id}`).value = urlState[id];
+    const initialCommunity = await resolveCommunitySearch(el("#queryInput").value.trim());
+    if (initialCommunity) {
+      state.selectedCommunity = initialCommunity;
+      selectRegion(initialCommunity.city, initialCommunity.township);
+      el("#queryInput").value = initialCommunity.name;
+    }
     await loadSelectedRegion();
     const selected = new URLSearchParams(location.search).get("row");
     if (selected) selectRow(selected, { fly: true, open: true });

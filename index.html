@@ -8,8 +8,8 @@
       name="description"
       content="用內政部實價登錄 Open Data 查詢區域、社區與門牌交易紀錄，追蹤價格趨勢與重複轉手。"
     />
-    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=20260530-community-board-2" />
+    <link rel="stylesheet" href="styles.css?v=20260530-community-board-2" />
   </head>
   <body>
     <header class="app-header">
@@ -52,31 +52,6 @@
         </label>
         <div class="suggest-list" id="suggestList" aria-label="搜尋建議"></div>
 
-        <div class="recent-head">
-          <span>最近搜尋</span>
-          <button id="clearRecent" type="button">清除</button>
-        </div>
-        <div class="recent-list" id="recentList"></div>
-
-        <div class="filter-grid">
-          <label>
-            <span>最低總價</span>
-            <input id="minPrice" inputmode="numeric" placeholder="萬元" />
-          </label>
-          <label>
-            <span>最高總價</span>
-            <input id="maxPrice" inputmode="numeric" placeholder="萬元" />
-          </label>
-          <label>
-            <span>來源批次</span>
-            <select id="sourceFilter"></select>
-          </label>
-          <label>
-            <span>交易標的</span>
-            <select id="targetFilter"></select>
-          </label>
-        </div>
-
         <div class="browse-panel">
           <div class="browse-head">
             <div>
@@ -89,7 +64,7 @@
           <div class="community-list" id="communityList"></div>
         </div>
 
-        <div class="quick-list" id="quickList" aria-label="快速社區"></div>
+        <div class="quick-list" id="quickList" aria-label="搜尋預設"></div>
 
         <button class="button primary" id="loadButton" type="button">載入區域資料</button>
         <p class="status" id="loadStatus">正在讀取索引...</p>
@@ -108,10 +83,7 @@
           </div>
           <div class="legend" id="legend"></div>
           <div class="map-limit-control">
-            <label for="annotationLimit">
-              <span>地圖標註</span>
-              <strong id="annotationLimitValue">13</strong>
-            </label>
+            <span id="annotationLimitValue">13</span>
             <input id="annotationLimit" type="range" min="1" max="9999" step="1" value="13" />
           </div>
         </section>
@@ -123,6 +95,37 @@
           <button class="metric-card" data-action="metric" data-metric="repeat"><span>重複轉手門牌</span><strong id="kpiRepeat">--</strong></button>
           <button class="metric-card" data-action="metric" data-metric="high"><span>最高總價</span><strong id="kpiHigh">--</strong></button>
           <button class="metric-card" data-action="metric" data-metric="latest"><span>最新成交</span><strong id="kpiLatest">--</strong></button>
+        </section>
+
+        <section class="section community-board" id="communities">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Communities</p>
+              <h2>社區列表</h2>
+            </div>
+            <label class="board-search">
+              <span>搜尋</span>
+              <input id="communityTableSearch" type="search" placeholder="社區、鄉鎮、門牌樣本" />
+            </label>
+          </div>
+          <div class="table-meta" id="communityTableMeta">--</div>
+          <div class="table-wrap board-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>社區</th>
+                  <th>鄉鎮市區</th>
+                  <th>成交</th>
+                  <th>中位總價</th>
+                  <th>中位單價</th>
+                  <th>最高總價</th>
+                  <th>最新</th>
+                  <th>主要標的</th>
+                </tr>
+              </thead>
+              <tbody id="communityRows"></tbody>
+            </table>
+          </div>
         </section>
 
         <section class="chart-grid">
@@ -224,7 +227,7 @@
       <div id="drawerBody"></div>
     </aside>
 
-    <script src="vendor/leaflet/leaflet.js"></script>
-    <script src="script.js" defer></script>
+    <script src="vendor/leaflet/leaflet.js?v=20260530-community-board-2"></script>
+    <script src="script.js?v=20260530-community-board-2" defer></script>
   </body>
 </html>
