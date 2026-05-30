@@ -3,6 +3,7 @@ const COMMUNITY_INDEX = "data/plvr/community-index.json";
 const RECENT_KEY = "houseEx.recentSearches";
 const RECENT_LIMIT = 3;
 const FILTER_KEY = "houseEx.filters";
+const M2_PER_PING = 3.305785;
 
 const knownCommunities = [
   {
@@ -59,7 +60,7 @@ const state = {
   filteredRows: [],
   includeDetails: false,
   activeCommunity: null,
-  sort: { key: "date", dir: "desc" },
+  sort: { key: "addressBlock", dir: "asc" },
   compactMode: true,
   repeatSort: "gain",
   selectedRowId: "",
@@ -68,16 +69,18 @@ const state = {
   map: null,
   markerLayer: null,
   chartHits: new Map(),
-  visibleColumns: ["date", "address", "target", "totalPrice", "unitPrice", "buildingArea", "age", "source"],
+  visibleColumns: ["date", "address", "buildingNo", "target", "totalPrice", "unitPrice", "buildingPing", "age", "source"],
 };
 
 const columnDefs = [
   ["date", "日期"],
   ["address", "門牌 / 位置"],
+  ["buildingNo", "棟及號"],
   ["target", "標的"],
   ["totalPrice", "總價"],
-  ["unitPrice", "單價"],
-  ["buildingArea", "建坪"],
+  ["unitPrice", "單價/坪"],
+  ["buildingPing", "建坪"],
+  ["landPing", "地坪"],
   ["age", "屋齡"],
   ["hasParking", "車位"],
   ["source", "來源"],
@@ -87,6 +90,7 @@ const columnDefs = [
 
 const numberFormat = new Intl.NumberFormat("zh-TW");
 const moneyFormat = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 0 });
+const pingFormat = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 2 });
 const el = (selector) => document.querySelector(selector);
 const els = (selector) => [...document.querySelectorAll(selector)];
 const debounce = (fn, wait = 180) => {
@@ -138,6 +142,15 @@ function formatWan(value) {
 function formatUnit(value) {
   if (!value) return "--";
   return moneyFormat.format(value);
+}
+
+function m2ToPing(value) {
+  return value ? value / M2_PER_PING : 0;
+}
+
+function formatPing(value) {
+  if (!value) return "--";
+  return pingFormat.format(value);
 }
 
 function formatPct(value) {
@@ -219,8 +232,11 @@ function parseRecord(record, index) {
   const values = recordValues(record);
   const rawDate = values["交易年月日"] || "";
   const totalPrice = toNumber(values["總價元"] || values["車位總價元"] || values["車位價格"]);
-  const unitPrice = toNumber(values["單價元平方公尺"]);
+  const unitPriceM2 = toNumber(values["單價元平方公尺"]);
+  const unitPrice = unitPriceM2 ? unitPriceM2 * M2_PER_PING : 0;
   const buildingArea = toNumber(values["建物移轉總面積平方公尺"] || values["建物移轉面積平方公尺"]);
+  const landArea = toNumber(values["土地移轉總面積平方公尺"]);
+  const buildingNo = values["棟及號"] || "";
   const builtDate = values["建築完成年月"] || "";
   const date = twDateToIso(rawDate);
   const builtIso = twDateToIso(builtDate);
@@ -236,14 +252,19 @@ function parseRecord(record, index) {
     rawDate,
     month: date ? date.slice(0, 7) : "未知",
     address,
+    buildingNo,
+    addressBlock: normalizeText(`${address} ${buildingNo}`),
     road: extractRoad(address),
     cityName: record.city_name || state.region?.region?.city_name || state.city,
     township: values["鄉鎮市區"] || state.township,
     target: values["交易標的"] || record.transaction_type || "",
     totalPrice,
     unitPrice,
+    unitPriceM2,
     buildingArea,
-    landArea: toNumber(values["土地移轉總面積平方公尺"]),
+    buildingPing: m2ToPing(buildingArea),
+    landArea,
+    landPing: m2ToPing(landArea),
     age,
     ageLabel: age ? `${age.toFixed(1)} 年` : values["屋齡"] || "--",
     hasParking: /車位/.test(`${values["交易筆棟數"] || ""}${values["車位類別"] || ""}${record.table_kind || ""}`),
@@ -274,6 +295,8 @@ function buildSearchText(row) {
     row.cityName,
     row.township,
     row.address,
+    row.buildingNo,
+    row.addressBlock,
     row.road,
     row.target,
     row.date,
@@ -281,7 +304,8 @@ function buildSearchText(row) {
     row.totalPrice,
     formatWan(row.totalPrice),
     row.unitPrice,
-    row.buildingArea,
+    row.buildingPing,
+    row.landPing,
     row.ageLabel,
     row.hasParking ? "有車位 車位" : "無車位",
     row.source,
@@ -315,7 +339,7 @@ function sortRows(rows, sort = state.sort) {
     const av = a[sort.key] ?? "";
     const bv = b[sort.key] ?? "";
     if (typeof av === "number" || typeof bv === "number") return ((av || 0) - (bv || 0)) * dir;
-    return String(av).localeCompare(String(bv), "zh-Hant") * dir;
+    return String(av).localeCompare(String(bv), "zh-Hant", { numeric: true }) * dir;
   });
 }
 
@@ -454,7 +478,7 @@ function renderCommunityTable() {
           <td>${escapeHtml(community.township || "--")}</td>
           <td>${numberFormat.format(stats.count || 0)}</td>
           <td>${formatWan(stats.median_total_price || 0)}</td>
-          <td>${formatUnit(stats.median_unit_price || 0)}</td>
+          <td>${formatUnit((stats.median_unit_price || 0) * M2_PER_PING)}</td>
           <td>${formatWan(stats.max_total_price || 0)}</td>
           <td>${escapeHtml(stats.latest_date || "--")}</td>
           <td>${escapeHtml(primaryTarget(community))}</td>
@@ -542,8 +566,9 @@ function suggestionSources() {
   pushUniqueRows("target", "交易標的", 64);
   pushUniqueRows((row) => (row.hasParking ? "有車位" : ""), "車位", 62, 1);
   pushUniqueRows((row) => (row.totalPrice ? formatWan(row.totalPrice) : ""), "總價", 58);
-  pushUniqueRows((row) => (row.unitPrice ? `${formatUnit(row.unitPrice)} 元/m²` : ""), "單價", 56);
-  pushUniqueRows((row) => (row.buildingArea ? `${row.buildingArea.toFixed(2)} 平方公尺` : ""), "建坪", 54);
+  pushUniqueRows("buildingNo", "棟及號", 57);
+  pushUniqueRows((row) => (row.unitPrice ? `${formatUnit(row.unitPrice)} 元/坪` : ""), "單價", 56);
+  pushUniqueRows((row) => (row.buildingPing ? `${formatPing(row.buildingPing)} 坪` : ""), "建坪", 54);
 
   for (const group of repeats.slice(0, 40)) {
     items.push({
@@ -1093,7 +1118,7 @@ function renderRadar(rows) {
             <button type="button" data-row="${escapeHtml(row.id)}">
               <span>${escapeHtml(row.address || row.road || row.target || "--")}</span>
               <b>${escapeHtml(row.radarNote || formatWan(row.totalPrice))}</b>
-              <small>${escapeHtml(row.date || "--")} · ${escapeHtml(formatUnit(row.unitPrice))} 元/m² · ${escapeHtml(row.source)}</small>
+              <small>${escapeHtml(row.date || "--")} · ${escapeHtml(formatUnit(row.unitPrice))} 元/坪 · ${escapeHtml(row.source)}</small>
             </button>
           </li>
         `).join("") || "<li><span>--</span></li>"}
@@ -1108,7 +1133,9 @@ function renderColumns() {
     .map(([key, label]) => `<th><button type="button" data-sort="${key}">${label}${state.sort.key === key ? (state.sort.dir === "asc" ? " ↑" : " ↓") : ""}</button></th>`)
     .join("")}</tr>`;
   el("#columnPanel").innerHTML = columnDefs.map(([key, label]) => `
-    <label><input type="checkbox" value="${key}" ${state.visibleColumns.includes(key) ? "checked" : ""} /> ${label}</label>
+    <button class="column-tag ${state.visibleColumns.includes(key) ? "active" : ""}" type="button" data-column-toggle="${key}">
+      ${label}
+    </button>
   `).join("");
 }
 
@@ -1116,10 +1143,12 @@ function cellValue(row, key) {
   const map = {
     date: row.date || row.rawDate || "--",
     address: row.address || "--",
+    buildingNo: row.buildingNo || "--",
     target: row.isMain ? row.target : row.record.table_kind,
     totalPrice: formatWan(row.totalPrice),
     unitPrice: formatUnit(row.unitPrice),
-    buildingArea: row.buildingArea ? row.buildingArea.toFixed(2) : "--",
+    buildingPing: formatPing(row.buildingPing),
+    landPing: formatPing(row.landPing),
     age: row.ageLabel,
     hasParking: row.hasParking ? "有" : "無",
     source: row.source,
@@ -1179,8 +1208,8 @@ function selectRow(id, { fly = true, open = true } = {}) {
 }
 
 function rowsSameAddress(row) {
-  const key = normalizeText(row.address);
-  return mainRows().filter((item) => normalizeText(item.address) === key);
+  const key = normalizeText(`${row.address} ${row.buildingNo}`);
+  return mainRows().filter((item) => normalizeText(`${item.address} ${item.buildingNo}`) === key);
 }
 
 function rowsSameRoad(row) {
@@ -1201,8 +1230,10 @@ function renderRowDrawer(row) {
       ${detailItem("區域", `${row.cityName}${row.township}`)}
       ${detailItem("交易日期", row.date || row.rawDate || "--")}
       ${detailItem("總價", formatWan(row.totalPrice))}
-      ${detailItem("單價", `${formatUnit(row.unitPrice)} 元/m²`)}
-      ${detailItem("建坪", row.buildingArea ? row.buildingArea.toFixed(2) : "--")}
+      ${detailItem("單價", `${formatUnit(row.unitPrice)} 元/坪`)}
+      ${detailItem("建坪", `${formatPing(row.buildingPing)} 坪`)}
+      ${detailItem("地坪", `${formatPing(row.landPing)} 坪`)}
+      ${detailItem("棟及號", row.buildingNo || "--")}
       ${detailItem("屋齡", row.ageLabel)}
       ${detailItem("車位", row.hasParking ? "有" : "無")}
       ${detailItem("來源", row.source)}
@@ -1221,7 +1252,7 @@ function detailItem(label, value) {
 function miniList(title, rows, clickable = false) {
   return `<h3>${escapeHtml(title)}</h3><ul class="mini-list">${rows.map((row) => `
     <li>${clickable ? `<button type="button" data-row="${escapeHtml(row.id)}">` : ""}
-      <span>${escapeHtml(row.date || "--")} · ${escapeHtml(row.address || "--")}</span>
+      <span>${escapeHtml(row.date || "--")} · ${escapeHtml(row.address || "--")}${row.buildingNo ? ` · ${escapeHtml(row.buildingNo)}` : ""}</span>
       <b>${escapeHtml(formatWan(row.totalPrice))}</b>
     ${clickable ? "</button>" : ""}</li>
   `).join("") || "<li>--</li>"}</ul>`;
@@ -1244,7 +1275,7 @@ function renderRepeatDrawer(addressKey) {
       ${detailItem("年化報酬率", formatPct(group.annual))}
       ${detailItem("持有天數", numberFormat.format(group.days))}
       ${detailItem("總價差", formatWan(group.delta))}
-      ${detailItem("單價差", `${formatUnit(group.unitDelta)} 元/m²`)}
+      ${detailItem("單價差", `${formatUnit(group.unitDelta)} 元/坪`)}
     </div>
     ${miniList("交易時間線", group.rows, true)}
   `;
@@ -1412,11 +1443,16 @@ function bindEvents() {
     saveFilters();
   });
   el("#columnToggle").addEventListener("click", () => el("#columnPanel").classList.toggle("open"));
-  el("#columnPanel").addEventListener("change", (event) => {
-    if (event.target.matches("input[type='checkbox']")) {
-      state.visibleColumns = els("#columnPanel input:checked").map((input) => input.value);
-      renderTable();
-    }
+  el("#columnPanel").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-column-toggle]");
+    if (!button) return;
+    const key = button.dataset.columnToggle;
+    const isVisible = state.visibleColumns.includes(key);
+    if (isVisible && state.visibleColumns.length <= 1) return;
+    state.visibleColumns = isVisible
+      ? state.visibleColumns.filter((item) => item !== key)
+      : [...state.visibleColumns, key];
+    renderTable();
   });
   el("#recordHead").addEventListener("click", (event) => {
     const button = event.target.closest("button[data-sort]");

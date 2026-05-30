@@ -737,8 +737,8 @@ ul {
 
 .column-panel {
   display: none;
-  grid-template-columns: repeat(6, minmax(120px, 1fr));
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 12px 0;
   padding: 10px;
   border: 1px solid var(--line);
@@ -747,7 +747,23 @@ ul {
 }
 
 .column-panel.open {
-  display: grid;
+  display: flex;
+}
+
+.column-tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--muted);
+  background: var(--panel);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.column-tag.active {
+  color: #fff;
+  border-color: #176f72;
+  background: #176f72;
 }
 
 .table-meta {
@@ -934,8 +950,7 @@ body:not(.pro-mode) .detail-row {
   .kpi-grid,
   .summary-grid,
   .repeat-grid,
-  .detail-grid,
-  .column-panel {
+  .detail-grid {
     grid-template-columns: 1fr;
   }
 
