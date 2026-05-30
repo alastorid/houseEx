@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-30T08:49:29.910369+00:00",
+  "generated_at": "2026-05-30T22:05:43.922883+00:00",
   "source_page": "https://plvr.land.moi.gov.tw/DownloadOpenData",
   "total_sources": 63,
   "total_records": 27945993,
@@ -632,7 +632,7 @@
           "raw_shard": "data/plvr/by-region/m_南投縣__中寮鄉.json",
           "encoding": "gzip",
           "raw_bytes": 8694848,
-          "compressed_bytes": 343939
+          "compressed_bytes": 343938
         },
         {
           "city_code": "m",
@@ -897,7 +897,7 @@
           "raw_shard": "data/plvr/by-region/m_南投縣__南投市.json",
           "encoding": "gzip",
           "raw_bytes": 57748273,
-          "compressed_bytes": 2357107
+          "compressed_bytes": 2357106
         },
         {
           "city_code": "m",
@@ -994,7 +994,7 @@
           "raw_shard": "data/plvr/by-region/m_南投縣__名間鄉.json",
           "encoding": "gzip",
           "raw_bytes": 13146423,
-          "compressed_bytes": 580860
+          "compressed_bytes": 580859
         },
         {
           "city_code": "m",
@@ -1186,7 +1186,7 @@
           "raw_shard": "data/plvr/by-region/m_南投縣__埔里鎮.json",
           "encoding": "gzip",
           "raw_bytes": 43057200,
-          "compressed_bytes": 1926658
+          "compressed_bytes": 1926659
         },
         {
           "city_code": "m",
@@ -1474,7 +1474,7 @@
           "raw_shard": "data/plvr/by-region/m_南投縣__草屯鎮.json",
           "encoding": "gzip",
           "raw_bytes": 64047357,
-          "compressed_bytes": 2568610
+          "compressed_bytes": 2568611
         },
         {
           "city_code": "m",
@@ -2335,7 +2335,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__太保市.json",
           "encoding": "gzip",
           "raw_bytes": 45124023,
-          "compressed_bytes": 1610435
+          "compressed_bytes": 1610432
         },
         {
           "city_code": "q",
@@ -2712,7 +2712,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__東石鄉.json",
           "encoding": "gzip",
           "raw_bytes": 5381259,
-          "compressed_bytes": 236559
+          "compressed_bytes": 236558
         },
         {
           "city_code": "q",
@@ -3090,7 +3090,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__溪口鄉.json",
           "encoding": "gzip",
           "raw_bytes": 4567224,
-          "compressed_bytes": 208488
+          "compressed_bytes": 208489
         },
         {
           "city_code": "q",
@@ -3281,7 +3281,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__竹崎鄉.json",
           "encoding": "gzip",
           "raw_bytes": 8805063,
-          "compressed_bytes": 390880
+          "compressed_bytes": 390879
         },
         {
           "city_code": "q",
@@ -3376,7 +3376,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__義竹鄉.json",
           "encoding": "gzip",
           "raw_bytes": 6416437,
-          "compressed_bytes": 279440
+          "compressed_bytes": 279441
         },
         {
           "city_code": "q",
@@ -3552,7 +3552,7 @@
           "raw_shard": "data/plvr/by-region/q_嘉義縣__鹿草鄉.json",
           "encoding": "gzip",
           "raw_bytes": 5800424,
-          "compressed_bytes": 243440
+          "compressed_bytes": 243439
         }
       ]
     },
@@ -3691,7 +3691,7 @@
           "raw_shard": "data/plvr/by-region/c_基隆市__七堵區.json",
           "encoding": "gzip",
           "raw_bytes": 42245319,
-          "compressed_bytes": 1712817
+          "compressed_bytes": 1712816
         },
         {
           "city_code": "c",
@@ -3788,7 +3788,7 @@
           "raw_shard": "data/plvr/by-region/c_基隆市__中山區.json",
           "encoding": "gzip",
           "raw_bytes": 29018789,
-          "compressed_bytes": 1055035
+          "compressed_bytes": 1055038
         },
         {
           "city_code": "c",
@@ -3885,7 +3885,7 @@
           "raw_shard": "data/plvr/by-region/c_基隆市__中正區.json",
           "encoding": "gzip",
           "raw_bytes": 78430869,
-          "compressed_bytes": 2726720
+          "compressed_bytes": 2726719
         },
         {
           "city_code": "c",
@@ -4176,7 +4176,7 @@
           "raw_shard": "data/plvr/by-region/c_基隆市__安樂區.json",
           "encoding": "gzip",
           "raw_bytes": 113417354,
-          "compressed_bytes": 3805258
+          "compressed_bytes": 3805257
         },
         {
           "city_code": "c",
@@ -4306,7 +4306,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 3509,
-          "compressed_bytes": 1093
+          "compressed_bytes": 1094
         },
         {
           "city_code": "g",
@@ -4499,7 +4499,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__五結鄉.json",
           "encoding": "gzip",
           "raw_bytes": 50113028,
-          "compressed_bytes": 1995446
+          "compressed_bytes": 1995447
         },
         {
           "city_code": "g",
@@ -4596,7 +4596,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__冬山鄉.json",
           "encoding": "gzip",
           "raw_bytes": 41924086,
-          "compressed_bytes": 1734311
+          "compressed_bytes": 1734310
         },
         {
           "city_code": "g",
@@ -4780,7 +4780,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__員山鄉.json",
           "encoding": "gzip",
           "raw_bytes": 25386909,
-          "compressed_bytes": 1056919
+          "compressed_bytes": 1056921
         },
         {
           "city_code": "g",
@@ -4877,7 +4877,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__壯圍鄉.json",
           "encoding": "gzip",
           "raw_bytes": 21595751,
-          "compressed_bytes": 852451
+          "compressed_bytes": 852453
         },
         {
           "city_code": "g",
@@ -4961,7 +4961,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__大同鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1511664,
-          "compressed_bytes": 55534
+          "compressed_bytes": 55535
         },
         {
           "city_code": "g",
@@ -5252,7 +5252,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__羅東鎮.json",
           "encoding": "gzip",
           "raw_bytes": 49502673,
-          "compressed_bytes": 2226685
+          "compressed_bytes": 2226686
         },
         {
           "city_code": "g",
@@ -5446,7 +5446,7 @@
           "raw_shard": "data/plvr/by-region/g_宜蘭縣__頭城鎮.json",
           "encoding": "gzip",
           "raw_bytes": 21104303,
-          "compressed_bytes": 881703
+          "compressed_bytes": 881702
         }
       ]
     },
@@ -5482,7 +5482,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 14401,
-          "compressed_bytes": 1673
+          "compressed_bytes": 1672
         },
         {
           "city_code": "t",
@@ -5758,7 +5758,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__佳冬鄉.json",
           "encoding": "gzip",
           "raw_bytes": 6201990,
-          "compressed_bytes": 279806
+          "compressed_bytes": 279808
         },
         {
           "city_code": "t",
@@ -5841,7 +5841,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__來義鄉.json",
           "encoding": "gzip",
           "raw_bytes": 659684,
-          "compressed_bytes": 24621
+          "compressed_bytes": 24620
         },
         {
           "city_code": "t",
@@ -6031,7 +6031,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__南州鄉.json",
           "encoding": "gzip",
           "raw_bytes": 4748976,
-          "compressed_bytes": 218941
+          "compressed_bytes": 218937
         },
         {
           "city_code": "t",
@@ -6223,7 +6223,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__崁頂鄉.json",
           "encoding": "gzip",
           "raw_bytes": 5011127,
-          "compressed_bytes": 228964
+          "compressed_bytes": 228965
         },
         {
           "city_code": "t",
@@ -6320,7 +6320,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__恆春鎮.json",
           "encoding": "gzip",
           "raw_bytes": 21988938,
-          "compressed_bytes": 879294
+          "compressed_bytes": 879295
         },
         {
           "city_code": "t",
@@ -6415,7 +6415,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__新園鄉.json",
           "encoding": "gzip",
           "raw_bytes": 11523159,
-          "compressed_bytes": 498122
+          "compressed_bytes": 498121
         },
         {
           "city_code": "t",
@@ -6596,7 +6596,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__春日鄉.json",
           "encoding": "gzip",
           "raw_bytes": 789153,
-          "compressed_bytes": 28848
+          "compressed_bytes": 28849
         },
         {
           "city_code": "t",
@@ -6693,7 +6693,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__東港鎮.json",
           "encoding": "gzip",
           "raw_bytes": 27642955,
-          "compressed_bytes": 1157845
+          "compressed_bytes": 1157846
         },
         {
           "city_code": "t",
@@ -7053,7 +7053,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__泰武鄉.json",
           "encoding": "gzip",
           "raw_bytes": 463002,
-          "compressed_bytes": 18287
+          "compressed_bytes": 18286
         },
         {
           "city_code": "t",
@@ -7408,7 +7408,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__獅子鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1407222,
-          "compressed_bytes": 50458
+          "compressed_bytes": 50456
         },
         {
           "city_code": "t",
@@ -8041,7 +8041,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__里港鄉.json",
           "encoding": "gzip",
           "raw_bytes": 11353470,
-          "compressed_bytes": 488497
+          "compressed_bytes": 488495
         },
         {
           "city_code": "t",
@@ -8138,7 +8138,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__長治鄉.json",
           "encoding": "gzip",
           "raw_bytes": 19178038,
-          "compressed_bytes": 792933
+          "compressed_bytes": 792934
         },
         {
           "city_code": "t",
@@ -8212,7 +8212,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__霧臺鄉.json",
           "encoding": "gzip",
           "raw_bytes": 428775,
-          "compressed_bytes": 15387
+          "compressed_bytes": 15386
         },
         {
           "city_code": "t",
@@ -8302,7 +8302,7 @@
           "raw_shard": "data/plvr/by-region/t_屏東縣__高樹鄉.json",
           "encoding": "gzip",
           "raw_bytes": 10191284,
-          "compressed_bytes": 409104
+          "compressed_bytes": 409103
         },
         {
           "city_code": "t",
@@ -8536,7 +8536,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 11175,
-          "compressed_bytes": 1821
+          "compressed_bytes": 1820
         },
         {
           "city_code": "n",
@@ -8633,7 +8633,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__二林鎮.json",
           "encoding": "gzip",
           "raw_bytes": 21607182,
-          "compressed_bytes": 913855
+          "compressed_bytes": 913854
         },
         {
           "city_code": "n",
@@ -8917,7 +8917,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__北斗鎮.json",
           "encoding": "gzip",
           "raw_bytes": 17794682,
-          "compressed_bytes": 711160
+          "compressed_bytes": 711159
         },
         {
           "city_code": "n",
@@ -9014,7 +9014,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__和美鎮.json",
           "encoding": "gzip",
           "raw_bytes": 37618848,
-          "compressed_bytes": 1483714
+          "compressed_bytes": 1483715
         },
         {
           "city_code": "n",
@@ -9208,7 +9208,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__埔心鄉.json",
           "encoding": "gzip",
           "raw_bytes": 19167196,
-          "compressed_bytes": 731511
+          "compressed_bytes": 731512
         },
         {
           "city_code": "n",
@@ -9590,7 +9590,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__大村鄉.json",
           "encoding": "gzip",
           "raw_bytes": 21029002,
-          "compressed_bytes": 824828
+          "compressed_bytes": 824830
         },
         {
           "city_code": "n",
@@ -9687,7 +9687,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__彰化市.json",
           "encoding": "gzip",
           "raw_bytes": 106100499,
-          "compressed_bytes": 4459312
+          "compressed_bytes": 4459315
         },
         {
           "city_code": "n",
@@ -9783,7 +9783,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__永靖鄉.json",
           "encoding": "gzip",
           "raw_bytes": 10944730,
-          "compressed_bytes": 462983
+          "compressed_bytes": 462984
         },
         {
           "city_code": "n",
@@ -10072,7 +10072,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__田中鎮.json",
           "encoding": "gzip",
           "raw_bytes": 16148952,
-          "compressed_bytes": 685439
+          "compressed_bytes": 685440
         },
         {
           "city_code": "n",
@@ -10743,7 +10743,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__芬園鄉.json",
           "encoding": "gzip",
           "raw_bytes": 10147035,
-          "compressed_bytes": 420908
+          "compressed_bytes": 420907
         },
         {
           "city_code": "n",
@@ -10935,7 +10935,7 @@
           "raw_shard": "data/plvr/by-region/n_彰化縣__芳苑鄉.json",
           "encoding": "gzip",
           "raw_bytes": 13155442,
-          "compressed_bytes": 542559
+          "compressed_bytes": 542561
         },
         {
           "city_code": "n",
@@ -11091,7 +11091,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 4751030,
-          "compressed_bytes": 91436
+          "compressed_bytes": 91435
         },
         {
           "city_code": "f",
@@ -11188,7 +11188,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__三峽區.json",
           "encoding": "gzip",
           "raw_bytes": 120125286,
-          "compressed_bytes": 5081703
+          "compressed_bytes": 5081697
         },
         {
           "city_code": "f",
@@ -11382,7 +11382,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__三重區.json",
           "encoding": "gzip",
           "raw_bytes": 330769946,
-          "compressed_bytes": 12639233
+          "compressed_bytes": 12639232
         },
         {
           "city_code": "f",
@@ -11577,7 +11577,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__五股區.json",
           "encoding": "gzip",
           "raw_bytes": 128794036,
-          "compressed_bytes": 5145250
+          "compressed_bytes": 5145244
         },
         {
           "city_code": "f",
@@ -11771,7 +11771,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__土城區.json",
           "encoding": "gzip",
           "raw_bytes": 223606357,
-          "compressed_bytes": 8736360
+          "compressed_bytes": 8736373
         },
         {
           "city_code": "f",
@@ -11937,7 +11937,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__平溪區.json",
           "encoding": "gzip",
           "raw_bytes": 1910132,
-          "compressed_bytes": 69572
+          "compressed_bytes": 69574
         },
         {
           "city_code": "f",
@@ -12035,7 +12035,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__新店區.json",
           "encoding": "gzip",
           "raw_bytes": 335434896,
-          "compressed_bytes": 13816775
+          "compressed_bytes": 13816779
         },
         {
           "city_code": "f",
@@ -12132,7 +12132,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__新莊區.json",
           "encoding": "gzip",
           "raw_bytes": 386057730,
-          "compressed_bytes": 16708218
+          "compressed_bytes": 16708217
         },
         {
           "city_code": "f",
@@ -12229,7 +12229,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__板橋區.json",
           "encoding": "gzip",
           "raw_bytes": 463078048,
-          "compressed_bytes": 17721907
+          "compressed_bytes": 17721905
         },
         {
           "city_code": "f",
@@ -12423,7 +12423,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__樹林區.json",
           "encoding": "gzip",
           "raw_bytes": 105047109,
-          "compressed_bytes": 4833222
+          "compressed_bytes": 4833221
         },
         {
           "city_code": "f",
@@ -12617,7 +12617,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__汐止區.json",
           "encoding": "gzip",
           "raw_bytes": 292897379,
-          "compressed_bytes": 12115564
+          "compressed_bytes": 12115565
         },
         {
           "city_code": "f",
@@ -12811,7 +12811,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__淡水區.json",
           "encoding": "gzip",
           "raw_bytes": 511766990,
-          "compressed_bytes": 21300865
+          "compressed_bytes": 21300853
         },
         {
           "city_code": "f",
@@ -12908,7 +12908,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__深坑區.json",
           "encoding": "gzip",
           "raw_bytes": 15676943,
-          "compressed_bytes": 773219
+          "compressed_bytes": 773220
         },
         {
           "city_code": "f",
@@ -13171,7 +13171,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__石碇區.json",
           "encoding": "gzip",
           "raw_bytes": 2593379,
-          "compressed_bytes": 107121
+          "compressed_bytes": 107120
         },
         {
           "city_code": "f",
@@ -13636,7 +13636,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__金山區.json",
           "encoding": "gzip",
           "raw_bytes": 10875102,
-          "compressed_bytes": 519588
+          "compressed_bytes": 519587
         },
         {
           "city_code": "f",
@@ -13823,7 +13823,7 @@
           "raw_shard": "data/plvr/by-region/f_新北市__鶯歌區.json",
           "encoding": "gzip",
           "raw_bytes": 91690661,
-          "compressed_bytes": 3594524
+          "compressed_bytes": 3594523
         }
       ]
     },
@@ -13960,7 +13960,7 @@
           "raw_shard": "data/plvr/by-region/o_新竹市__新竹市.json",
           "encoding": "gzip",
           "raw_bytes": 507009413,
-          "compressed_bytes": 18348360
+          "compressed_bytes": 18348348
         }
       ]
     },
@@ -14021,7 +14021,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 86300,
-          "compressed_bytes": 3032
+          "compressed_bytes": 3033
         },
         {
           "city_code": "j",
@@ -14106,7 +14106,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__五峰鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1411697,
-          "compressed_bytes": 45727
+          "compressed_bytes": 45726
         },
         {
           "city_code": "j",
@@ -14665,7 +14665,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__新豐鄉.json",
           "encoding": "gzip",
           "raw_bytes": 66783699,
-          "compressed_bytes": 2438929
+          "compressed_bytes": 2438932
         },
         {
           "city_code": "j",
@@ -14853,7 +14853,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__湖口鄉.json",
           "encoding": "gzip",
           "raw_bytes": 91973820,
-          "compressed_bytes": 3461627
+          "compressed_bytes": 3461626
         },
         {
           "city_code": "j",
@@ -15047,7 +15047,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__竹東鎮.json",
           "encoding": "gzip",
           "raw_bytes": 120545959,
-          "compressed_bytes": 3951808
+          "compressed_bytes": 3951806
         },
         {
           "city_code": "j",
@@ -15241,7 +15241,7 @@
           "raw_shard": "data/plvr/by-region/j_新竹縣__關西鎮.json",
           "encoding": "gzip",
           "raw_bytes": 15636750,
-          "compressed_bytes": 626063
+          "compressed_bytes": 626062
         }
       ]
     },
@@ -15587,7 +15587,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__大園區.json",
           "encoding": "gzip",
           "raw_bytes": 171559379,
-          "compressed_bytes": 5876685
+          "compressed_bytes": 5876684
         },
         {
           "city_code": "h",
@@ -15685,7 +15685,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__大溪區.json",
           "encoding": "gzip",
           "raw_bytes": 76012021,
-          "compressed_bytes": 3106382
+          "compressed_bytes": 3106381
         },
         {
           "city_code": "h",
@@ -15783,7 +15783,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__平鎮區.json",
           "encoding": "gzip",
           "raw_bytes": 220977124,
-          "compressed_bytes": 8649888
+          "compressed_bytes": 8649885
         },
         {
           "city_code": "h",
@@ -15868,7 +15868,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__復興區.json",
           "encoding": "gzip",
           "raw_bytes": 3087241,
-          "compressed_bytes": 127267
+          "compressed_bytes": 127266
         },
         {
           "city_code": "h",
@@ -16064,7 +16064,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__桃園區.json",
           "encoding": "gzip",
           "raw_bytes": 622870836,
-          "compressed_bytes": 24391418
+          "compressed_bytes": 24391422
         },
         {
           "city_code": "h",
@@ -16550,7 +16550,7 @@
           "raw_shard": "data/plvr/by-region/h_桃園市__龜山區.json",
           "encoding": "gzip",
           "raw_bytes": 355452643,
-          "compressed_bytes": 11270355
+          "compressed_bytes": 11270357
         }
       ]
     },
@@ -16583,7 +16583,7 @@
           "raw_shard": "data/plvr/by-region/x_澎湖縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 19547,
-          "compressed_bytes": 1405
+          "compressed_bytes": 1407
         },
         {
           "city_code": "x",
@@ -16739,7 +16739,7 @@
           "raw_shard": "data/plvr/by-region/x_澎湖縣__望安鄉.json",
           "encoding": "gzip",
           "raw_bytes": 384274,
-          "compressed_bytes": 14796
+          "compressed_bytes": 14795
         },
         {
           "city_code": "x",
@@ -17150,7 +17150,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 9156965,
-          "compressed_bytes": 217089
+          "compressed_bytes": 217088
         },
         {
           "city_code": "b",
@@ -17343,7 +17343,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__北區.json",
           "encoding": "gzip",
           "raw_bytes": 202938662,
-          "compressed_bytes": 8290355
+          "compressed_bytes": 8290358
         },
         {
           "city_code": "b",
@@ -17440,7 +17440,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__北屯區.json",
           "encoding": "gzip",
           "raw_bytes": 515455779,
-          "compressed_bytes": 19356249
+          "compressed_bytes": 19356250
         },
         {
           "city_code": "b",
@@ -18201,7 +18201,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__大肚區.json",
           "encoding": "gzip",
           "raw_bytes": 29726039,
-          "compressed_bytes": 1215244
+          "compressed_bytes": 1215243
         },
         {
           "city_code": "b",
@@ -18298,7 +18298,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__大里區.json",
           "encoding": "gzip",
           "raw_bytes": 139991155,
-          "compressed_bytes": 5946159
+          "compressed_bytes": 5946162
         },
         {
           "city_code": "b",
@@ -18395,7 +18395,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__大雅區.json",
           "encoding": "gzip",
           "raw_bytes": 59167465,
-          "compressed_bytes": 2369981
+          "compressed_bytes": 2369978
         },
         {
           "city_code": "b",
@@ -18492,7 +18492,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__太平區.json",
           "encoding": "gzip",
           "raw_bytes": 193560268,
-          "compressed_bytes": 7488219
+          "compressed_bytes": 7488208
         },
         {
           "city_code": "b",
@@ -18686,7 +18686,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__東勢區.json",
           "encoding": "gzip",
           "raw_bytes": 25253791,
-          "compressed_bytes": 1040110
+          "compressed_bytes": 1040111
         },
         {
           "city_code": "b",
@@ -18782,7 +18782,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__東區.json",
           "encoding": "gzip",
           "raw_bytes": 74462708,
-          "compressed_bytes": 2954550
+          "compressed_bytes": 2954546
         },
         {
           "city_code": "b",
@@ -18879,7 +18879,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__梧棲區.json",
           "encoding": "gzip",
           "raw_bytes": 92244539,
-          "compressed_bytes": 3023145
+          "compressed_bytes": 3023131
         },
         {
           "city_code": "b",
@@ -19073,7 +19073,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__清水區.json",
           "encoding": "gzip",
           "raw_bytes": 88426358,
-          "compressed_bytes": 2964046
+          "compressed_bytes": 2964049
         },
         {
           "city_code": "b",
@@ -19460,7 +19460,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__神岡區.json",
           "encoding": "gzip",
           "raw_bytes": 30124522,
-          "compressed_bytes": 1278526
+          "compressed_bytes": 1278527
         },
         {
           "city_code": "b",
@@ -19752,7 +19752,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__豐原區.json",
           "encoding": "gzip",
           "raw_bytes": 90403918,
-          "compressed_bytes": 3796755
+          "compressed_bytes": 3796757
         },
         {
           "city_code": "b",
@@ -19849,7 +19849,7 @@
           "raw_shard": "data/plvr/by-region/b_臺中市__霧峰區.json",
           "encoding": "gzip",
           "raw_bytes": 42576100,
-          "compressed_bytes": 1674452
+          "compressed_bytes": 1674450
         },
         {
           "city_code": "b",
@@ -19978,7 +19978,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 81469,
-          "compressed_bytes": 2501
+          "compressed_bytes": 2495
         },
         {
           "city_code": "a",
@@ -20075,7 +20075,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__中山區.json",
           "encoding": "gzip",
           "raw_bytes": 304741291,
-          "compressed_bytes": 13431526
+          "compressed_bytes": 13431525
         },
         {
           "city_code": "a",
@@ -20269,7 +20269,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__信義區.json",
           "encoding": "gzip",
           "raw_bytes": 145765352,
-          "compressed_bytes": 6327302
+          "compressed_bytes": 6327301
         },
         {
           "city_code": "a",
@@ -20366,7 +20366,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__內湖區.json",
           "encoding": "gzip",
           "raw_bytes": 234270692,
-          "compressed_bytes": 10493590
+          "compressed_bytes": 10493572
         },
         {
           "city_code": "a",
@@ -20754,7 +20754,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__大同區.json",
           "encoding": "gzip",
           "raw_bytes": 127441183,
-          "compressed_bytes": 4948934
+          "compressed_bytes": 4948933
         },
         {
           "city_code": "a",
@@ -20948,7 +20948,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__文山區.json",
           "encoding": "gzip",
           "raw_bytes": 175460445,
-          "compressed_bytes": 7501093
+          "compressed_bytes": 7501095
         },
         {
           "city_code": "a",
@@ -21045,7 +21045,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__松山區.json",
           "encoding": "gzip",
           "raw_bytes": 117822540,
-          "compressed_bytes": 5201248
+          "compressed_bytes": 5201243
         },
         {
           "city_code": "a",
@@ -21142,7 +21142,7 @@
           "raw_shard": "data/plvr/by-region/a_臺北市__萬華區.json",
           "encoding": "gzip",
           "raw_bytes": 131409333,
-          "compressed_bytes": 5633704
+          "compressed_bytes": 5633703
         }
       ]
     },
@@ -21287,7 +21287,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__七股區.json",
           "encoding": "gzip",
           "raw_bytes": 11049820,
-          "compressed_bytes": 432105
+          "compressed_bytes": 432103
         },
         {
           "city_code": "d",
@@ -21383,7 +21383,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__下營區.json",
           "encoding": "gzip",
           "raw_bytes": 9776017,
-          "compressed_bytes": 387186
+          "compressed_bytes": 387187
         },
         {
           "city_code": "d",
@@ -21480,7 +21480,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__中西區.json",
           "encoding": "gzip",
           "raw_bytes": 74803332,
-          "compressed_bytes": 3156153
+          "compressed_bytes": 3156152
         },
         {
           "city_code": "d",
@@ -21577,7 +21577,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__仁德區.json",
           "encoding": "gzip",
           "raw_bytes": 81124050,
-          "compressed_bytes": 3096816
+          "compressed_bytes": 3096817
         },
         {
           "city_code": "d",
@@ -22330,7 +22330,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__大內區.json",
           "encoding": "gzip",
           "raw_bytes": 5784449,
-          "compressed_bytes": 230072
+          "compressed_bytes": 230074
         },
         {
           "city_code": "d",
@@ -22524,7 +22524,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__安南區.json",
           "encoding": "gzip",
           "raw_bytes": 183470262,
-          "compressed_bytes": 6606303
+          "compressed_bytes": 6606304
         },
         {
           "city_code": "d",
@@ -22621,7 +22621,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__安定區.json",
           "encoding": "gzip",
           "raw_bytes": 26823483,
-          "compressed_bytes": 1000734
+          "compressed_bytes": 1000733
         },
         {
           "city_code": "d",
@@ -22718,7 +22718,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__安平區.json",
           "encoding": "gzip",
           "raw_bytes": 103348857,
-          "compressed_bytes": 3912101
+          "compressed_bytes": 3912088
         },
         {
           "city_code": "d",
@@ -23475,7 +23475,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__新營區.json",
           "encoding": "gzip",
           "raw_bytes": 49526134,
-          "compressed_bytes": 2139619
+          "compressed_bytes": 2139618
         },
         {
           "city_code": "d",
@@ -23573,7 +23573,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__東區.json",
           "encoding": "gzip",
           "raw_bytes": 157721806,
-          "compressed_bytes": 6309979
+          "compressed_bytes": 6309983
         },
         {
           "city_code": "d",
@@ -23766,7 +23766,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__柳營區.json",
           "encoding": "gzip",
           "raw_bytes": 12913871,
-          "compressed_bytes": 531779
+          "compressed_bytes": 531778
         },
         {
           "city_code": "d",
@@ -23861,7 +23861,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__楠西區.json",
           "encoding": "gzip",
           "raw_bytes": 3610467,
-          "compressed_bytes": 167798
+          "compressed_bytes": 167799
         },
         {
           "city_code": "d",
@@ -24345,7 +24345,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__西港區.json",
           "encoding": "gzip",
           "raw_bytes": 16586548,
-          "compressed_bytes": 662867
+          "compressed_bytes": 662870
         },
         {
           "city_code": "d",
@@ -24442,7 +24442,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__關廟區.json",
           "encoding": "gzip",
           "raw_bytes": 25409740,
-          "compressed_bytes": 924538
+          "compressed_bytes": 924539
         },
         {
           "city_code": "d",
@@ -24539,7 +24539,7 @@
           "raw_shard": "data/plvr/by-region/d_臺南市__鹽水區.json",
           "encoding": "gzip",
           "raw_bytes": 15810046,
-          "compressed_bytes": 669333
+          "compressed_bytes": 669336
         },
         {
           "city_code": "d",
@@ -24749,7 +24749,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 3710,
-          "compressed_bytes": 914
+          "compressed_bytes": 908
         },
         {
           "city_code": "v",
@@ -25030,7 +25030,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__大武鄉.json",
           "encoding": "gzip",
           "raw_bytes": 963956,
-          "compressed_bytes": 39776
+          "compressed_bytes": 39775
         },
         {
           "city_code": "v",
@@ -25120,7 +25120,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__太麻里鄉.json",
           "encoding": "gzip",
           "raw_bytes": 6537110,
-          "compressed_bytes": 268915
+          "compressed_bytes": 268919
         },
         {
           "city_code": "v",
@@ -25202,7 +25202,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__延平鄉.json",
           "encoding": "gzip",
           "raw_bytes": 684117,
-          "compressed_bytes": 24323
+          "compressed_bytes": 24322
         },
         {
           "city_code": "v",
@@ -25290,7 +25290,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__成功鎮.json",
           "encoding": "gzip",
           "raw_bytes": 5443564,
-          "compressed_bytes": 245096
+          "compressed_bytes": 245094
         },
         {
           "city_code": "v",
@@ -25377,7 +25377,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__東河鄉.json",
           "encoding": "gzip",
           "raw_bytes": 3274084,
-          "compressed_bytes": 138078
+          "compressed_bytes": 138077
         },
         {
           "city_code": "v",
@@ -25627,7 +25627,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__綠島鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1508619,
-          "compressed_bytes": 52453
+          "compressed_bytes": 52454
         },
         {
           "city_code": "v",
@@ -25813,7 +25813,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__金峰鄉.json",
           "encoding": "gzip",
           "raw_bytes": 297357,
-          "compressed_bytes": 11883
+          "compressed_bytes": 11885
         },
         {
           "city_code": "v",
@@ -25995,7 +25995,7 @@
           "raw_shard": "data/plvr/by-region/v_臺東縣__關山鎮.json",
           "encoding": "gzip",
           "raw_bytes": 3729436,
-          "compressed_bytes": 177838
+          "compressed_bytes": 177840
         },
         {
           "city_code": "v",
@@ -26115,7 +26115,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 1460,
-          "compressed_bytes": 815
+          "compressed_bytes": 816
         },
         {
           "city_code": "u",
@@ -26289,7 +26289,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__卓溪鄉.json",
           "encoding": "gzip",
           "raw_bytes": 815175,
-          "compressed_bytes": 30090
+          "compressed_bytes": 30088
         },
         {
           "city_code": "u",
@@ -26386,7 +26386,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__吉安鄉.json",
           "encoding": "gzip",
           "raw_bytes": 48309296,
-          "compressed_bytes": 2145173
+          "compressed_bytes": 2145172
         },
         {
           "city_code": "u",
@@ -26572,7 +26572,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__富里鄉.json",
           "encoding": "gzip",
           "raw_bytes": 5013588,
-          "compressed_bytes": 213667
+          "compressed_bytes": 213666
         },
         {
           "city_code": "u",
@@ -26669,7 +26669,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__新城鄉.json",
           "encoding": "gzip",
           "raw_bytes": 15830334,
-          "compressed_bytes": 640907
+          "compressed_bytes": 640906
         },
         {
           "city_code": "u",
@@ -27046,7 +27046,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__花蓮市.json",
           "encoding": "gzip",
           "raw_bytes": 91365817,
-          "compressed_bytes": 4001151
+          "compressed_bytes": 4001144
         },
         {
           "city_code": "u",
@@ -27219,7 +27219,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__豐濱鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1279142,
-          "compressed_bytes": 51994
+          "compressed_bytes": 51993
         },
         {
           "city_code": "u",
@@ -27307,7 +27307,7 @@
           "raw_shard": "data/plvr/by-region/u_花蓮縣__鳳林鎮.json",
           "encoding": "gzip",
           "raw_bytes": 5060107,
-          "compressed_bytes": 226493
+          "compressed_bytes": 226491
         }
       ]
     },
@@ -27348,7 +27348,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 15232,
-          "compressed_bytes": 1733
+          "compressed_bytes": 1734
         },
         {
           "city_code": "k",
@@ -27438,7 +27438,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__三灣鄉.json",
           "encoding": "gzip",
           "raw_bytes": 7256427,
-          "compressed_bytes": 266703
+          "compressed_bytes": 266702
         },
         {
           "city_code": "k",
@@ -27534,7 +27534,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__三義鄉.json",
           "encoding": "gzip",
           "raw_bytes": 8385547,
-          "compressed_bytes": 375543
+          "compressed_bytes": 375544
         },
         {
           "city_code": "k",
@@ -27721,7 +27721,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__卓蘭鎮.json",
           "encoding": "gzip",
           "raw_bytes": 6334527,
-          "compressed_bytes": 271746
+          "compressed_bytes": 271744
         },
         {
           "city_code": "k",
@@ -27901,7 +27901,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__大湖鄉.json",
           "encoding": "gzip",
           "raw_bytes": 7822123,
-          "compressed_bytes": 313214
+          "compressed_bytes": 313209
         },
         {
           "city_code": "k",
@@ -28168,7 +28168,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__獅潭鄉.json",
           "encoding": "gzip",
           "raw_bytes": 3833343,
-          "compressed_bytes": 143861
+          "compressed_bytes": 143860
         },
         {
           "city_code": "k",
@@ -28459,7 +28459,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__苗栗市.json",
           "encoding": "gzip",
           "raw_bytes": 61155786,
-          "compressed_bytes": 2517256
+          "compressed_bytes": 2517259
         },
         {
           "city_code": "k",
@@ -28736,7 +28736,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__造橋鄉.json",
           "encoding": "gzip",
           "raw_bytes": 12367810,
-          "compressed_bytes": 456957
+          "compressed_bytes": 456958
         },
         {
           "city_code": "k",
@@ -28930,7 +28930,7 @@
           "raw_shard": "data/plvr/by-region/k_苗栗縣__頭份市.json",
           "encoding": "gzip",
           "raw_bytes": 121922016,
-          "compressed_bytes": 4576404
+          "compressed_bytes": 4576405
         },
         {
           "city_code": "k",
@@ -29060,7 +29060,7 @@
           "raw_shard": "data/plvr/by-region/z_連江縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 5404,
-          "compressed_bytes": 1153
+          "compressed_bytes": 1154
         },
         {
           "city_code": "z",
@@ -29137,7 +29137,7 @@
           "raw_shard": "data/plvr/by-region/z_連江縣__北竿鄉.json",
           "encoding": "gzip",
           "raw_bytes": 374000,
-          "compressed_bytes": 15267
+          "compressed_bytes": 15266
         },
         {
           "city_code": "z",
@@ -29220,7 +29220,7 @@
           "raw_shard": "data/plvr/by-region/z_連江縣__南竿鄉.json",
           "encoding": "gzip",
           "raw_bytes": 1424726,
-          "compressed_bytes": 45688
+          "compressed_bytes": 45687
         },
         {
           "city_code": "z",
@@ -29449,7 +29449,7 @@
           "raw_shard": "data/plvr/by-region/w_金門縣__烏坵鄉.json",
           "encoding": "gzip",
           "raw_bytes": 3860,
-          "compressed_bytes": 1094
+          "compressed_bytes": 1095
         },
         {
           "city_code": "w",
@@ -29734,7 +29734,7 @@
           "raw_shard": "data/plvr/by-region/w_金門縣__金沙鎮.json",
           "encoding": "gzip",
           "raw_bytes": 5197371,
-          "compressed_bytes": 226216
+          "compressed_bytes": 226218
         },
         {
           "city_code": "w",
@@ -29830,7 +29830,7 @@
           "raw_shard": "data/plvr/by-region/w_金門縣__金湖鎮.json",
           "encoding": "gzip",
           "raw_bytes": 10765698,
-          "compressed_bytes": 476706
+          "compressed_bytes": 476705
         }
       ]
     },
@@ -29865,7 +29865,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__unknown.json",
           "encoding": "gzip",
           "raw_bytes": 4686,
-          "compressed_bytes": 1287
+          "compressed_bytes": 1286
         },
         {
           "city_code": "p",
@@ -30051,7 +30051,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__元長鄉.json",
           "encoding": "gzip",
           "raw_bytes": 8079110,
-          "compressed_bytes": 331155
+          "compressed_bytes": 331157
         },
         {
           "city_code": "p",
@@ -30239,7 +30239,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__口湖鄉.json",
           "encoding": "gzip",
           "raw_bytes": 5274191,
-          "compressed_bytes": 232939
+          "compressed_bytes": 232937
         },
         {
           "city_code": "p",
@@ -30903,7 +30903,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__斗六市.json",
           "encoding": "gzip",
           "raw_bytes": 88106009,
-          "compressed_bytes": 3564526
+          "compressed_bytes": 3564528
         },
         {
           "city_code": "p",
@@ -31000,7 +31000,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__斗南鎮.json",
           "encoding": "gzip",
           "raw_bytes": 26976584,
-          "compressed_bytes": 1069965
+          "compressed_bytes": 1069968
         },
         {
           "city_code": "p",
@@ -31562,7 +31562,7 @@
           "raw_shard": "data/plvr/by-region/p_雲林縣__褒忠鄉.json",
           "encoding": "gzip",
           "raw_bytes": 3577355,
-          "compressed_bytes": 155636
+          "compressed_bytes": 155637
         },
         {
           "city_code": "p",
@@ -31890,7 +31890,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__三民區.json",
           "encoding": "gzip",
           "raw_bytes": 274974463,
-          "compressed_bytes": 11753824
+          "compressed_bytes": 11753820
         },
         {
           "city_code": "e",
@@ -31987,7 +31987,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__仁武區.json",
           "encoding": "gzip",
           "raw_bytes": 95613863,
-          "compressed_bytes": 3844701
+          "compressed_bytes": 3844700
         },
         {
           "city_code": "e",
@@ -32264,7 +32264,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__前金區.json",
           "encoding": "gzip",
           "raw_bytes": 58719156,
-          "compressed_bytes": 2168808
+          "compressed_bytes": 2168809
         },
         {
           "city_code": "e",
@@ -32653,7 +32653,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__大社區.json",
           "encoding": "gzip",
           "raw_bytes": 25844309,
-          "compressed_bytes": 1134971
+          "compressed_bytes": 1134973
         },
         {
           "city_code": "e",
@@ -32750,7 +32750,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__小港區.json",
           "encoding": "gzip",
           "raw_bytes": 84509712,
-          "compressed_bytes": 3566145
+          "compressed_bytes": 3566142
         },
         {
           "city_code": "e",
@@ -32944,7 +32944,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__左營區.json",
           "encoding": "gzip",
           "raw_bytes": 191653774,
-          "compressed_bytes": 8242645
+          "compressed_bytes": 8242644
         },
         {
           "city_code": "e",
@@ -33038,7 +33038,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__彌陀區.json",
           "encoding": "gzip",
           "raw_bytes": 5091825,
-          "compressed_bytes": 240922
+          "compressed_bytes": 240921
         },
         {
           "city_code": "e",
@@ -33231,7 +33231,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__旗山區.json",
           "encoding": "gzip",
           "raw_bytes": 14708528,
-          "compressed_bytes": 643397
+          "compressed_bytes": 643399
         },
         {
           "city_code": "e",
@@ -33323,7 +33323,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__旗津區.json",
           "encoding": "gzip",
           "raw_bytes": 2399136,
-          "compressed_bytes": 116835
+          "compressed_bytes": 116834
         },
         {
           "city_code": "e",
@@ -33410,7 +33410,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__杉林區.json",
           "encoding": "gzip",
           "raw_bytes": 4080621,
-          "compressed_bytes": 173854
+          "compressed_bytes": 173855
         },
         {
           "city_code": "e",
@@ -33507,7 +33507,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__林園區.json",
           "encoding": "gzip",
           "raw_bytes": 34260859,
-          "compressed_bytes": 1362493
+          "compressed_bytes": 1362492
         },
         {
           "city_code": "e",
@@ -33783,7 +33783,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__楠梓區.json",
           "encoding": "gzip",
           "raw_bytes": 214935930,
-          "compressed_bytes": 8670348
+          "compressed_bytes": 8670349
         },
         {
           "city_code": "e",
@@ -33880,7 +33880,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__橋頭區.json",
           "encoding": "gzip",
           "raw_bytes": 57313089,
-          "compressed_bytes": 2026877
+          "compressed_bytes": 2026876
         },
         {
           "city_code": "e",
@@ -34070,7 +34070,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__湖內區.json",
           "encoding": "gzip",
           "raw_bytes": 20166408,
-          "compressed_bytes": 879363
+          "compressed_bytes": 879361
         },
         {
           "city_code": "e",
@@ -34256,7 +34256,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__田寮區.json",
           "encoding": "gzip",
           "raw_bytes": 3545089,
-          "compressed_bytes": 139466
+          "compressed_bytes": 139465
         },
         {
           "city_code": "e",
@@ -34978,7 +34978,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__阿蓮區.json",
           "encoding": "gzip",
           "raw_bytes": 10007644,
-          "compressed_bytes": 459316
+          "compressed_bytes": 459315
         },
         {
           "city_code": "e",
@@ -35172,7 +35172,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__鳳山區.json",
           "encoding": "gzip",
           "raw_bytes": 232792129,
-          "compressed_bytes": 9856917
+          "compressed_bytes": 9856914
         },
         {
           "city_code": "e",
@@ -35269,7 +35269,7 @@
           "raw_shard": "data/plvr/by-region/e_高雄市__鹽埕區.json",
           "encoding": "gzip",
           "raw_bytes": 46264069,
-          "compressed_bytes": 1278450
+          "compressed_bytes": 1278453
         },
         {
           "city_code": "e",
@@ -35372,6 +35372,6 @@
     }
   ],
   "asset_format": "gzip-compressed JSON shards",
-  "total_compressed_bytes": 839819795,
+  "total_compressed_bytes": 839819695,
   "max_file_mb": 95
 }
