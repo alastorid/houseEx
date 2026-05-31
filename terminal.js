@@ -225,6 +225,7 @@ function widthStyle(key) {
 }
 
 function renderHead() {
+  console.log("Visible columns:", visibleColumnDefs().map(c => c[1]));
   el("#gridHead").innerHTML = `<tr>${visibleColumnDefs().map(([key, label]) => `
     <th ${widthStyle(key)} data-field="${key}">
       <button type="button" data-sort="${key}" data-analytics="${key}">${label}${state.sortBy === key ? (state.sortDir === "ASC" ? " ▲" : " ▼") : ""}</button>
