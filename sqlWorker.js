@@ -628,11 +628,19 @@ function queryColumnAnalytics(payload = {}) {
   const db = cityDb(payload.city);
   const fieldMap = {
     community_name: { expr: "community_name", type: "string" },
+    city: { expr: "city", type: "string" },
     district: { expr: "district", type: "string" },
     road: { expr: "road", type: "string" },
+    full_address: { expr: "full_address", type: "string" },
+    building_no: { expr: "building_no", type: "string" },
+    transaction_date: { expr: "transaction_date", type: "string" },
     transaction_target: { expr: "transaction_target", type: "string" },
     property_type: { expr: "property_type", type: "string" },
     source_batch: { expr: "source_batch", type: "string" },
+    has_parking: { expr: "has_parking", type: "string" },
+    floor: { expr: "floor", type: "string" },
+    total_floor: { expr: "total_floor", type: "string" },
+    raw_json: { expr: "raw_json", type: "string" },
     total_price: { expr: "total_price", type: "number" },
     unit_price_ping: { expr: "unit_price_ping", type: "number" },
     building_area_ping: { expr: "building_area_ping", type: "number" },
@@ -640,7 +648,8 @@ function queryColumnAnalytics(payload = {}) {
     parking_price: { expr: "parking_price", type: "number" },
     building_age: { expr: "building_age", type: "number" },
   };
-  const field = fieldMap[payload.field] || fieldMap.community_name;
+  const field = fieldMap[payload.field];
+  if (!field) return withMeta("queryColumnAnalytics", payload.city, started, []);
   const { where, params } = txWhere(payload);
   let rows;
   if (field.type === "number") {
