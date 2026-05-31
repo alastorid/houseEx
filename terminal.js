@@ -416,7 +416,7 @@ function bind() {
   el("#fieldSelect").addEventListener("change", updateOperators);
   el("#operatorSelect").addEventListener("change", updateOperators);
   el("#addFilter").addEventListener("click", () => addFilter(el("#fieldSelect").value, el("#operatorSelect").value, el("#filterValue").value, el("#filterValue2").value));
-  document.querySelectorAll(".single-range input").forEach((input) => input.addEventListener("input", () => {
+  document.querySelectorAll(".dual-range input").forEach((input) => input.addEventListener("input", () => {
     const control = input.closest("[data-range]");
     if (!control) return;
     const field = control.dataset.range;

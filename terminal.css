@@ -103,7 +103,7 @@ label {
 
 .range-control {
   display: grid;
-  gap: 4px;
+  gap: 7px;
 }
 
 .range-control > div:first-child {
@@ -111,29 +111,49 @@ label {
   justify-content: space-between;
   gap: 10px;
   color: var(--muted);
-  font-size: 11px;
 }
 
-.single-range {
+.dual-range {
   position: relative;
-  height: 20px;
+  height: 24px;
 }
 
-.single-range input[type="range"] {
-  width: 100%;
+.dual-range::before,
+.range-fill {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
   height: 4px;
   border-radius: 999px;
   background: var(--line);
-  appearance: none;
-  cursor: pointer;
 }
 
-.single-range input[type="range"]::-webkit-slider-thumb {
+.range-fill {
+  right: auto;
+  background: var(--accent);
+}
+
+.dual-range input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+  appearance: none;
+}
+
+.dual-range input[type="range"]::-webkit-slider-thumb {
   width: 14px;
   height: 14px;
   border: 2px solid var(--accent);
   border-radius: 50%;
   background: var(--panel);
+  pointer-events: auto;
   appearance: none;
 }
 
