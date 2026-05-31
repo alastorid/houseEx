@@ -532,33 +532,6 @@ function bind() {
     }
     el("#contextMenu").classList.remove("open");
   });
-  el("#savePreset").addEventListener("click", () => {
-    const name = el("#presetName").value.trim();
-    if (!name) return;
-    savePresets([{ name, filters: state.filters, city: state.city, district: state.district, excludedDistricts: state.excludedDistricts }, ...readPresets().filter((item) => item.name !== name)]);
-  });
-  el("#savedPresets").addEventListener("click", (event) => {
-    const load = event.target.closest("[data-load-preset]");
-    const del = event.target.closest("[data-delete-preset]");
-    const presets = readPresets();
-    if (load) {
-      const preset = presets[Number(load.dataset.loadPreset)];
-      state.filters = preset?.filters || [];
-      state.city = preset?.city || state.city;
-      state.district = preset?.district || "";
-      state.excludedDistricts = preset?.excludedDistricts || [];
-      state.offset = 0;
-      el("#citySelect").value = state.city;
-      reloadDistricts().then(() => {
-        renderFilters();
-        runQuery();
-      });
-    }
-    if (del) {
-      presets.splice(Number(del.dataset.deletePreset), 1);
-      savePresets(presets);
-    }
-  });
   el("#exportCsv").addEventListener("click", exportCsv);
 }
 
