@@ -182,7 +182,7 @@ async function refreshRangeHints() {
       ["unit_price_ping", "unitMin", "unitRangeLabel", (v) => decimal.format(v / 10000), 1],
     ]) {
       const [field, minId, labelId, formatter, displayStep] = item;
-      const result = await queryService.queryColumnAnalytics({ ...payload, field });
+      const result = await queryService.queryColumnAnalytics({ ...payload, field }).catch(() => ({ rows: [{ min: 0, max: 0 }] }));
       const row = result.rows[0] || { min: 0, max: 0 };
       const scale = field === "total_price" || field === "unit_price_ping" ? 10000 : 1;
       const inputMin = el(`#${minId}`);
