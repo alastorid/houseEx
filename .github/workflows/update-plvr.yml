@@ -21,17 +21,15 @@ concurrency:
 jobs:
   fetch:
     runs-on: macos-latest
-    outputs:
-      data_updated: ${{ steps.commit.outputs.changes_detected }}
     steps:
       - uses: actions/checkout@v4
-      - name: Cache PLVR data
+      - name: Cache raw ZIP downloads
         uses: actions/cache@v4
         with:
-          path: data/plvr
-          key: plvr-data-${{ github.sha }}
+          path: downloads/plvr
+          key: plvr-zips-${{ github.sha }}
           restore-keys: |
-            plvr-data-
+            plvr-zips-
       - run: python3 scripts/fetch-plvr-open-data.py
       - id: commit
         uses: stefanzweifel/git-auto-commit-action@v5
