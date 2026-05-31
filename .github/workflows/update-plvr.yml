@@ -1,6 +1,12 @@
 name: Update PLVR Open Data
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/update-plvr.yml"
+      - "scripts/**"
+      - "data/community-overrides.json"
   schedule:
     - cron: "23 20 * * *"
   workflow_dispatch:
@@ -29,7 +35,7 @@ jobs:
         run: python3 scripts/build-community-index.py
 
       - name: Build SQLite query assets
-        run: python3 scripts/build-sqlite-assets.py --cities n
+        run: python3 scripts/build-sqlite-assets.py --cities all
 
       - name: Audit community discovery gaps
         run: python3 scripts/audit-community-gaps.py
@@ -41,4 +47,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update PLVR region shards
-          file_pattern: data/community-overrides.json data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz data/db/city/*.sqlite.gz
+          file_pattern: data/community-overrides.json data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz data/db/district/**/*.sqlite.gz

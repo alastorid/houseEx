@@ -49,13 +49,14 @@ CITY_SLUGS = {
 }
 
 SIZE_BUDGETS = {
-    "index.sqlite.gz": 5 * 1024 * 1024,
-    "city.sqlite.gz": 50 * 1024 * 1024,
+    "index.sqlite.gz": 25 * 1024 * 1024,
+    "shard.sqlite.gz": 45 * 1024 * 1024,
     "script.js": 300 * 1024,
     "styles.css": 80 * 1024,
 }
 
 COMMUNITY_OVERRIDES: list[dict] = []
+COMMUNITY_ITEMS_CACHE: dict[str, list[dict]] = {}
 
 
 def to_number(value: object) -> float:
@@ -148,6 +149,12 @@ def file_hash(path: Path) -> str:
 
 def city_slug(city_name: str, city_code: str = "") -> str:
     return CITY_SLUGS.get(city_name) or normalize_text(city_code or city_name).lower() or "city"
+
+
+def district_slug(district: str) -> str:
+    digest = hashlib.sha1(normalize_text(district).encode("utf-8")).hexdigest()[:8]
+    ascii_hint = re.sub(r"[^a-z0-9]+", "-", normalize_text(district).lower()).strip("-")
+    return ascii_hint or digest
 
 
 def stable_position(city: str, district: str, address: str, seed: str) -> tuple[float, float]:
@@ -690,6 +697,190 @@ def build_city_db(city: dict, args: argparse.Namespace, metadata: dict) -> dict:
     }
 
 
+def community_items_for_city(args: argparse.Namespace, city_name: str) -> list[dict]:
+    if city_name in COMMUNITY_ITEMS_CACHE:
+        return COMMUNITY_ITEMS_CACHE[city_name]
+    community_index = json.loads(args.community_index.read_text(encoding="utf-8"))
+    shard = next(c["shard"] for c in community_index["cities"] if c["city_name"] == city_name)
+    COMMUNITY_ITEMS_CACHE[city_name] = read_json_gz(Path(shard)).get("communities", [])
+    return COMMUNITY_ITEMS_CACHE[city_name]
+
+
+def build_transaction_db(city: dict, towns: list[dict], out: Path, args: argparse.Namespace, metadata: dict, record_filter=None) -> tuple[dict, dict]:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if out.exists():
+        out.unlink()
+    conn = sqlite3.connect(out)
+    schema(conn, include_transactions=True)
+    conn.execute("INSERT OR REPLACE INTO metadata VALUES (?,?)", ("version", metadata["version"]))
+    districts = {town.get("township") for town in towns}
+    for item in community_items_for_city(args, city["city_name"]):
+        if item.get("township") in districts:
+            insert_community(conn, item)
+    insert_sql = "INSERT OR REPLACE INTO transactions VALUES (" + ",".join("?" for _ in range(30)) + ")"
+    count = 0
+    for town in towns:
+        shard = Path(town["shard"])
+        if not shard.exists():
+            continue
+        data = read_json_gz(shard)
+        for idx, record in enumerate(data.get("records", [])):
+            if record.get("table_kind") != "主檔":
+                continue
+            if record_filter and not record_filter(record, idx):
+                continue
+            tx = transaction_row(record, idx)
+            conn.execute(insert_sql, tx)
+            insert_fts_all(conn, tx)
+            count += 1
+        conn.commit()
+    populate_summary_tables(conn)
+    conn.execute("INSERT INTO fts_transactions(fts_transactions) VALUES ('rebuild')")
+    conn.execute("INSERT INTO fts_communities(fts_communities) VALUES ('rebuild')")
+    conn.commit()
+    qa = city_qa(conn, city["city_name"])
+    transaction_count = qa["totalRows"]
+    community_count = conn.execute("SELECT COUNT(*) FROM communities").fetchone()[0] or 0
+    min_date = conn.execute("SELECT MIN(transaction_date) FROM transactions WHERE transaction_date <> ''").fetchone()[0] or ""
+    max_date = conn.execute("SELECT MAX(transaction_date) FROM transactions WHERE transaction_date <> ''").fetchone()[0] or ""
+    conn.execute("ANALYZE")
+    conn.execute("PRAGMA optimize")
+    conn.execute("VACUUM")
+    conn.close()
+    gz = out.with_suffix(".sqlite.gz")
+    gzip_file(out, gz)
+    info = {
+        "db": out.as_posix(),
+        "gzip": gz.as_posix(),
+        "path": gz.as_posix(),
+        "size": out.stat().st_size,
+        "compressedBytes": gz.stat().st_size,
+        "compressed_bytes": gz.stat().st_size,
+        "uncompressedBytes": out.stat().st_size,
+        "hash": file_hash(gz),
+        "transactionCount": transaction_count,
+        "transaction_count": transaction_count,
+        "communityCount": community_count,
+        "minDate": min_date,
+        "maxDate": max_date,
+        "qa": qa,
+    }
+    return info, qa
+
+
+def build_district_shards(city: dict, args: argparse.Namespace, metadata: dict) -> dict:
+    safe_name = city_slug(city["city_name"], city.get("city_code") or "")
+    city_dir = args.output_dir / "district" / safe_name
+    if city_dir.exists():
+        for old in city_dir.glob("*.sqlite*"):
+            old.unlink()
+    city_dir.mkdir(parents=True, exist_ok=True)
+    shards = []
+    total_rows = 0
+    total_communities = 0
+    min_dates = []
+    max_dates = []
+    qa_total = {
+        "city": city["city_name"],
+        "totalRows": 0,
+        "rowsMissingPrice": 0,
+        "rowsMissingAddress": 0,
+        "rowsMissingLatLng": 0,
+        "duplicatedTransactionCandidates": 0,
+        "abnormalUnitPrice": 0,
+        "abnormalBuildingArea": 0,
+        "cityDistrictMismatch": 0,
+        "sourceBatchCount": {},
+    }
+    def add_shard(shard_info: dict, qa: dict) -> None:
+        nonlocal total_rows, total_communities
+        source_counts = qa.get("sourceBatchCount") or {}
+        for key, value in source_counts.items():
+            qa_total["sourceBatchCount"][key] = qa_total["sourceBatchCount"].get(key, 0) + value
+        for key in ("totalRows", "rowsMissingPrice", "rowsMissingAddress", "rowsMissingLatLng", "duplicatedTransactionCandidates", "abnormalUnitPrice", "abnormalBuildingArea", "cityDistrictMismatch"):
+            qa_total[key] += qa.get(key, 0)
+        total_rows += shard_info["transactionCount"]
+        total_communities += shard_info["communityCount"]
+        if shard_info["minDate"]:
+            min_dates.append(shard_info["minDate"])
+        if shard_info["maxDate"]:
+            max_dates.append(shard_info["maxDate"])
+        shards.append(shard_info)
+
+    for town in city.get("townships", []):
+        district = town.get("township") or "unknown"
+        slug = district_slug(district)
+        out = city_dir / f"{slug}.sqlite"
+        info, qa = build_transaction_db(city, [town], out, args, metadata)
+        if info["compressedBytes"] > SIZE_BUDGETS["shard.sqlite.gz"]:
+            Path(info["db"]).unlink(missing_ok=True)
+            Path(info["gzip"]).unlink(missing_ok=True)
+            bucket_count = max(2, math.ceil(info["compressedBytes"] / SIZE_BUDGETS["shard.sqlite.gz"]) + 1)
+            for bucket in range(bucket_count):
+                bucket_out = city_dir / f"{slug}__{bucket + 1:02d}.sqlite"
+                bucket_info, bucket_qa = build_transaction_db(
+                    city,
+                    [town],
+                    bucket_out,
+                    args,
+                    metadata,
+                    record_filter=lambda record, idx, b=bucket, n=bucket_count: int(hashlib.sha1(f"{record.get('_source_id')}|{record.get('_file')}|{idx}|{(record.get('values') or {}).get('編號','')}".encode("utf-8")).hexdigest(), 16) % n == b,
+                )
+                add_shard({
+                    **{key: bucket_info[key] for key in ("db", "gzip", "path", "size", "compressedBytes", "compressed_bytes", "uncompressedBytes", "hash", "transactionCount", "transaction_count", "communityCount", "minDate", "maxDate")},
+                    "city": city["city_name"],
+                    "district": district,
+                    "slug": f"{slug}__{bucket + 1:02d}",
+                    "bucket": bucket + 1,
+                    "bucketCount": bucket_count,
+                    "recordCount": town.get("record_count") or 0,
+                }, bucket_qa)
+        else:
+            add_shard({
+                **{key: info[key] for key in ("db", "gzip", "path", "size", "compressedBytes", "compressed_bytes", "uncompressedBytes", "hash", "transactionCount", "transaction_count", "communityCount", "minDate", "maxDate")},
+                "city": city["city_name"],
+                "district": district,
+                "slug": slug,
+                "recordCount": town.get("record_count") or 0,
+            }, qa)
+    districts = {}
+    for shard in shards:
+        district = shard["district"]
+        entry = districts.setdefault(district, {
+            "city": city["city_name"],
+            "district": district,
+            "slug": district_slug(district),
+            "shards": [],
+            "transactionCount": 0,
+            "transaction_count": 0,
+            "communityCount": 0,
+            "compressedBytes": 0,
+            "compressed_bytes": 0,
+        })
+        entry["shards"].append(shard)
+        entry["transactionCount"] += shard.get("transactionCount") or 0
+        entry["transaction_count"] = entry["transactionCount"]
+        entry["communityCount"] += shard.get("communityCount") or 0
+        entry["compressedBytes"] += shard.get("compressedBytes") or 0
+        entry["compressed_bytes"] = entry["compressedBytes"]
+        if not entry.get("path") and len(entry["shards"]) == 1:
+            entry.update({key: shard[key] for key in ("db", "gzip", "path", "size", "uncompressedBytes", "hash", "minDate", "maxDate") if key in shard})
+    return {
+        "city": city["city_name"],
+        "slug": safe_name,
+        "city_code": city["city_code"],
+        "shardMode": "district",
+        "transactionCount": total_rows,
+        "transaction_count": total_rows,
+        "communityCount": total_communities,
+        "minDate": min(min_dates) if min_dates else "",
+        "maxDate": max(max_dates) if max_dates else "",
+        "districts": districts,
+        "shards": shards,
+        "qa": qa_total,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--web-index", type=Path, default=Path("data/plvr/web-index.json"))
@@ -723,7 +914,7 @@ def main() -> int:
             continue
         if not requested:
             continue
-        info = build_city_db(city, args, metadata)
+        info = build_district_shards(city, args, metadata)
         metadata["cities"][info["city"]] = info
 
     metadata_path = args.output_dir / "metadata.json"
@@ -746,7 +937,8 @@ def main() -> int:
         ("styles.css", Path("styles.css"), SIZE_BUDGETS["styles.css"]),
     ]
     for info in metadata["cities"].values():
-        budget_checks.append((f"{info['slug']}.sqlite.gz", Path(info["gzip"]), SIZE_BUDGETS["city.sqlite.gz"]))
+        for shard in info.get("shards", []):
+            budget_checks.append((f"{info['slug']}/{shard['slug']}.sqlite.gz", Path(shard["gzip"]), SIZE_BUDGETS["shard.sqlite.gz"]))
     for label, path, budget in budget_checks:
         if not path.exists():
             continue

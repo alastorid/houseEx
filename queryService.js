@@ -1,5 +1,5 @@
 const queryService = (() => {
-  const WORKER_VERSION = "20260531-sqlite-hardening";
+  const WORKER_VERSION = "20260531-district-shards";
   const DEFAULT_TIMEOUT_MS = 15000;
   const latestByChannel = new Map();
   let worker;

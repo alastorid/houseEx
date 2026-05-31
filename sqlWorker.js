@@ -3,7 +3,7 @@
 let SQL;
 let metadata;
 let indexDb;
-const cityDbs = new Map();
+const shardDbs = new Map();
 
 const DB_CACHE_NAME = "houseEx.sqliteCache";
 const DB_CACHE_VERSION = 1;
@@ -112,9 +112,9 @@ function idbAll(db) {
 
 async function pruneCityCache(db) {
   const rows = (await idbAll(db))
-    .filter((item) => item.kind === "city")
+    .filter((item) => item.kind === "city" || item.kind === "shard")
     .sort((a, b) => (b.lastUsed || 0) - (a.lastUsed || 0));
-  await Promise.all(rows.slice(3).map((item) => idbDelete(db, item.key)));
+  await Promise.all(rows.slice(12).map((item) => idbDelete(db, item.key)));
 }
 
 async function clearCache() {
@@ -268,52 +268,56 @@ function searchAll(payload = {}) {
   const city = payload.city;
   const keyword = String(payload.keyword || "").trim();
   if (!city || !keyword) return withMeta("searchAll", city || "city", started, []);
-  const db = cityDb(city);
   const limit = Math.min(Number(payload.limit) || 50, 200);
   const like = `%${keyword}%`;
   let rows = [];
-  if (tableExists(db, "fts_all")) {
-    try {
-      rows = rowsFromExec(
+  for (const { db } of cityDbsForPayload(payload)) {
+    let shardRows = [];
+    if (tableExists(db, "fts_all")) {
+      try {
+        shardRows = rowsFromExec(
+          db,
+          `
+            SELECT t.*
+            FROM fts_all f
+            JOIN transactions t ON t.id = f.id
+            WHERE fts_all MATCH ?
+            ORDER BY
+              CASE WHEN t.community_name = ? THEN 0 ELSE 1 END,
+              t.transaction_date DESC
+            LIMIT ?
+          `,
+          [keyword.replace(/"/g, ""), keyword, limit],
+        );
+      } catch {
+        shardRows = [];
+      }
+    }
+    if (!shardRows.length) {
+      shardRows = rowsFromExec(
         db,
         `
-          SELECT t.*
-          FROM fts_all f
-          JOIN transactions t ON t.id = f.id
-          WHERE fts_all MATCH ?
+          SELECT *
+          FROM transactions
+          WHERE community_name LIKE ?
+             OR full_address LIKE ?
+             OR building_no LIKE ?
+             OR city LIKE ?
+             OR district LIKE ?
+             OR road LIKE ?
+             OR source_batch LIKE ?
+             OR raw_json LIKE ?
           ORDER BY
-            CASE WHEN t.community_name = ? THEN 0 ELSE 1 END,
-            t.transaction_date DESC
+            CASE WHEN community_name = ? THEN 0 ELSE 1 END,
+            transaction_date DESC
           LIMIT ?
         `,
-        [keyword.replace(/"/g, ""), keyword, limit],
+        [like, like, like, like, like, like, like, like, keyword, limit],
       );
-    } catch {
-      rows = [];
     }
+    rows.push(...shardRows);
   }
-  if (!rows.length) {
-    rows = rowsFromExec(
-      db,
-      `
-        SELECT *
-        FROM transactions
-        WHERE community_name LIKE ?
-           OR full_address LIKE ?
-           OR building_no LIKE ?
-           OR city LIKE ?
-           OR district LIKE ?
-           OR road LIKE ?
-           OR source_batch LIKE ?
-           OR raw_json LIKE ?
-        ORDER BY
-          CASE WHEN community_name = ? THEN 0 ELSE 1 END,
-          transaction_date DESC
-        LIMIT ?
-      `,
-      [like, like, like, like, like, like, like, like, keyword, limit],
-    );
-  }
+  rows = rows.slice(0, limit);
   return withMeta("searchAll", city, started, rows);
 }
 
@@ -321,20 +325,43 @@ async function loadCity(payload = {}) {
   const started = now();
   const city = payload.city;
   if (!city) throw new Error("city required");
-  if (cityDbs.has(city)) {
-    return { city, cached: true, info: metadata.cities?.[city], meta: meta("loadCity", city, 0, now() - started, true) };
-  }
   const info = metadata.cities?.[city];
-  if (!info?.gzip && !info?.path) throw new Error(`SQLite city DB unavailable: ${city}`);
-  const loaded = await loadSqliteBytes(info.gzip || info.path, info.hash, "city", city);
-  cityDbs.set(city, new SQL.Database(loaded.bytes));
-  return { city, cached: loaded.cacheHit, info, meta: meta("loadCity", city, 0, now() - started, loaded.cacheHit) };
+  if (!info) throw new Error(`SQLite city DB unavailable: ${city}`);
+  const shards = shardInfos(city, payload.district);
+  let cacheHit = true;
+  for (const shard of shards) {
+    const key = shardKey(city, shard.district || "");
+    if (shardDbs.has(key)) continue;
+    const loaded = await loadSqliteBytes(shard.gzip || shard.path, shard.hash, info.shardMode === "district" ? "shard" : "city", key);
+    cacheHit = cacheHit && loaded.cacheHit;
+    shardDbs.set(key, new SQL.Database(loaded.bytes));
+  }
+  return { city, cached: cacheHit, info, shardCount: shards.length, meta: meta("loadCity", city, shards.length, now() - started, cacheHit) };
 }
 
-function cityDb(city) {
-  const db = cityDbs.get(city);
-  if (!db) throw new Error(`City DB not loaded: ${city}`);
-  return db;
+function shardKey(city, district = "") {
+  return `${city}|${district || "*"}`;
+}
+
+function shardInfos(city, district = "") {
+  const info = metadata.cities?.[city];
+  if (!info) throw new Error(`SQLite city DB unavailable: ${city}`);
+  if (info.shardMode !== "district") return [{ ...info, district: "" }];
+  if (district) {
+    const shard = info.districts?.[district];
+    if (!shard) throw new Error(`SQLite district DB unavailable: ${city} ${district}`);
+    return shard.shards || [shard];
+  }
+  return info.shards || Object.values(info.districts || {});
+}
+
+function cityDbsForPayload(payload = {}) {
+  return shardInfos(payload.city, payload.district).map((shard) => {
+    const key = shardKey(payload.city, shard.district || "");
+    const db = shardDbs.get(key);
+    if (!db) throw new Error(`SQLite shard not loaded: ${payload.city} ${shard.district || ""}`);
+    return { db, shard };
+  });
 }
 
 function txWhere(payload = {}) {
@@ -537,95 +564,127 @@ function safeSort(sortBy = "full_address", sortDir = "ASC") {
   return `${col} COLLATE NOCASE ${dir}, building_no COLLATE NOCASE ${dir}, transaction_date DESC`;
 }
 
+function compareValues(a, b, dir = "ASC") {
+  const av = a == null ? "" : a;
+  const bv = b == null ? "" : b;
+  let result;
+  if (typeof av === "number" || typeof bv === "number") result = Number(av || 0) - Number(bv || 0);
+  else result = String(av).localeCompare(String(bv), "zh-Hant", { numeric: true });
+  return dir === "DESC" ? -result : result;
+}
+
+function sortRows(rows, sortBy = "full_address", sortDir = "ASC") {
+  const dir = String(sortDir).toUpperCase() === "DESC" ? "DESC" : "ASC";
+  return rows.sort((a, b) => (
+    compareValues(a[sortBy], b[sortBy], dir)
+    || compareValues(a.building_no, b.building_no, dir)
+    || compareValues(a.transaction_date, b.transaction_date, "DESC")
+  ));
+}
+
 function queryTransactions(payload = {}) {
   const started = now();
-  const db = cityDb(payload.city);
   const { where, params } = txWhere(payload);
   const limit = Math.min(Number(payload.limit) || 100, 5000);
   const offset = Math.max(0, Number(payload.offset) || 0);
-  const rows = rowsFromExec(
-    db,
-    `
-      SELECT * FROM transactions
-      ${where}
-      ORDER BY ${safeSort(payload.sortBy, payload.sortDir)}
-      LIMIT ? OFFSET ?
-    `,
-    [...params, limit, offset],
-  );
-  const total = scalarFromExec(db, `SELECT COUNT(*) FROM transactions ${where}`, params);
+  const fetchLimit = limit + offset;
+  let rows = [];
+  let total = 0;
+  for (const { db } of cityDbsForPayload(payload)) {
+    rows.push(...rowsFromExec(
+      db,
+      `
+        SELECT * FROM transactions
+        ${where}
+        ORDER BY ${safeSort(payload.sortBy, payload.sortDir)}
+        LIMIT ?
+      `,
+      [...params, fetchLimit],
+    ));
+    total += scalarFromExec(db, `SELECT COUNT(*) FROM transactions ${where}`, params);
+  }
+  rows = sortRows(rows, payload.sortBy, payload.sortDir).slice(offset, offset + limit);
   return withMeta("queryTransactions", payload.city, started, rows, false, { total, limit, offset });
 }
 
 function queryTransactionDetail(payload = {}) {
   const started = now();
-  const db = cityDb(payload.city);
-  const row = rowsFromExec(db, "SELECT * FROM transactions WHERE id = ? LIMIT 1", [payload.id])[0] || null;
+  let row = null;
+  for (const { db } of cityDbsForPayload(payload)) {
+    row = rowsFromExec(db, "SELECT * FROM transactions WHERE id = ? LIMIT 1", [payload.id])[0] || null;
+    if (row) break;
+  }
   return { row, meta: meta("queryTransactionDetail", payload.city, row ? 1 : 0, now() - started, false) };
 }
 
 function queryRepeatSales(payload = {}) {
   const started = now();
-  const db = cityDb(payload.city);
   const { where, params } = txWhere(payload);
-  const rows = rowsFromExec(
-    db,
-    `
-      SELECT full_address, building_no, community_name, COUNT(*) AS count,
-             MIN(transaction_date) AS first_date,
-             MAX(transaction_date) AS last_date,
-             MIN(total_price) AS min_price,
-             MAX(total_price) AS max_price,
-             MAX(total_price) - MIN(total_price) AS price_diff
-      FROM transactions
-      ${where}
-      GROUP BY full_address, building_no
-      HAVING COUNT(*) > 1
-      ORDER BY count DESC, last_date DESC
-      LIMIT ?
-    `,
-    [...params, Math.min(Number(payload.limit) || 100, 500)],
-  );
+  const limit = Math.min(Number(payload.limit) || 100, 500);
+  let rows = [];
+  for (const { db } of cityDbsForPayload(payload)) {
+    rows.push(...rowsFromExec(
+      db,
+      `
+        SELECT full_address, building_no, community_name, COUNT(*) AS count,
+               MIN(transaction_date) AS first_date,
+               MAX(transaction_date) AS last_date,
+               MIN(total_price) AS min_price,
+               MAX(total_price) AS max_price,
+               MAX(total_price) - MIN(total_price) AS price_diff
+        FROM transactions
+        ${where}
+        GROUP BY full_address, building_no
+        HAVING COUNT(*) > 1
+        ORDER BY count DESC, last_date DESC
+        LIMIT ?
+      `,
+      [...params, limit],
+    ));
+  }
+  rows = rows.sort((a, b) => (b.count - a.count) || String(b.last_date).localeCompare(String(a.last_date))).slice(0, limit);
   return withMeta("queryRepeatSales", payload.city, started, rows);
 }
 
 function queryMapAnnotations(payload = {}) {
   const started = now();
-  const db = cityDb(payload.city);
   const { where, params } = txWhere(payload);
   const limit = Math.min(Number(payload.limit) || 13, 9999);
   const zoom = Number(payload.zoom) || 14;
   const groupExpr = zoom < 10 ? "district" : zoom < 15 ? "community_name" : "full_address || building_no";
   const labelExpr = zoom < 10 ? "district" : zoom < 15 ? "community_name" : "full_address";
-  const rows = rowsFromExec(
-    db,
-    `
-      SELECT
-        ${labelExpr} AS label,
-        community_name,
-        full_address,
-        building_no,
-        COUNT(*) AS tx_count,
-        AVG(lat) AS lat,
-        AVG(lng) AS lng,
-        AVG(unit_price_ping) AS median_unit_price_ping,
-        MIN(unit_price_ping) AS min_unit_price_ping,
-        MAX(unit_price_ping) AS max_unit_price_ping,
-        MAX(transaction_date) AS latest_transaction_date
-      FROM transactions
-      ${where}
-      GROUP BY ${groupExpr}
-      ORDER BY tx_count DESC, latest_transaction_date DESC
-      LIMIT ?
-    `,
-    [...params, limit],
-  );
+  let rows = [];
+  for (const { db } of cityDbsForPayload(payload)) {
+    rows.push(...rowsFromExec(
+      db,
+      `
+        SELECT
+          ${labelExpr} AS label,
+          community_name,
+          full_address,
+          building_no,
+          COUNT(*) AS tx_count,
+          AVG(lat) AS lat,
+          AVG(lng) AS lng,
+          AVG(unit_price_ping) AS median_unit_price_ping,
+          MIN(unit_price_ping) AS min_unit_price_ping,
+          MAX(unit_price_ping) AS max_unit_price_ping,
+          MAX(transaction_date) AS latest_transaction_date
+        FROM transactions
+        ${where}
+        GROUP BY ${groupExpr}
+        ORDER BY tx_count DESC, latest_transaction_date DESC
+        LIMIT ?
+      `,
+      [...params, limit],
+    ));
+  }
+  rows = rows.sort((a, b) => (b.tx_count - a.tx_count) || String(b.latest_transaction_date).localeCompare(String(a.latest_transaction_date))).slice(0, limit);
   return withMeta("queryMapAnnotations", payload.city, started, rows);
 }
 
 function queryColumnAnalytics(payload = {}) {
   const started = now();
-  const db = cityDb(payload.city);
   const fieldMap = {
     community_name: { expr: "community_name", type: "string" },
     city: { expr: "city", type: "string" },
@@ -656,31 +715,50 @@ function queryColumnAnalytics(payload = {}) {
     const numberWhere = where
       ? `${where} AND ${field.expr} > 0`
       : `WHERE ${field.expr} > 0`;
-    rows = rowsFromExec(
-      db,
-      `
-        SELECT COUNT(*) AS count,
-               MIN(${field.expr}) AS min,
-               AVG(${field.expr}) AS avg,
-               MAX(${field.expr}) AS max
-        FROM transactions
-        ${numberWhere}
-      `,
-      params,
-    );
+    const partials = cityDbsForPayload(payload).flatMap(({ db }) => rowsFromExec(
+        db,
+        `
+          SELECT COUNT(*) AS count,
+                 MIN(${field.expr}) AS min,
+                 AVG(${field.expr}) AS avg,
+                 MAX(${field.expr}) AS max
+          FROM transactions
+          ${numberWhere}
+        `,
+        params,
+      ));
+    const count = partials.reduce((sum, row) => sum + Number(row.count || 0), 0);
+    const weighted = partials.reduce((sum, row) => sum + Number(row.avg || 0) * Number(row.count || 0), 0);
+    rows = [{
+      count,
+      min: Math.min(...partials.map((row) => Number(row.min || Infinity))),
+      avg: count ? weighted / count : 0,
+      max: Math.max(...partials.map((row) => Number(row.max || 0))),
+    }];
   } else {
-    rows = rowsFromExec(
-      db,
-      `
-        SELECT ${field.expr} AS value, COUNT(*) AS count
-        FROM transactions
-        ${where}
-        GROUP BY ${field.expr}
-        ORDER BY count DESC
-        LIMIT ?
-      `,
-      [...params, Math.min(Number(payload.limit) || 20, 200)],
-    );
+    const counts = new Map();
+    const limit = Math.min(Number(payload.limit) || 20, 200);
+    for (const { db } of cityDbsForPayload(payload)) {
+      for (const row of rowsFromExec(
+        db,
+        `
+          SELECT ${field.expr} AS value, COUNT(*) AS count
+          FROM transactions
+          ${where}
+          GROUP BY ${field.expr}
+          ORDER BY count DESC
+          LIMIT ?
+        `,
+        [...params, limit],
+      )) {
+        const key = row.value || "";
+        counts.set(key, (counts.get(key) || 0) + Number(row.count || 0));
+      }
+    }
+    rows = [...counts.entries()]
+      .map(([value, count]) => ({ value, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
   }
   return withMeta("queryColumnAnalytics", payload.city, started, rows);
 }

@@ -31,6 +31,12 @@ def scalar(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> object:
     return conn.execute(sql, params).fetchone()[0]
 
 
+def open_district(metadata_city: dict, district: str) -> sqlite3.Connection:
+    shard = (metadata_city.get("districts") or {}).get(district)
+    assert_true(bool(shard), f"metadata must include {district} shard")
+    return open_gzip_sqlite(ROOT / shard["gzip"])
+
+
 def main() -> int:
     metadata = json.loads((ROOT / "data/db/metadata.json").read_text(encoding="utf-8"))
     changhua = metadata["cities"].get("彰化縣")
@@ -42,9 +48,13 @@ def main() -> int:
     assert_true(index_hit >= 1, "index DB must resolve 漢寶新宿")
     index_conn.close()
 
-    city_conn = open_gzip_sqlite(ROOT / changhua["gzip"])
-    assert_true(scalar(city_conn, "SELECT COUNT(*) FROM transactions") > 100000, "彰化 DB must contain transactions")
-    assert_true(scalar(city_conn, "SELECT COUNT(*) FROM fts_all") > 100000, "fts_all must be populated")
+    assert_true(changhua.get("shardMode") == "district", "彰化 must use district shards")
+    total_rows = sum((item.get("transactionCount") or 0) for item in (changhua.get("shards") or []))
+    assert_true(total_rows > 100000, "彰化 district shards must contain transactions")
+
+    city_conn = open_district(changhua, "芳苑鄉")
+    assert_true(scalar(city_conn, "SELECT COUNT(*) FROM transactions") > 0, "芳苑 shard must contain transactions")
+    assert_true(scalar(city_conn, "SELECT COUNT(*) FROM fts_all") > 0, "fts_all must be populated")
     assert_true(scalar(city_conn, "SELECT COUNT(*) FROM community_summary") > 0, "community_summary must be populated")
 
     hanbao = city_conn.execute(
@@ -61,6 +71,9 @@ def main() -> int:
     assert_true(bool(hanbao[1]), "交易明細 must include 棟及號")
     assert_true((hanbao[2] or 0) > 0, "unit_price_ping must be populated")
 
+    city_conn.close()
+
+    city_conn = open_district(changhua, "社頭鄉")
     gaotie = city_conn.execute(
         """
         SELECT district, COUNT(*)
@@ -76,6 +89,9 @@ def main() -> int:
     batch_hit = scalar(city_conn, "SELECT COUNT(*) FROM transactions WHERE source_batch = '115S1'")
     assert_true(batch_hit > 0, "source batch 115S1 must be searchable")
 
+    city_conn.close()
+
+    city_conn = open_district(changhua, "員林市")
     jiemei = city_conn.execute(
         """
         SELECT district, COUNT(*)

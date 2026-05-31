@@ -167,9 +167,9 @@ function cellHtml(row, field) {
 
 function filterPayload() {
   const filters = [...state.filters];
-  if (state.district) filters.push({ field: "district", operator: "exact", value: state.district });
   return {
     city: state.city,
+    district: state.district,
     keyword: state.keyword,
     filters,
     sortBy: state.sortBy,
@@ -192,7 +192,7 @@ async function runQuery({ append = false } = {}) {
   if (state.loading) return;
   state.loading = true;
   try {
-    await queryService.loadCity({ city: state.city });
+    await queryService.loadCity({ city: state.city, district: state.district });
     const result = await queryService.queryTransactions(filterPayload());
     setMeta(result.meta);
     state.total = result.total || 0;

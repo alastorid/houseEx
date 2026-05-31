@@ -794,7 +794,7 @@ async function loadSelectedRegion() {
   setStatus(`正在載入 ${state.city}${state.township}：${numberFormat.format(entry.record_count)} 筆...`);
   try {
     if (state.sqliteReady && state.sqliteMetadata?.cities?.[state.city]) {
-      const cityLoad = await queryService.loadCity({ city: state.city });
+      const cityLoad = await queryService.loadCity({ city: state.city, district: state.township });
       setQueryMeta(cityLoad.meta);
       state.sqliteCity = state.city;
       const query = el("#queryInput").value.trim();
