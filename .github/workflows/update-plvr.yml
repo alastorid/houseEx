@@ -23,14 +23,19 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install aria2
-        run: brew install aria2
+      - name: Cache raw ZIP downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads/plvr
+          key: plvr-zips-${{ github.sha }}
+          restore-keys: |
+            plvr-zips-
       - run: python3 scripts/fetch-plvr-open-data.py
       - id: commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "fetch: update raw open data"
-          file_pattern: "raw/*.zip data/plvr/source-urls.json"
+          file_pattern: "data/plvr/source-urls.json"
 
   process:
     needs: fetch
