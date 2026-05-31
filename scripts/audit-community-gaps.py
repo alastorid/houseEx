@@ -30,7 +30,12 @@ def address_cluster(address: str) -> str:
 
 
 def main() -> int:
-    db_path = ROOT / "data/db/city/changhua.sqlite"
+    city_dir = ROOT / "data/db/district/changhua"
+    db_paths = list(city_dir.glob("*.sqlite"))
+    if not db_paths:
+        print(f"No sqlite files found in {city_dir}")
+        return 1
+    db_path = db_paths[0]
     conn = sqlite3.connect(db_path)
     present_missing = conn.execute(
         """
