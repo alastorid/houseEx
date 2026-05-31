@@ -176,32 +176,24 @@ async function refreshRangeHints() {
   try {
     const baseRows = state.rows.length ? state.rows : [];
     for (const item of [
-      ["building_area_ping", "buildingMin", "buildingMax", "buildingRangeLabel", "buildingFill", (v) => decimal.format(v), 0.5],
-      ["land_area_ping", "landMin", "landMax", "landRangeLabel", "landFill", (v) => decimal.format(v), 0.5],
-      ["total_price", "priceMin", "priceMax", "priceRangeLabel", "priceFill", (v) => money.format(v / 10000), 10],
-      ["unit_price_ping", "unitMin", "unitMax", "unitRangeLabel", "unitFill", (v) => decimal.format(v / 10000), 1],
+      ["building_area_ping", "buildingMin", "buildingRangeLabel", (v) => decimal.format(v), 0.5],
+      ["land_area_ping", "landMin", "landRangeLabel", (v) => decimal.format(v), 0.5],
+      ["total_price", "priceMin", "priceRangeLabel", (v) => money.format(v / 10000), 10],
+      ["unit_price_ping", "unitMin", "unitRangeLabel", (v) => decimal.format(v / 10000), 1],
     ]) {
-      const [field, minId, maxId, labelId, fillId, formatter, displayStep] = item;
+      const [field, minId, labelId, formatter, displayStep] = item;
       const values = baseRows.map((row) => Number(row[field]) || 0).filter((value) => value > 0);
       const min = values.length ? Math.min(...values) : 0;
       const max = values.length ? Math.max(...values) : 0;
       const scale = field === "total_price" || field === "unit_price_ping" ? 10000 : 1;
       const inputMin = el(`#${minId}`);
-      const inputMax = el(`#${maxId}`);
-      const current = state.rangeBounds[field] || {};
       const lo = Math.floor(min / scale);
       const hi = Math.ceil(max / scale);
       inputMin.min = String(lo);
       inputMin.max = String(hi);
       inputMin.step = String(displayStep);
-      inputMax.min = String(lo);
-      inputMax.max = String(hi);
-      inputMax.step = String(displayStep);
-      if (!current.touched) {
-        inputMin.value = String(lo);
-        inputMax.value = String(hi);
-      }
-      state.rangeBounds[field] = { min: lo, max: hi, scale, fillId, labelId, minId, maxId, formatter, touched: current.touched || false };
+      if (!state.rangeBounds[field]?.touched) inputMin.value = String(lo);
+      state.rangeBounds[field] = { min: lo, max: hi, scale, labelId, minId, formatter, touched: state.rangeBounds[field]?.touched || false };
       updateRangeLabel(field);
     }
   } finally {
@@ -213,18 +205,9 @@ function updateRangeLabel(field) {
   const bounds = state.rangeBounds[field];
   if (!bounds) return;
   const minInput = el(`#${bounds.minId}`);
-  const maxInput = el(`#${bounds.maxId}`);
-  let minValue = Number(minInput.value);
-  let maxValue = Number(maxInput.value);
-  if (minValue > maxValue) [minValue, maxValue] = [maxValue, minValue];
+  const minValue = Number(minInput.value);
   const format = bounds.formatter || ((v) => decimal.format(v));
-  el(`#${bounds.labelId}`).textContent = `${format(minValue * bounds.scale)} ~ ${format(maxValue * bounds.scale)}`;
-  const spread = Math.max(bounds.max - bounds.min, 1);
-  const left = ((minValue - bounds.min) / spread) * 100;
-  const right = ((maxValue - bounds.min) / spread) * 100;
-  const fill = el(`#${bounds.fillId}`);
-  fill.style.left = `${left}%`;
-  fill.style.width = `${Math.max(0, right - left)}%`;
+  el(`#${bounds.labelId}`).textContent = `${format(minValue * bounds.scale)} +`;
 }
 
 function populateFields() {
@@ -311,17 +294,16 @@ function removeAutoFilters(fields) {
 
 function applyRangeFilters() {
   removeAutoFilters(["building_area_ping", "land_area_ping", "total_price", "unit_price_ping"]);
-  for (const [field, minId, maxId] of [
-    ["building_area_ping", "buildingMin", "buildingMax"],
-    ["land_area_ping", "landMin", "landMax"],
-    ["total_price", "priceMin", "priceMax"],
-    ["unit_price_ping", "unitMin", "unitMax"],
+  for (const [field, minId] of [
+    ["building_area_ping", "buildingMin"],
+    ["land_area_ping", "landMin"],
+    ["total_price", "priceMin"],
+    ["unit_price_ping", "unitMin"],
   ]) {
     const bounds = state.rangeBounds[field];
     if (!bounds) continue;
-    const min = Math.min(Number(el(`#${minId}`).value), Number(el(`#${maxId}`).value));
-    const max = Math.max(Number(el(`#${minId}`).value), Number(el(`#${maxId}`).value));
-    if (min > bounds.min || max < bounds.max) state.filters.push({ field, operator: "between", value: min * bounds.scale, value2: max * bounds.scale });
+    const min = Number(el(`#${minId}`).value);
+    if (min > bounds.min) state.filters.push({ field, operator: ">=", value: min * bounds.scale });
   }
   renderFilters();
   runQuery();
@@ -435,7 +417,7 @@ function bind() {
   el("#fieldSelect").addEventListener("change", updateOperators);
   el("#operatorSelect").addEventListener("change", updateOperators);
   el("#addFilter").addEventListener("click", () => addFilter(el("#fieldSelect").value, el("#operatorSelect").value, el("#filterValue").value, el("#filterValue2").value));
-  document.querySelectorAll(".dual-range input").forEach((input) => input.addEventListener("input", () => {
+  document.querySelectorAll(".single-range input").forEach((input) => input.addEventListener("input", () => {
     const control = input.closest("[data-range]");
     if (!control) return;
     const field = control.dataset.range;
