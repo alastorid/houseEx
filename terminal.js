@@ -221,11 +221,18 @@ function humanFilter(filter) {
   return `${label} ${filter.operator} ${filter.operator === "between" ? `${value}~${value2}` : value}`;
 }
 
+function filterInputValue(filter) {
+  if (filter.field === "total_price" || filter.field === "parking_price" || filter.field === "unit_price_ping") {
+    return filter.value === "" || filter.value == null ? "" : Number(filter.value) / 10000;
+  }
+  return filter.value ?? "";
+}
+
 function renderFilters() {
   el("#activeFilters").innerHTML = state.filters.map((filter, index) => (
     `<div class="filter-line" data-index="${index}">
-      <small>${fieldDef(filter.field)[1]} ${filter.operator}</small>
-      <input type="text" value="${filter.value}" data-edit-val="${index}" />
+      <small>${humanFilter(filter)}</small>
+      <input type="text" value="${filterInputValue(filter)}" data-edit-val="${index}" />
       <button type="button" data-remove-filter="${index}">×</button>
     </div>`
   )).join("");
@@ -244,6 +251,17 @@ function convertValue(field, value) {
   if (value === "" || value == null) return "";
   if (field === "total_price" || field === "parking_price") return Number(value) * 10000;
   if (field === "unit_price_ping") return Number(value) * 10000;
+  return value;
+}
+
+function contextFilterValue(field, value) {
+  if (field === "total_price" || field === "parking_price" || field === "unit_price_ping") return Number(value || 0) / 10000;
+  return value;
+}
+
+function contextFilterLabel(field, value) {
+  if (field === "total_price" || field === "parking_price") return `${money.format(Number(value || 0) / 10000)}萬`;
+  if (field === "unit_price_ping") return `${decimal.format(Number(value || 0) / 10000)}萬/坪`;
   return value;
 }
 
@@ -454,11 +472,13 @@ function bind() {
     const field = visibleColumnDefs()[cellIndex][0];
     const row = state.rows[tr.rowIndex - 1];
     const value = row[field];
+    const filterValue = contextFilterValue(field, value);
+    const filterLabel = contextFilterLabel(field, value);
     const menu = el("#contextMenu");
-    let options = [`<button type="button" data-filter="${field}" data-op="=" data-val="${value}">Include: ${value}</button>`, `<button type="button" data-filter="${field}" data-op="!=" data-val="${value}">Exclude: ${value}</button>`];
+    let options = [`<button type="button" data-filter="${field}" data-op="=" data-val="${filterValue}">Include: ${filterLabel}</button>`, `<button type="button" data-filter="${field}" data-op="!=" data-val="${filterValue}">Exclude: ${filterLabel}</button>`];
     if (fieldDef(field)[2] === "number" || fieldDef(field)[2] === "money" || fieldDef(field)[2] === "unitMoney") {
-      options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${value}">>= ${value}</button>`);
-      options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${value}"><= ${value}</button>`);
+      options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${filterValue}">>= ${filterLabel}</button>`);
+      options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${filterValue}"><= ${filterLabel}</button>`);
     }
     if (field === "full_address") {
       const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
