@@ -268,20 +268,13 @@ th {
   padding: 8px;
   background: var(--panel);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  flex-direction: column;
 }
 
-.column-popover {
-  right: 292px;
-  top: 82px;
-  max-width: 360px;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.column-popover.open,
 .context-menu.open {
   display: flex;
 }
+
 
 tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.025);
