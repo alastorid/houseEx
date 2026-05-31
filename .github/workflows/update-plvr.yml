@@ -25,6 +25,13 @@ jobs:
       data_updated: ${{ steps.commit.outputs.changes_detected }}
     steps:
       - uses: actions/checkout@v4
+      - name: Cache PLVR data
+        uses: actions/cache@v4
+        with:
+          path: data/plvr
+          key: plvr-data-${{ github.sha }}
+          restore-keys: |
+            plvr-data-
       - run: python3 scripts/fetch-plvr-open-data.py
       - id: commit
         uses: stefanzweifel/git-auto-commit-action@v5
