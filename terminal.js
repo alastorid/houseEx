@@ -543,6 +543,32 @@ function bind() {
     if (!button) return;
     window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(button.dataset.mapAddress)}`, "_blank", "noopener");
   });
+  el("#gridRows").addEventListener("contextmenu", (event) => {
+    const td = event.target.closest("td");
+    const tr = event.target.closest("tr");
+    if (!td || !tr) return;
+    event.preventDefault();
+    const cellIndex = td.cellIndex;
+    const field = visibleColumnDefs()[cellIndex][0];
+    const row = state.rows[tr.rowIndex - 1];
+    const value = row[field];
+    const menu = el("#contextMenu");
+    let options = [`<button type="button" data-filter="${field}" data-op="=" data-val="${value}">Include: ${value}</button>`, `<button type="button" data-filter="${field}" data-op="!=" data-val="${value}">Exclude: ${value}</button>`];
+    if (fieldDef(field)[2] === "number" || fieldDef(field)[2] === "money" || fieldDef(field)[2] === "unitMoney") {
+      options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${value}">>= ${value}</button>`);
+      options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${value}"><= ${value}</button>`);
+    }
+    menu.innerHTML = options.join("");
+    menu.style.left = `${event.clientX}px`;
+    menu.style.top = `${event.clientY}px`;
+    menu.classList.add("open");
+  });
+  el("#contextMenu").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-filter]");
+    if (!button) return;
+    addFilter(button.dataset.filter, button.dataset.op, button.dataset.val);
+    el("#contextMenu").classList.remove("open");
+  });
   el("#savePreset").addEventListener("click", () => {
     const name = el("#presetName").value.trim();
     if (!name) return;
