@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-30T21:29:49.980985+00:00",
+  "generated_at": "2026-05-31T19:45:28.530568+00:00",
   "source_page": "https://plvr.land.moi.gov.tw/DownloadOpenData",
   "sources": [
     {
@@ -37,6 +37,12 @@
       "kind": "history",
       "label": "前期下載 20260511",
       "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260511"
+    },
+    {
+      "id": "20260521",
+      "kind": "history",
+      "label": "前期下載 20260521",
+      "url": "https://plvr.land.moi.gov.tw/DownloadHistory?type=history&fileName=20260521"
     },
     {
       "id": "115S1",
