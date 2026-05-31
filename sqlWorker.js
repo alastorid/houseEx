@@ -616,6 +616,9 @@ function queryColumnAnalytics(payload = {}) {
   const { where, params } = txWhere(payload);
   let rows;
   if (field.type === "number") {
+    const numberWhere = where
+      ? `${where} AND ${field.expr} > 0`
+      : `WHERE ${field.expr} > 0`;
     rows = rowsFromExec(
       db,
       `
@@ -624,9 +627,8 @@ function queryColumnAnalytics(payload = {}) {
                AVG(${field.expr}) AS avg,
                MAX(${field.expr}) AS max
         FROM transactions
-        ${where}
-        AND ${field.expr} > 0
-      `.replace(`${where}\n        AND`, where ? `${where}\n        AND` : "WHERE"),
+        ${numberWhere}
+      `,
       params,
     );
   } else {

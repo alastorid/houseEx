@@ -96,18 +96,6 @@ label {
   gap: 6px;
 }
 
-.range-inputs {
-  display: grid;
-  gap: 8px;
-}
-
-.input-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 1fr;
-  gap: 6px;
-  align-items: center;
-}
-
 .filter-line {
   display: flex;
   justify-content: space-between;

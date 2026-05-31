@@ -42,7 +42,6 @@ const state = {
   districtOptions: [],
   districtCounts: {},
   excludedDistricts: [],
-  rangeBounds: {},
   keyword: "",
   filters: [],
   rows: [],
@@ -150,7 +149,6 @@ async function runQuery({ append = false } = {}) {
     state.total = result.total || 0;
     state.rows = append ? [...state.rows, ...(result.rows || [])] : result.rows || [];
     renderRows();
-    if (!append) refreshRangeHints();
     if (!append) refreshTownTags();
   } finally {
     state.loading = false;
@@ -171,45 +169,6 @@ function renderTownTags() {
     const selected = state.district && state.district !== district;
     return `<button type="button" class="${excluded || selected ? "" : "active"}" data-town-tag="${district}">${district} <span>${money.format(state.districtCounts[district] || 0)}</span></button>`;
   }).join("");
-}
-
-async function refreshRangeHints() {
-  if (state.analyticsLoading || !state.city) return;
-  state.analyticsLoading = true;
-  try {
-    const payload = filterPayload();
-    for (const item of [
-      ["building_area_ping", "buildingMin", "buildingRangeLabel", (v) => decimal.format(v), 0.5],
-      ["land_area_ping", "landMin", "landRangeLabel", (v) => decimal.format(v), 0.5],
-      ["total_price", "priceMin", "priceRangeLabel", (v) => money.format(v / 10000), 10],
-      ["unit_price_ping", "unitMin", "unitRangeLabel", (v) => decimal.format(v / 10000), 1],
-    ]) {
-      const [field, minId, labelId, formatter, displayStep] = item;
-      const result = await queryService.queryColumnAnalytics({ ...payload, field }).catch(() => ({ rows: [{ min: 0, max: 0 }] }));
-      const row = result.rows[0] || { min: 0, max: 0 };
-      const scale = field === "total_price" || field === "unit_price_ping" ? 10000 : 1;
-      const inputMin = el(`#${minId}`);
-      const lo = Math.floor(row.min / scale);
-      const hi = Math.ceil(row.max / scale);
-      inputMin.min = String(lo);
-      inputMin.max = String(hi);
-      inputMin.step = String(displayStep);
-      if (!state.rangeBounds[field]?.touched) inputMin.value = String(lo);
-      state.rangeBounds[field] = { min: lo, max: hi, scale, labelId, minId, formatter, touched: state.rangeBounds[field]?.touched || false };
-      updateRangeLabel(field);
-    }
-  } finally {
-    state.analyticsLoading = false;
-  }
-}
-
-function updateRangeLabel(field) {
-  const bounds = state.rangeBounds[field];
-  if (!bounds) return;
-  const minInput = el(`#${bounds.minId}`);
-  const minValue = Number(minInput.value);
-  const format = bounds.formatter || ((v) => decimal.format(v));
-  el(`#${bounds.labelId}`).textContent = `${format(minValue * bounds.scale)} +`;
 }
 
 function populateFields() {
@@ -301,27 +260,8 @@ function addFilter(field, operator, value, value2 = "") {
   runQuery();
 }
 
-const debouncedApplyRangeFilters = debounce(applyRangeFilters, 260);
-
 function removeAutoFilters(fields) {
   state.filters = state.filters.filter((filter) => !fields.includes(filter.field));
-}
-
-function applyRangeFilters() {
-  removeAutoFilters(["building_area_ping", "land_area_ping", "total_price", "unit_price_ping"]);
-  for (const [field, minId] of [
-    ["building_area_ping", "buildingMin"],
-    ["land_area_ping", "landMin"],
-    ["total_price", "priceMin"],
-    ["unit_price_ping", "unitMin"],
-  ]) {
-    const bounds = state.rangeBounds[field];
-    if (!bounds) continue;
-    const min = Number(el(`#${minId}`).value);
-    if (min > bounds.min) state.filters.push({ field, operator: ">=", value: min * bounds.scale });
-  }
-  renderFilters();
-  runQuery();
 }
 
 function renderColumnsPopover() {
