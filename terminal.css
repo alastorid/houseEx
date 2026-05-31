@@ -108,11 +108,29 @@ label {
 
 .preset-bar,
 .active-filters,
-#savedPresets {
+#savedPresets,
+.town-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin: 8px 0;
+}
+
+.town-tags button,
+.segmented button,
+.column-popover button {
+  color: var(--muted);
+}
+
+.town-tags button.active,
+.segmented button.active,
+.column-popover button.active {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.town-tags span {
+  color: var(--warn);
 }
 
 .filter-chip {
@@ -183,6 +201,57 @@ th button {
   color: var(--accent);
   background: transparent;
   text-align: left;
+}
+
+.address-cell {
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+th {
+  position: relative;
+}
+
+.column-popover,
+.context-menu {
+  display: none;
+  position: fixed;
+  z-index: 20;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  background: var(--panel);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+
+.column-popover {
+  right: 292px;
+  top: 82px;
+  max-width: 360px;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.column-popover.open,
+.context-menu.open {
+  display: flex;
 }
 
 tbody tr:nth-child(even) {

@@ -356,9 +356,31 @@ function txWhere(payload = {}) {
       clauses.push(value === false || value === "false" || value === "0" ? `NOT ${exists}` : exists);
       return;
     }
+    if (op === "notIn") {
+      const values = Array.isArray(value) ? value.filter(Boolean) : String(value || "").split(/[,\s，、]+/).filter(Boolean);
+      if (!values.length) return;
+      clauses.push(`${field.expr} NOT IN (${values.map(() => "?").join(",")})`);
+      params.push(...values);
+      return;
+    }
     if (field.type === "boolean") {
-      clauses.push(`${field.expr} = ?`);
-      params.push(value === true || value === "true" || value === "1" || value === 1 ? 1 : 0);
+      const boolValue = value === true || value === "true" || value === "1" || value === 1 ? 1 : 0;
+      clauses.push(`${field.expr} ${op === "!=" || op === "not" ? "!=" : "="} ?`);
+      params.push(boolValue);
+      return;
+    }
+    if (op === "anycontains") {
+      const values = Array.isArray(value) ? value : String(value || "").split(/[,\s，、]+/).filter(Boolean);
+      if (!values.length) return;
+      clauses.push(`(${values.map(() => `${field.expr} LIKE ?`).join(" OR ")})`);
+      params.push(...values.map((item) => `%${item}%`));
+      return;
+    }
+    if (op === "notcontains") {
+      const text = String(value || "");
+      if (!text) return;
+      clauses.push(`(${field.expr} NOT LIKE ? OR ${field.expr} IS NULL)`);
+      params.push(`%${text}%`);
       return;
     }
     if (op === "between") {
