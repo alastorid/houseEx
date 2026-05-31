@@ -52,7 +52,9 @@ const state = {
   analyticsLoading: false,
   sortBy: "transaction_date",
   sortDir: "DESC",
-  visibleColumns: columns.map(([key]) => key),
+  visibleColumns: columns.map(([key]) => key).filter(key => 
+    !["city", "road", "has_parking", "parking_price", "building_age", "source_batch", "repeat_sale"].includes(key)
+  ),
   widths: Object.fromEntries(columns.map(([key, , , width]) => [key, width])),
 };
 
@@ -225,7 +227,6 @@ function widthStyle(key) {
 }
 
 function renderHead() {
-  console.log("Visible columns:", visibleColumnDefs().map(c => c[1]));
   el("#gridHead").innerHTML = `<tr>${visibleColumnDefs().map(([key, label]) => `
     <th ${widthStyle(key)} data-field="${key}">
       <button type="button" data-sort="${key}" data-analytics="${key}">${label}${state.sortBy === key ? (state.sortDir === "ASC" ? " ▲" : " ▼") : ""}</button>
