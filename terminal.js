@@ -379,7 +379,6 @@ async function init() {
   el("#citySelect").innerHTML = Object.keys(state.metadata.cities || {}).map((city) => `<option value="${city}">${city}</option>`).join("");
   el("#citySelect").value = state.city;
   await reloadDistricts();
-  renderPresets();
   renderColumnsPopover();
   await runQuery();
 }
