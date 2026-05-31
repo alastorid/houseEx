@@ -264,7 +264,7 @@ function humanFilter(filter) {
 
 function renderFilters() {
   el("#activeFilters").innerHTML = state.filters.map((filter, index) => (
-    `<span class="filter-chip">${humanFilter(filter)}<button type="button" data-remove-filter="${index}">×</button></span>`
+    `<div class="filter-line">${humanFilter(filter)}<button type="button" data-remove-filter="${index}">×</button></div>`
   )).join("");
 }
 
@@ -409,16 +409,12 @@ async function init() {
   el("#citySelect").innerHTML = Object.keys(state.metadata.cities || {}).map((city) => `<option value="${city}">${city}</option>`).join("");
   el("#citySelect").value = state.city;
   await reloadDistricts();
-  populateFields();
   renderPresets();
   renderColumnsPopover();
   await runQuery();
 }
 
 function bind() {
-  el("#fieldSelect").addEventListener("change", updateOperators);
-  el("#operatorSelect").addEventListener("change", updateOperators);
-  el("#addFilter").addEventListener("click", () => addFilter(el("#fieldSelect").value, el("#operatorSelect").value, el("#filterValue").value, el("#filterValue2").value));
   el("#applyNumericFilters").addEventListener("click", applyNumericFilters);
   el("#addStringFilter").addEventListener("click", () => {
     const raw = el("#stringValue").value.trim();
