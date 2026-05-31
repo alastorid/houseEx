@@ -1,0 +1,11 @@
+[
+  {
+    "name": "傑盟天第",
+    "city": "彰化縣",
+    "district": "員林市",
+    "road": "建國路",
+    "numbers": [231, 233, 237, 239, 241, 245, 249, 253, 255, 257],
+    "sourceUrls": ["https://market.591.com.tw/5901437"],
+    "note": "PLVR transaction rows for this existing building have blank 建案名稱; the community identity is address-based."
+  }
+]

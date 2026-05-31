@@ -1,7 +1,5 @@
 const REGION_INDEX = "data/plvr/web-index.json";
 const COMMUNITY_INDEX = "data/plvr/community-index.json";
-const RECENT_KEY = "houseEx.recentSearches";
-const RECENT_LIMIT = 3;
 const FILTER_KEY = "houseEx.filters";
 const M2_PER_PING = 3.305785;
 
@@ -61,6 +59,8 @@ const state = {
   records: [],
   rows: [],
   filteredRows: [],
+  tableTotal: 0,
+  lastQueryMeta: null,
   includeDetails: false,
   activeCommunity: null,
   sort: { key: "addressBlock", dir: "asc" },
@@ -398,28 +398,6 @@ function communityMatches(row, community) {
   return community.keywords.some((keyword) => text.includes(normalizeText(keyword)));
 }
 
-function getRecentSearches() {
-  try {
-    const values = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
-    return Array.isArray(values) ? values.slice(0, RECENT_LIMIT) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveRecentSearch(query) {
-  const clean = String(query || "").trim();
-  if (!clean) return;
-  const next = [clean, ...getRecentSearches().filter((item) => item !== clean)].slice(0, RECENT_LIMIT);
-  localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-  renderRecentSearches();
-}
-
-function renderRecentSearches() {
-  const recent = getRecentSearches();
-  renderQuickList(recent);
-}
-
 function cityCommunityEntry(cityName = state.city) {
   return state.communityIndex?.cities?.find((item) => item.city_name === cityName);
 }
@@ -541,7 +519,6 @@ function navigateToCommunity(item) {
   state.selectedCommunity = item;
   selectRegion(item.city, item.township);
   el("#queryInput").value = item.name;
-  saveRecentSearch(item.name);
   loadSelectedRegion();
 }
 
@@ -550,7 +527,9 @@ async function resolveCommunitySearch(query) {
   if (!clean) return null;
   if (state.sqliteReady) {
     try {
-      const matches = await queryService.searchCommunities({ keyword: query, limit: 5 });
+      const result = await queryService.searchCommunities({ keyword: query, limit: 5 });
+      setQueryMeta(result.meta);
+      const matches = result.rows || [];
       const exact = matches.find((item) => normalizeText(item.community_name) === clean);
       const item = exact || matches[0];
       if (item) {
@@ -724,6 +703,15 @@ function setStatus(message) {
   el("#loadStatus").textContent = message;
 }
 
+function setQueryMeta(meta) {
+  if (!meta) return;
+  state.lastQueryMeta = meta;
+  const badge = el("#perfBadge");
+  if (!badge) return;
+  const cache = meta.cacheHit ? " · cache" : "";
+  badge.textContent = `SQLite · ${meta.db || "index"} · ${numberFormat.format(meta.rowCount || 0)} rows · ${meta.elapsedMs}ms${cache}`;
+}
+
 async function loadJson(path) {
   const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${path}`);
@@ -736,7 +724,9 @@ async function loadJson(path) {
 async function loadIndex() {
   if (window.queryService) {
     try {
-      state.sqliteMetadata = await queryService.init();
+      const result = await queryService.init();
+      state.sqliteMetadata = result.metadata;
+      setQueryMeta(result.meta);
       state.sqliteReady = true;
     } catch (error) {
       console.warn("SQLite worker unavailable, using JSON shards", error);
@@ -756,7 +746,6 @@ async function loadIndex() {
   const fallback = knownCommunities[0];
   selectRegion(urlState.city || saved.city || fallback.city, urlState.township || saved.township || fallback.township);
   el("#queryInput").value = urlState.query || "高鐵湛";
-  renderRecentSearches();
   loadCityCommunities(state.city).catch((error) => {
     console.warn(error);
     el("#communityStatus").textContent = "社區索引載入失敗";
@@ -803,54 +792,40 @@ async function loadSelectedRegion() {
   setStatus(`正在載入 ${state.city}${state.township}：${numberFormat.format(entry.record_count)} 筆...`);
   try {
     if (state.sqliteReady && state.sqliteMetadata?.cities?.[state.city]) {
-      await queryService.loadCity({ city: state.city });
+      const cityLoad = await queryService.loadCity({ city: state.city });
+      setQueryMeta(cityLoad.meta);
       state.sqliteCity = state.city;
       const query = el("#queryInput").value.trim();
-      const txRows = await queryService.queryTransactions({
+      const txResult = await queryService.queryTransactions({
         city: state.city,
         district: state.township,
         communityName: state.selectedCommunity?.city === state.city && state.selectedCommunity?.township === state.township ? state.selectedCommunity.name : "",
         keyword: state.selectedCommunity ? "" : query,
         sortBy: "full_address",
         sortDir: "ASC",
-        limit: 5000,
+        limit: 1000,
         offset: 0,
       });
+      setQueryMeta(txResult.meta);
+      const txRows = txResult.rows || [];
+      state.tableTotal = txResult.total || txRows.length;
       state.rows = txRows.map(rowFromSql);
       state.records = state.rows.map((row) => row.record);
       state.region = { region: { city_name: state.city, township: state.township }, records: state.records, source: "sqlite" };
-      setStatus(`已用 SQLite 載入 ${state.city}${state.township}，${numberFormat.format(state.rows.length)} 筆。`);
+      setStatus(`已用 SQLite 載入 ${state.city}${state.township}，${numberFormat.format(state.rows.length)} / ${numberFormat.format(state.tableTotal)} 筆。`);
       applyFilter({ commitSearch: true, skipClientFilter: true });
       return;
     }
     state.region = await loadJson(entry.shard);
     state.records = state.region.records || [];
     state.rows = state.records.map(parseRecord);
+    state.tableTotal = state.rows.length;
     setStatus(`已載入 ${state.city}${state.township}，${numberFormat.format(state.records.length)} 筆。`);
     applyFilter({ commitSearch: true });
   } finally {
     document.body.classList.remove("loading");
     el("#loadButton").disabled = false;
   }
-}
-
-function renderQuickList(items = getRecentSearches()) {
-  const presets = items.length ? items : knownCommunities.slice(0, RECENT_LIMIT).map((community) => community.name);
-  el("#quickList").innerHTML = presets
-    .map((query) => {
-      const community = knownCommunities.find((item) => item.name === query || item.aliases.includes(query));
-      const meta = community ? `${community.city}${community.township} · ${community.hint}` : "搜尋預設";
-      return `
-        <div class="quick-chip" data-preset="${escapeHtml(query)}">
-          <button class="quick-run" type="button" data-preset-run="${escapeHtml(query)}">
-            <strong>${escapeHtml(query)}</strong>
-            <span>${escapeHtml(meta)}</span>
-          </button>
-          <button class="quick-delete" type="button" data-preset-delete="${escapeHtml(query)}" aria-label="刪除 ${escapeHtml(query)}">×</button>
-        </div>
-      `;
-    })
-    .join("");
 }
 
 function applyFilter({ commitSearch = false, skipClientFilter = false } = {}) {
@@ -870,7 +845,6 @@ function applyFilter({ commitSearch = false, skipClientFilter = false } = {}) {
         return true;
       });
 
-  if (commitSearch) saveRecentSearch(query);
   saveFilters();
   syncUrl();
   renderAll();
@@ -1260,7 +1234,8 @@ function renderTable() {
   const rows = displayRows();
   const maxRows = 900;
   const shown = rows.slice(0, maxRows);
-  el("#tableMeta").textContent = `顯示 ${numberFormat.format(shown.length)} / ${numberFormat.format(rows.length)} 筆。大量資料採分批顯示。`;
+  const total = Math.max(state.tableTotal || 0, rows.length);
+  el("#tableMeta").textContent = `顯示 ${numberFormat.format(shown.length)} / ${numberFormat.format(total)} 筆。大量資料採 SQL 分頁與分批顯示。`;
   renderColumns();
   el("#recordRows").innerHTML = shown.map((row) => `
     <tr class="${row.isMain ? "" : "detail-row"} ${row.id === state.selectedRowId ? "selected" : ""} ${isAnomaly(row) ? "anomaly" : ""}" data-row="${escapeHtml(row.id)}">
@@ -1494,28 +1469,6 @@ function bindEvents() {
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".control-panel")) el("#suggestList").classList.remove("open");
   });
-  el("#quickList").addEventListener("click", (event) => {
-    const deleteButton = event.target.closest("button[data-preset-delete]");
-    if (deleteButton) {
-      const next = getRecentSearches().filter((item) => item !== deleteButton.dataset.presetDelete);
-      localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-      renderRecentSearches();
-      return;
-    }
-    const runButton = event.target.closest("button[data-preset-run]");
-    if (!runButton) return;
-    const query = runButton.dataset.presetRun;
-    const community = knownCommunities.find((item) => item.name === query || item.aliases.includes(query));
-    const needsRegionLoad = community && (state.city !== community.city || state.township !== community.township);
-    if (community) selectRegion(community.city, community.township);
-    el("#queryInput").value = query;
-    el("#suggestList").classList.remove("open");
-    if (needsRegionLoad) {
-      loadSelectedRegion();
-    } else {
-      commitSearch();
-    }
-  });
   for (const id of ["unitMode"]) {
     el(`#${id}`).addEventListener("input", () => applyFilter());
     el(`#${id}`).addEventListener("change", () => applyFilter());
@@ -1585,6 +1538,16 @@ function bindEvents() {
   }
   el("#downloadFiltered").addEventListener("click", () => downloadFiltered("json"));
   el("#downloadCsv").addEventListener("click", () => downloadFiltered("csv"));
+  el("#clearCache").addEventListener("click", async () => {
+    try {
+      setStatus("正在清除快取...");
+      const result = await queryService.clearCache();
+      setQueryMeta(result.meta);
+      setStatus("快取已清除。");
+    } catch (error) {
+      setStatus(`快取清除失敗：${error.message}`);
+    }
+  });
   el("#closeDrawer").addEventListener("click", closeDrawer);
   el("#drawerBody").addEventListener("click", async (event) => {
     const rowButton = event.target.closest("button[data-row]");

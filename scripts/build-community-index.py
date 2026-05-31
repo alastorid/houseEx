@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
+import re
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,6 +59,37 @@ def read_shard(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def normalize_address(value: object) -> str:
+    text = str(value or "").replace(" ", "")
+    return "".join(chr(ord(ch) - 0xFEE0) if "０" <= ch <= "９" else ch for ch in text).replace("員林鎮", "員林市")
+
+
+def load_overrides(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def override_name(record: dict, overrides: list[dict]) -> str:
+    values = record.get("values") or {}
+    city = record.get("city_name") or ""
+    district = values.get("鄉鎮市區") or ""
+    address = normalize_address(values.get("土地位置建物門牌") or values.get("土地位置") or "")
+    for item in overrides:
+        if item.get("city") != city or item.get("district") != district:
+            continue
+        road = item.get("road") or ""
+        if road and road not in address:
+            continue
+        numbers = {int(number) for number in item.get("numbers", [])}
+        if numbers:
+            match = re.search(rf"{re.escape(road)}(\d+)號", address)
+            if not match or int(match.group(1)) not in numbers:
+                continue
+        return item.get("name") or ""
+    return ""
+
+
 def write_gzip_json(path: Path, payload: dict) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".part")
@@ -72,9 +104,11 @@ def main() -> int:
     parser.add_argument("--web-index", type=Path, default=Path("data/plvr/web-index.json"))
     parser.add_argument("--output-dir", type=Path, default=Path("data/plvr/communities"))
     parser.add_argument("--output-index", type=Path, default=Path("data/plvr/community-index.json"))
+    parser.add_argument("--community-overrides", type=Path, default=Path("data/community-overrides.json"))
     args = parser.parse_args()
 
     index = json.loads(args.web_index.read_text(encoding="utf-8"))
+    overrides = load_overrides(args.community_overrides)
     city_outputs = []
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -89,7 +123,7 @@ def main() -> int:
                 if record.get("table_kind") != "主檔":
                     continue
                 values = record.get("values") or {}
-                name = str(values.get("建案名稱") or "").strip()
+                name = str(values.get("建案名稱") or "").strip() or override_name(record, overrides)
                 if not name:
                     continue
                 community_rows[name].append(

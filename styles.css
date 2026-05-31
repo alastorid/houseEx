@@ -219,7 +219,6 @@ input {
 }
 
 .suggest-list button:hover,
-.quick-chip:hover,
 .summary-card button:hover,
 .mini-list button:hover {
   background: var(--soft);
@@ -239,7 +238,6 @@ input {
 }
 
 .button,
-.quick-chip,
 .metric-card,
 .repeat-card,
 .segmented button {
@@ -265,15 +263,14 @@ input {
   color: var(--teal);
 }
 
+.cache-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
 .button:disabled {
   cursor: progress;
   opacity: 0.65;
-}
-
-.quick-list {
-  display: grid;
-  gap: 8px;
-  margin: 12px 0;
 }
 
 .browse-panel {
@@ -341,53 +338,6 @@ input {
   font-size: 0.82rem;
 }
 
-.quick-chip {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  padding: 0;
-  background: var(--soft);
-  overflow: hidden;
-}
-
-.quick-run,
-.quick-delete {
-  border: 0;
-  background: transparent;
-}
-
-.quick-run {
-  min-width: 0;
-  padding: 10px;
-  text-align: left;
-}
-
-.quick-delete {
-  align-self: start;
-  width: 26px;
-  height: 26px;
-  margin: 4px 4px 0 0;
-  border-radius: 50%;
-  color: var(--muted);
-  font-weight: 900;
-}
-
-.quick-delete:hover {
-  color: #fff;
-  background: var(--red);
-}
-
-.quick-chip strong,
-.quick-chip span {
-  display: block;
-}
-
-.quick-chip span {
-  color: var(--muted);
-  font-size: 0.84rem;
-}
-
 .main-stage {
   display: grid;
   gap: 16px;
@@ -436,6 +386,25 @@ input {
   color: var(--teal);
   background: var(--soft);
   font-weight: 850;
+}
+
+.perf-badge {
+  position: absolute;
+  left: 16px;
+  top: 92px;
+  z-index: 10;
+  max-width: min(360px, calc(100% - 32px));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--teal);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  font-size: 0.78rem;
+  font-weight: 850;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  backdrop-filter: blur(10px);
 }
 
 .legend {

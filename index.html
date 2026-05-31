@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>實價登錄資料</title>
+    <title>some random data</title>
     <meta
       name="description"
-      content="用內政部實價登錄 Open Data 查詢區域、社區與門牌交易紀錄，追蹤價格趨勢與重複轉手。"
+      content="一些公開資料的查詢頁。"
     />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=20260530-building-no" />
     <link rel="stylesheet" href="styles.css?v=20260530-building-no" />
@@ -15,11 +15,12 @@
     <header class="app-header">
       <nav class="topbar" aria-label="主選單">
         <a class="brand" href="#top">
-          <span class="brand-mark">PLVR</span>
-          <span>實價登錄資料</span>
+          <span class="brand-mark">DATA</span>
+          <span>some random data</span>
         </a>
         <div class="toolbar">
           <button class="icon-button" id="themeToggle" type="button" title="切換深色模式">◐</button>
+          <a href="terminal.html">Terminal</a>
           <a href="#repeatSales">重複轉手</a>
           <a href="#records">交易明細</a>
           <a href="#radar">市場雷達</a>
@@ -31,7 +32,7 @@
       <aside class="control-panel" aria-label="查詢控制">
         <div class="panel-block">
           <p class="eyebrow">Search</p>
-          <h1>實價登錄資料</h1>
+          <h1>some random data</h1>
           <p class="muted">搜尋社區、地址、日期、價格、來源批次與原始欄位。</p>
         </div>
 
@@ -64,9 +65,8 @@
           <div class="community-list" id="communityList"></div>
         </div>
 
-        <div class="quick-list" id="quickList" aria-label="搜尋預設"></div>
-
         <button class="button primary" id="loadButton" type="button">載入區域資料</button>
+        <button class="button ghost-dark cache-button" id="clearCache" type="button">清除快取</button>
         <p class="status" id="loadStatus">正在讀取索引...</p>
       </aside>
 
@@ -81,6 +81,7 @@
             </div>
             <div class="data-pill" id="dataPill">--</div>
           </div>
+          <div class="perf-badge" id="perfBadge">SQLite</div>
           <div class="legend" id="legend"></div>
           <div class="map-limit-control">
             <span id="annotationLimitValue">13</span>
@@ -227,8 +228,8 @@
       <div id="drawerBody"></div>
     </aside>
 
-    <script src="vendor/leaflet/leaflet.js?v=20260531-sqlite-worker"></script>
-    <script src="queryService.js?v=20260531-sqlite-worker" defer></script>
-    <script src="script.js?v=20260531-sqlite-worker" defer></script>
+    <script src="vendor/leaflet/leaflet.js?v=20260531-sqlite-hardening"></script>
+    <script src="queryService.js?v=20260531-sqlite-hardening" defer></script>
+    <script src="script.js?v=20260531-sqlite-hardening" defer></script>
   </body>
 </html>

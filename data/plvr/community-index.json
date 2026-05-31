@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-30T22:09:25.525849+00:00",
+  "generated_at": "2026-05-31T05:30:57.068960+00:00",
   "asset_format": "gzip-compressed city community indexes",
   "cities": [
     {
@@ -21,42 +21,42 @@
       "city_name": "嘉義縣",
       "community_count": 241,
       "shard": "data/plvr/communities/q_嘉義縣.json.gz",
-      "compressed_bytes": 35798
+      "compressed_bytes": 35797
     },
     {
       "city_code": "c",
       "city_name": "基隆市",
       "community_count": 68,
       "shard": "data/plvr/communities/c_基隆市.json.gz",
-      "compressed_bytes": 9723
+      "compressed_bytes": 9724
     },
     {
       "city_code": "g",
       "city_name": "宜蘭縣",
       "community_count": 601,
       "shard": "data/plvr/communities/g_宜蘭縣.json.gz",
-      "compressed_bytes": 86006
+      "compressed_bytes": 86007
     },
     {
       "city_code": "t",
       "city_name": "屏東縣",
       "community_count": 225,
       "shard": "data/plvr/communities/t_屏東縣.json.gz",
-      "compressed_bytes": 33523
+      "compressed_bytes": 33519
     },
     {
       "city_code": "n",
       "city_name": "彰化縣",
-      "community_count": 679,
+      "community_count": 680,
       "shard": "data/plvr/communities/n_彰化縣.json.gz",
-      "compressed_bytes": 99996
+      "compressed_bytes": 100264
     },
     {
       "city_code": "f",
       "city_name": "新北市",
       "community_count": 1457,
       "shard": "data/plvr/communities/f_新北市.json.gz",
-      "compressed_bytes": 235713
+      "compressed_bytes": 235715
     },
     {
       "city_code": "o",
@@ -70,21 +70,21 @@
       "city_name": "新竹縣",
       "community_count": 530,
       "shard": "data/plvr/communities/j_新竹縣.json.gz",
-      "compressed_bytes": 78275
+      "compressed_bytes": 78272
     },
     {
       "city_code": "h",
       "city_name": "桃園市",
       "community_count": 1709,
       "shard": "data/plvr/communities/h_桃園市.json.gz",
-      "compressed_bytes": 243181
+      "compressed_bytes": 243183
     },
     {
       "city_code": "x",
       "city_name": "澎湖縣",
       "community_count": 11,
       "shard": "data/plvr/communities/x_澎湖縣.json.gz",
-      "compressed_bytes": 2155
+      "compressed_bytes": 2154
     },
     {
       "city_code": "b",
@@ -119,7 +119,7 @@
       "city_name": "花蓮縣",
       "community_count": 198,
       "shard": "data/plvr/communities/u_花蓮縣.json.gz",
-      "compressed_bytes": 26135
+      "compressed_bytes": 26134
     },
     {
       "city_code": "k",
@@ -154,8 +154,8 @@
       "city_name": "高雄市",
       "community_count": 743,
       "shard": "data/plvr/communities/e_高雄市.json.gz",
-      "compressed_bytes": 118885
+      "compressed_bytes": 118886
     }
   ],
-  "total_communities": 11745
+  "total_communities": 11746
 }

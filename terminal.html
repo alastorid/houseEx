@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random data terminal</title>
+    <link rel="stylesheet" href="terminal.css?v=20260531-terminal" />
+  </head>
+  <body>
+    <header class="terminal-top">
+      <a href="index.html">some random data</a>
+      <strong>Property Terminal</strong>
+      <span id="perfBadge">SQLite</span>
+    </header>
+
+    <main class="terminal-shell">
+      <aside class="filter-rail">
+        <div class="filter-row">
+          <label>縣市<select id="citySelect"></select></label>
+          <label>鄉鎮<select id="districtSelect"></select></label>
+        </div>
+        <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
+
+        <div class="preset-bar">
+          <button type="button" data-preset="newer">近五年新屋</button>
+          <button type="button" data-preset="largeLow">低總價大坪數</button>
+          <button type="button" data-preset="parking">有車位</button>
+          <button type="button" data-preset="repeat">重複轉手</button>
+        </div>
+
+        <div class="filter-builder">
+          <select id="fieldSelect"></select>
+          <select id="operatorSelect"></select>
+          <input id="filterValue" placeholder="值" />
+          <input id="filterValue2" placeholder="第二值" />
+          <button id="addFilter" type="button">加入</button>
+        </div>
+
+        <div class="active-filters" id="activeFilters"></div>
+
+        <div class="saved">
+          <input id="presetName" placeholder="篩選名稱" />
+          <button id="savePreset" type="button">儲存</button>
+          <div id="savedPresets"></div>
+        </div>
+      </aside>
+
+      <section class="grid-stage">
+        <div class="grid-toolbar">
+          <span id="resultMeta">--</span>
+          <button id="exportCsv" type="button">CSV</button>
+        </div>
+        <div class="data-grid" id="gridWrap">
+          <table>
+            <thead id="gridHead"></thead>
+            <tbody id="gridRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="analytics-panel">
+        <h2 id="analyticsTitle">Column</h2>
+        <div id="analyticsBody">點欄位看分布。</div>
+      </aside>
+    </main>
+
+    <script src="queryService.js?v=20260531-sqlite-hardening" defer></script>
+    <script src="terminal.js?v=20260531-terminal" defer></script>
+  </body>
+</html>

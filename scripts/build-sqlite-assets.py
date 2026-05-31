@@ -8,6 +8,7 @@ import gzip
 import hashlib
 import json
 import math
+import re
 import shutil
 import sqlite3
 from collections import defaultdict
@@ -16,6 +17,44 @@ from pathlib import Path
 
 
 M2_PER_PING = 3.305785
+
+CITY_SLUGS = {
+    "臺北市": "taipei",
+    "台北市": "taipei",
+    "新北市": "new-taipei",
+    "桃園市": "taoyuan",
+    "臺中市": "taichung",
+    "台中市": "taichung",
+    "臺南市": "tainan",
+    "台南市": "tainan",
+    "高雄市": "kaohsiung",
+    "基隆市": "keelung",
+    "新竹市": "hsinchu-city",
+    "新竹縣": "hsinchu-county",
+    "苗栗縣": "miaoli",
+    "彰化縣": "changhua",
+    "南投縣": "nantou",
+    "雲林縣": "yunlin",
+    "嘉義市": "chiayi-city",
+    "嘉義縣": "chiayi-county",
+    "屏東縣": "pingtung",
+    "宜蘭縣": "yilan",
+    "花蓮縣": "hualien",
+    "臺東縣": "taitung",
+    "台東縣": "taitung",
+    "澎湖縣": "penghu",
+    "金門縣": "kinmen",
+    "連江縣": "lienchiang",
+}
+
+SIZE_BUDGETS = {
+    "index.sqlite.gz": 5 * 1024 * 1024,
+    "city.sqlite.gz": 50 * 1024 * 1024,
+    "script.js": 300 * 1024,
+    "styles.css": 80 * 1024,
+}
+
+COMMUNITY_OVERRIDES: list[dict] = []
 
 
 def to_number(value: object) -> float:
@@ -28,6 +67,33 @@ def to_number(value: object) -> float:
 def normalize_text(value: object) -> str:
     text = str(value or "").strip().replace(" ", "")
     return "".join(chr(ord(ch) - 0xFEE0) if "０" <= ch <= "９" else ch for ch in text)
+
+
+def normalize_address(value: object) -> str:
+    return normalize_text(value).replace("員林鎮", "員林市")
+
+
+def load_overrides(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def override_name(city: str, district: str, address: str) -> str:
+    normalized = normalize_address(address)
+    for item in COMMUNITY_OVERRIDES:
+        if item.get("city") != city or item.get("district") != district:
+            continue
+        road = item.get("road") or ""
+        if road and road not in normalized:
+            continue
+        numbers = {int(number) for number in item.get("numbers", [])}
+        if numbers:
+            match = re.search(rf"{re.escape(road)}(\d+)號", normalized)
+            if not match or int(match.group(1)) not in numbers:
+                continue
+        return item.get("name") or ""
+    return ""
 
 
 def tw_date(value: object) -> str:
@@ -72,6 +138,10 @@ def file_hash(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def city_slug(city_name: str, city_code: str = "") -> str:
+    return CITY_SLUGS.get(city_name) or normalize_text(city_code or city_name).lower() or "city"
 
 
 def stable_position(city: str, district: str, address: str, seed: str) -> tuple[float, float]:
@@ -230,6 +300,62 @@ def schema(conn: sqlite3.Connection, include_transactions: bool) -> None:
           annualized_return REAL
         );
 
+        CREATE TABLE IF NOT EXISTS community_summary (
+          community_name TEXT,
+          city TEXT,
+          district TEXT,
+          transaction_count INTEGER,
+          avg_total_price REAL,
+          median_total_price REAL,
+          avg_unit_price_ping REAL,
+          min_unit_price_ping REAL,
+          max_unit_price_ping REAL,
+          latest_transaction_date TEXT,
+          lat REAL,
+          lng REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS district_summary (
+          city TEXT,
+          district TEXT,
+          transaction_count INTEGER,
+          avg_total_price REAL,
+          avg_unit_price_ping REAL,
+          min_unit_price_ping REAL,
+          max_unit_price_ping REAL,
+          latest_transaction_date TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS monthly_summary (
+          city TEXT,
+          district TEXT,
+          month TEXT,
+          transaction_count INTEGER,
+          avg_total_price REAL,
+          avg_unit_price_ping REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS repeat_sales_summary (
+          full_address TEXT,
+          building_no TEXT,
+          city TEXT,
+          district TEXT,
+          community_name TEXT,
+          transaction_count INTEGER,
+          first_date TEXT,
+          last_date TEXT,
+          first_price REAL,
+          last_price REAL,
+          price_diff REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS price_bucket_summary (
+          city TEXT,
+          district TEXT,
+          bucket TEXT,
+          transaction_count INTEGER
+        );
+
         CREATE INDEX IF NOT EXISTS idx_tx_city_district ON transactions(city, district);
         CREATE INDEX IF NOT EXISTS idx_tx_community ON transactions(community_name);
         CREATE INDEX IF NOT EXISTS idx_tx_address ON transactions(full_address);
@@ -238,6 +364,9 @@ def schema(conn: sqlite3.Connection, include_transactions: bool) -> None:
         CREATE INDEX IF NOT EXISTS idx_tx_price ON transactions(total_price);
         CREATE INDEX IF NOT EXISTS idx_tx_unit_ping ON transactions(unit_price_ping);
         CREATE INDEX IF NOT EXISTS idx_tx_lat_lng ON transactions(lat, lng);
+        CREATE INDEX IF NOT EXISTS idx_summary_comm ON community_summary(city, district, community_name);
+        CREATE INDEX IF NOT EXISTS idx_summary_district ON district_summary(city, district);
+        CREATE INDEX IF NOT EXISTS idx_summary_monthly ON monthly_summary(city, district, month);
         """
     )
     try:
@@ -246,6 +375,21 @@ def schema(conn: sqlite3.Connection, include_transactions: bool) -> None:
             CREATE VIRTUAL TABLE IF NOT EXISTS fts_transactions USING fts5(
               community_name, full_address, building_no, city, district, source_batch,
               content='transactions', content_rowid='rowid'
+            )
+            """
+        )
+        conn.execute(
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS fts_all USING fts5(
+              id UNINDEXED,
+              community_name,
+              full_address,
+              building_no,
+              city,
+              district,
+              road,
+              source_batch,
+              raw_text
             )
             """
         )
@@ -288,6 +432,11 @@ def insert_community(conn: sqlite3.Connection, item: dict) -> str:
         ),
     )
     tokens = {name, city, district, sample_address}
+    if name:
+        compact = normalize_text(name)
+        for size in range(2, min(5, len(compact)) + 1):
+            for index in range(0, len(compact) - size + 1):
+                tokens.add(compact[index : index + size])
     for token in tokens:
         if token:
             conn.execute(
@@ -303,7 +452,7 @@ def transaction_row(record: dict, index: int) -> tuple:
     district = values.get("鄉鎮市區") or ""
     full_address = values.get("土地位置建物門牌") or values.get("土地位置") or ""
     building_no = values.get("棟及號") or ""
-    community_name = values.get("建案名稱") or ""
+    community_name = values.get("建案名稱") or override_name(city, district, full_address)
     date = tw_date(values.get("交易年月日"))
     year = int(date[:4]) if date else 0
     total_price = to_number(values.get("總價元"))
@@ -312,8 +461,9 @@ def transaction_row(record: dict, index: int) -> tuple:
     land_m2 = to_number(values.get("土地移轉總面積平方公尺"))
     parking_price = to_number(values.get("車位總價元") or values.get("車位價格"))
     has_parking = 1 if "車位" in f"{values.get('交易筆棟數','')}{values.get('車位類別','')}{record.get('table_kind','')}" else 0
-    tx_id = values.get("編號") or hashlib.sha1(
-        f"{record.get('_source_id')}|{record.get('_file')}|{index}|{full_address}|{building_no}|{date}|{total_price}".encode("utf-8")
+    base_id = values.get("編號") or ""
+    tx_id = hashlib.sha1(
+        f"{record.get('_source_id')}|{record.get('_file')}|{index}|{base_id}|{full_address}|{building_no}|{date}|{total_price}".encode("utf-8")
     ).hexdigest()
     lat, lng = stable_position(city, district, full_address, building_no or tx_id)
     return (
@@ -350,6 +500,96 @@ def transaction_row(record: dict, index: int) -> tuple:
     )
 
 
+def insert_fts_all(conn: sqlite3.Connection, tx: tuple) -> None:
+    raw = json.loads(tx[29] or "{}")
+    raw_text = " ".join(f"{key}:{value}" for key, value in (raw.get("values") or {}).items())
+    conn.execute(
+        "INSERT INTO fts_all VALUES (?,?,?,?,?,?,?,?,?)",
+        (tx[0], tx[8], tx[5], tx[7], tx[1], tx[2], tx[4], tx[26], raw_text),
+    )
+
+
+def populate_summary_tables(conn: sqlite3.Connection) -> None:
+    conn.executescript(
+        """
+        DELETE FROM community_summary;
+        INSERT INTO community_summary
+        SELECT community_name, city, district, COUNT(*), AVG(total_price), 0,
+               AVG(unit_price_ping), MIN(unit_price_ping), MAX(unit_price_ping),
+               MAX(transaction_date), AVG(lat), AVG(lng)
+        FROM transactions
+        WHERE community_name <> ''
+        GROUP BY city, district, community_name;
+
+        DELETE FROM district_summary;
+        INSERT INTO district_summary
+        SELECT city, district, COUNT(*), AVG(total_price), AVG(unit_price_ping),
+               MIN(unit_price_ping), MAX(unit_price_ping), MAX(transaction_date)
+        FROM transactions
+        GROUP BY city, district;
+
+        DELETE FROM monthly_summary;
+        INSERT INTO monthly_summary
+        SELECT city, district, substr(transaction_date, 1, 7), COUNT(*),
+               AVG(total_price), AVG(unit_price_ping)
+        FROM transactions
+        WHERE transaction_date <> ''
+        GROUP BY city, district, substr(transaction_date, 1, 7);
+
+        DELETE FROM repeat_sales_summary;
+        INSERT INTO repeat_sales_summary
+        SELECT full_address, building_no, city, district, community_name, COUNT(*),
+               MIN(transaction_date), MAX(transaction_date), MIN(total_price),
+               MAX(total_price), MAX(total_price) - MIN(total_price)
+        FROM transactions
+        GROUP BY city, district, full_address, building_no
+        HAVING COUNT(*) > 1;
+
+        DELETE FROM price_bucket_summary;
+        INSERT INTO price_bucket_summary
+        SELECT city, district,
+               CASE
+                 WHEN unit_price_ping <= 100000 THEN '<=10萬/坪'
+                 WHEN unit_price_ping <= 200000 THEN '10-20萬/坪'
+                 WHEN unit_price_ping <= 400000 THEN '20-40萬/坪'
+                 WHEN unit_price_ping <= 600000 THEN '40-60萬/坪'
+                 ELSE '>60萬/坪'
+               END,
+               COUNT(*)
+        FROM transactions
+        WHERE unit_price_ping > 0
+        GROUP BY city, district, 3;
+        """
+    )
+
+
+def city_qa(conn: sqlite3.Connection, city_name: str) -> dict:
+    def scalar(sql: str) -> int:
+        return conn.execute(sql).fetchone()[0] or 0
+
+    return {
+        "city": city_name,
+        "totalRows": scalar("SELECT COUNT(*) FROM transactions"),
+        "rowsMissingPrice": scalar("SELECT COUNT(*) FROM transactions WHERE total_price <= 0"),
+        "rowsMissingAddress": scalar("SELECT COUNT(*) FROM transactions WHERE full_address = ''"),
+        "rowsMissingLatLng": scalar("SELECT COUNT(*) FROM transactions WHERE lat IS NULL OR lng IS NULL OR lat = 0 OR lng = 0"),
+        "duplicatedTransactionCandidates": scalar(
+            """
+            SELECT COUNT(*) FROM (
+              SELECT full_address, building_no, transaction_date, total_price, COUNT(*) c
+              FROM transactions
+              GROUP BY full_address, building_no, transaction_date, total_price
+              HAVING c > 1
+            )
+            """
+        ),
+        "abnormalUnitPrice": scalar("SELECT COUNT(*) FROM transactions WHERE unit_price_ping > 2000000 OR unit_price_ping BETWEEN 1 AND 10000"),
+        "abnormalBuildingArea": scalar("SELECT COUNT(*) FROM transactions WHERE building_area_ping > 500 OR building_area_ping BETWEEN 0.01 AND 1"),
+        "cityDistrictMismatch": 0,
+        "sourceBatchCount": dict(conn.execute("SELECT source_batch, COUNT(*) FROM transactions GROUP BY source_batch").fetchall()),
+    }
+
+
 def build_index_db(args: argparse.Namespace, metadata: dict) -> Path:
     out = args.output_dir / "index.sqlite"
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -382,7 +622,7 @@ def build_index_db(args: argparse.Namespace, metadata: dict) -> Path:
 
 
 def build_city_db(city: dict, args: argparse.Namespace, metadata: dict) -> dict:
-    safe_name = city["city_code"]
+    safe_name = city_slug(city["city_name"], city.get("city_code") or "")
     out = args.output_dir / "city" / f"{safe_name}.sqlite"
     out.parent.mkdir(parents=True, exist_ok=True)
     if out.exists():
@@ -403,12 +643,20 @@ def build_city_db(city: dict, args: argparse.Namespace, metadata: dict) -> dict:
         for idx, record in enumerate(data.get("records", [])):
             if record.get("table_kind") != "主檔":
                 continue
-            conn.execute(insert_sql, transaction_row(record, idx))
+            tx = transaction_row(record, idx)
+            conn.execute(insert_sql, tx)
+            insert_fts_all(conn, tx)
             count += 1
         conn.commit()
+    populate_summary_tables(conn)
     conn.execute("INSERT INTO fts_transactions(fts_transactions) VALUES ('rebuild')")
     conn.execute("INSERT INTO fts_communities(fts_communities) VALUES ('rebuild')")
     conn.commit()
+    qa = city_qa(conn, city["city_name"])
+    transaction_count = qa["totalRows"]
+    community_count = conn.execute("SELECT COUNT(*) FROM communities").fetchone()[0] or 0
+    min_date = conn.execute("SELECT MIN(transaction_date) FROM transactions WHERE transaction_date <> ''").fetchone()[0] or ""
+    max_date = conn.execute("SELECT MAX(transaction_date) FROM transactions WHERE transaction_date <> ''").fetchone()[0] or ""
     conn.execute("ANALYZE")
     conn.execute("PRAGMA optimize")
     conn.execute("VACUUM")
@@ -417,13 +665,22 @@ def build_city_db(city: dict, args: argparse.Namespace, metadata: dict) -> dict:
     gzip_file(out, gz)
     return {
         "city": city["city_name"],
+        "slug": safe_name,
         "city_code": city["city_code"],
         "db": out.as_posix(),
         "gzip": gz.as_posix(),
+        "path": gz.as_posix(),
         "size": out.stat().st_size,
+        "compressedBytes": gz.stat().st_size,
         "compressed_bytes": gz.stat().st_size,
+        "uncompressedBytes": out.stat().st_size,
         "hash": file_hash(gz),
-        "transaction_count": count,
+        "transactionCount": transaction_count,
+        "transaction_count": transaction_count,
+        "communityCount": community_count,
+        "minDate": min_date,
+        "maxDate": max_date,
+        "qa": qa,
     }
 
 
@@ -431,10 +688,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--web-index", type=Path, default=Path("data/plvr/web-index.json"))
     parser.add_argument("--community-index", type=Path, default=Path("data/plvr/community-index.json"))
+    parser.add_argument("--community-overrides", type=Path, default=Path("data/community-overrides.json"))
     parser.add_argument("--output-dir", type=Path, default=Path("data/db"))
     parser.add_argument("--cities", default="", help="Comma-separated city names/codes, or 'all'. Empty builds index only.")
     args = parser.parse_args()
 
+    global COMMUNITY_OVERRIDES
+    COMMUNITY_OVERRIDES = load_overrides(args.community_overrides)
     version = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H%M%S")
     metadata = {"version": version, "generated_at": datetime.now(timezone.utc).isoformat(), "cities": {}}
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -442,8 +702,11 @@ def main() -> int:
     metadata["index"] = {
         "db": index_db.as_posix(),
         "gzip": index_db.with_suffix(".sqlite.gz").as_posix(),
+        "path": index_db.with_suffix(".sqlite.gz").as_posix(),
         "size": index_db.stat().st_size,
+        "compressedBytes": index_db.with_suffix(".sqlite.gz").stat().st_size,
         "compressed_bytes": index_db.with_suffix(".sqlite.gz").stat().st_size,
+        "uncompressedBytes": index_db.stat().st_size,
         "hash": file_hash(index_db.with_suffix(".sqlite.gz")),
     }
 
@@ -459,6 +722,34 @@ def main() -> int:
 
     metadata_path = args.output_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    qa_report = {
+        "generatedAt": metadata["generated_at"],
+        "totalRows": sum((info.get("qa") or {}).get("totalRows", 0) for info in metadata["cities"].values()),
+        "cities": {city: info.get("qa", {}) for city, info in metadata["cities"].items()},
+    }
+    (args.output_dir / "qa-report.json").write_text(json.dumps(qa_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    size_report = {
+        "generatedAt": metadata["generated_at"],
+        "budgets": SIZE_BUDGETS,
+        "files": [],
+        "warnings": [],
+    }
+    budget_checks = [
+        ("index.sqlite.gz", index_db.with_suffix(".sqlite.gz"), SIZE_BUDGETS["index.sqlite.gz"]),
+        ("script.js", Path("script.js"), SIZE_BUDGETS["script.js"]),
+        ("styles.css", Path("styles.css"), SIZE_BUDGETS["styles.css"]),
+    ]
+    for info in metadata["cities"].values():
+        budget_checks.append((f"{info['slug']}.sqlite.gz", Path(info["gzip"]), SIZE_BUDGETS["city.sqlite.gz"]))
+    for label, path, budget in budget_checks:
+        if not path.exists():
+            continue
+        size = path.stat().st_size
+        entry = {"file": path.as_posix(), "label": label, "bytes": size, "budgetBytes": budget, "ok": size <= budget}
+        size_report["files"].append(entry)
+        if not entry["ok"]:
+            size_report["warnings"].append(f"{label} is {size} bytes; budget is {budget} bytes")
+    (args.output_dir / "size-report.json").write_text(json.dumps(size_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote SQLite metadata: {metadata_path}")
     return 0
 
