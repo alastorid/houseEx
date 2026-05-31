@@ -52,7 +52,7 @@ const state = {
   analyticsLoading: false,
   sortBy: "transaction_date",
   sortDir: "DESC",
-  visibleColumns: columns.map(([key]) => key).filter((key) => key !== "raw_json"),
+  visibleColumns: columns.map(([key]) => key),
   widths: Object.fromEntries(columns.map(([key, , , width]) => [key, width])),
 };
 
