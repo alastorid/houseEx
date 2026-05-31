@@ -1,0 +1,23 @@
+{
+  "version": "2026-05-31-045251",
+  "generated_at": "2026-05-31T04:52:51.817236+00:00",
+  "cities": {
+    "彰化縣": {
+      "city": "彰化縣",
+      "city_code": "n",
+      "db": "data/db/city/n.sqlite",
+      "gzip": "data/db/city/n.sqlite.gz",
+      "size": 435683328,
+      "compressed_bytes": 44485697,
+      "hash": "4869286b9ab725c7c8bf42782311e59f0898ddfd7c9d352a319da037120dcb4d",
+      "transaction_count": 197596
+    }
+  },
+  "index": {
+    "db": "data/db/index.sqlite",
+    "gzip": "data/db/index.sqlite.gz",
+    "size": 13303808,
+    "compressed_bytes": 3575193,
+    "hash": "8a579f28b6e9c6640475a7a4e71dac277c0cbaed97bc2bfbbf7ac80bd2f8b7c5"
+  }
+}

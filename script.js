@@ -52,6 +52,9 @@ const state = {
   cityCommunities: [],
   allCommunities: [],
   allCommunitiesLoaded: false,
+  sqliteReady: false,
+  sqliteMetadata: null,
+  sqliteCity: "",
   city: "",
   township: "",
   region: null,
@@ -281,6 +284,46 @@ function parseRecord(record, index) {
   return row;
 }
 
+function rowFromSql(tx, index = 0) {
+  const record = tx.raw_json ? JSON.parse(tx.raw_json) : { table_kind: "主檔", values: {} };
+  const row = {
+    record,
+    id: tx.id,
+    index,
+    isMain: true,
+    date: tx.transaction_date || "",
+    rawDate: tx.transaction_date || "",
+    month: tx.transaction_date ? tx.transaction_date.slice(0, 7) : "未知",
+    address: tx.full_address || "",
+    buildingNo: tx.building_no || "",
+    addressBlock: normalizeText(`${tx.full_address || ""} ${tx.building_no || ""}`),
+    road: tx.road || extractRoad(tx.full_address || ""),
+    cityName: tx.city || "",
+    township: tx.district || "",
+    target: tx.transaction_target || "",
+    totalPrice: Number(tx.total_price) || 0,
+    unitPrice: Number(tx.unit_price_ping) || 0,
+    unitPriceM2: Number(tx.unit_price_m2) || 0,
+    buildingArea: Number(tx.building_area_m2) || 0,
+    buildingPing: Number(tx.building_area_ping) || 0,
+    landArea: Number(tx.land_area_m2) || 0,
+    landPing: Number(tx.land_area_ping) || 0,
+    age: Number(tx.building_age) || 0,
+    ageLabel: tx.building_age ? `${Number(tx.building_age).toFixed(1)} 年` : "--",
+    hasParking: Boolean(tx.has_parking),
+    source: tx.source_batch || "",
+    sourceLabel: tx.source_batch || "",
+    file: "",
+    floor: tx.floor || "",
+    totalFloor: tx.total_floor || "",
+    buildingType: tx.property_type || "",
+    note: "",
+    position: [Number(tx.lat) || 23.7, Number(tx.lng) || 121],
+  };
+  row.searchText = buildSearchText(row);
+  return row;
+}
+
 function extractRoad(address) {
   const text = String(address || "");
   const match = text.match(/([\u4e00-\u9fa5A-Za-z0-9０-９]+(?:路|街|大道|巷|段))/);
@@ -505,6 +548,29 @@ function navigateToCommunity(item) {
 async function resolveCommunitySearch(query) {
   const clean = normalizeText(query);
   if (!clean) return null;
+  if (state.sqliteReady) {
+    try {
+      const matches = await queryService.searchCommunities({ keyword: query, limit: 5 });
+      const exact = matches.find((item) => normalizeText(item.community_name) === clean);
+      const item = exact || matches[0];
+      if (item) {
+        return {
+          name: item.community_name,
+          city: item.city,
+          township: item.district,
+          stats: {
+            count: item.transaction_count,
+            median_total_price: item.median_total_price,
+            median_unit_price: item.median_unit_price_ping / M2_PER_PING,
+          },
+          shard: item.shard,
+          search_text: item.search_text,
+        };
+      }
+    } catch (error) {
+      console.warn("SQLite community search failed", error);
+    }
+  }
   const local = state.cityCommunities.find((item) => normalizeText(item.name) === clean);
   if (local) return local;
   const all = await loadAllCommunities();
@@ -668,6 +734,15 @@ async function loadJson(path) {
 }
 
 async function loadIndex() {
+  if (window.queryService) {
+    try {
+      state.sqliteMetadata = await queryService.init();
+      state.sqliteReady = true;
+    } catch (error) {
+      console.warn("SQLite worker unavailable, using JSON shards", error);
+      state.sqliteReady = false;
+    }
+  }
   state.index = await loadJson(REGION_INDEX);
   await loadCommunityIndex();
   populateCities();
@@ -727,6 +802,27 @@ async function loadSelectedRegion() {
   document.body.classList.add("loading");
   setStatus(`正在載入 ${state.city}${state.township}：${numberFormat.format(entry.record_count)} 筆...`);
   try {
+    if (state.sqliteReady && state.sqliteMetadata?.cities?.[state.city]) {
+      await queryService.loadCity({ city: state.city });
+      state.sqliteCity = state.city;
+      const query = el("#queryInput").value.trim();
+      const txRows = await queryService.queryTransactions({
+        city: state.city,
+        district: state.township,
+        communityName: state.selectedCommunity?.city === state.city && state.selectedCommunity?.township === state.township ? state.selectedCommunity.name : "",
+        keyword: state.selectedCommunity ? "" : query,
+        sortBy: "full_address",
+        sortDir: "ASC",
+        limit: 5000,
+        offset: 0,
+      });
+      state.rows = txRows.map(rowFromSql);
+      state.records = state.rows.map((row) => row.record);
+      state.region = { region: { city_name: state.city, township: state.township }, records: state.records, source: "sqlite" };
+      setStatus(`已用 SQLite 載入 ${state.city}${state.township}，${numberFormat.format(state.rows.length)} 筆。`);
+      applyFilter({ commitSearch: true, skipClientFilter: true });
+      return;
+    }
     state.region = await loadJson(entry.shard);
     state.records = state.region.records || [];
     state.rows = state.records.map(parseRecord);
@@ -757,20 +853,22 @@ function renderQuickList(items = getRecentSearches()) {
     .join("");
 }
 
-function applyFilter({ commitSearch = false } = {}) {
+function applyFilter({ commitSearch = false, skipClientFilter = false } = {}) {
   const query = el("#queryInput").value.trim();
   const inferred = inferCommunity(query);
-  state.activeCommunity = inferred || null;
+  state.activeCommunity = inferred || state.selectedCommunity || null;
   const terms = normalizeText(query)
     .split(/[,+，、]/)
     .map((term) => term.trim())
     .filter(Boolean);
 
-  state.filteredRows = state.rows.filter((row) => {
-    if (inferred && !communityMatches(row, inferred)) return false;
-    if (!inferred && terms.length && !terms.every((term) => row.searchText.includes(term))) return false;
-    return true;
-  });
+  state.filteredRows = skipClientFilter
+    ? state.rows.slice()
+    : state.rows.filter((row) => {
+        if (inferred && !communityMatches(row, inferred)) return false;
+        if (!inferred && terms.length && !terms.every((term) => row.searchText.includes(term))) return false;
+        return true;
+      });
 
   if (commitSearch) saveRecentSearch(query);
   saveFilters();

@@ -28,8 +28,11 @@ jobs:
       - name: Build community browser indexes
         run: python3 scripts/build-community-index.py
 
+      - name: Build SQLite query assets
+        run: python3 scripts/build-sqlite-assets.py --cities n
+
       - name: Commit updated PLVR data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update PLVR region shards
-          file_pattern: data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz
+          file_pattern: data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/index.sqlite.gz data/db/city/*.sqlite.gz

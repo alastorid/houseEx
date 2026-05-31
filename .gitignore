@@ -4,5 +4,6 @@ data/plvr/by-region/
 data/plvr/by-source/
 data/plvr/queries/
 data/plvr/region-index.json
+data/db/**/*.sqlite
 __pycache__/
 *.pyc
