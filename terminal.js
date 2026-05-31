@@ -480,6 +480,10 @@ function bind() {
       options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${filterValue}">>= ${filterLabel}</button>`);
       options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${filterValue}"><= ${filterLabel}</button>`);
     }
+    const googleKeyword = field === "full_address"
+      ? `${row.city || ""}${row.district || ""}${row.full_address}`
+      : filterLabel;
+    if (googleKeyword) options.push(`<button type="button" data-google-keyword="${encodeURIComponent(googleKeyword)}">Google: ${filterLabel}</button>`);
     if (field === "full_address") {
       const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
@@ -492,8 +496,11 @@ function bind() {
   el("#contextMenu").addEventListener("click", (event) => {
     const filterBtn = event.target.closest("[data-filter]");
     const streetViewBtn = event.target.closest("[data-map-streetview]");
+    const googleBtn = event.target.closest("[data-google-keyword]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
+    } else if (googleBtn) {
+      window.open(`https://www.google.com/search?q=${googleBtn.dataset.googleKeyword}`, "_blank", "noopener");
     } else if (streetViewBtn) {
       window.open(`https://www.google.com/maps?layer=c&cbll=&cbp=1,0,,0,0&q=${streetViewBtn.dataset.mapStreetview}`, "_blank", "noopener");
     }
