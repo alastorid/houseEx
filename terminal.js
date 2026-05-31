@@ -416,7 +416,15 @@ function bind() {
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseup", up);
   });
-  el("#columnButton").addEventListener("click", () => el("#columnPopover").classList.toggle("open"));
+  el("#columnButton").addEventListener("click", (event) => {
+    event.stopPropagation();
+    el("#columnPopover").classList.toggle("open");
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest("#columnPopover") && !event.target.closest("#columnButton")) {
+      el("#columnPopover").classList.remove("open");
+    }
+  });
   el("#columnPopover").addEventListener("click", (event) => {
     const button = event.target.closest("[data-toggle-column]");
     if (!button) return;

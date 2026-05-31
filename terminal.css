@@ -259,6 +259,17 @@ th {
   flex-direction: column;
 }
 
+.column-popover {
+  top: 82px;
+  right: 292px;
+  max-width: 360px;
+  max-height: min(520px, calc(100vh - 100px));
+  overflow: auto;
+  flex-flow: row wrap;
+  gap: 6px;
+}
+
+.column-popover.open,
 .context-menu.open {
   display: flex;
 }
