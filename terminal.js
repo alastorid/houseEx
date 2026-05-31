@@ -109,7 +109,8 @@ function cellHtml(row, field) {
   const value = displayValue(row, field);
   const title = String(value).replace(/"/g, "&quot;");
   if (field === "full_address" && row.full_address) {
-    return `<td ${widthStyle(field)}><button class="address-cell" type="button" data-map-address="${String(row.full_address).replace(/"/g, "&quot;")}">${value}</button></td>`;
+    const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
+    return `<td ${widthStyle(field)}><button class="address-cell" type="button" data-map-address="${String(fullMapAddress).replace(/"/g, "&quot;")}">${value}</button></td>`;
   }
   return `<td ${widthStyle(field)} title="${title}">${value}</td>`;
 }
