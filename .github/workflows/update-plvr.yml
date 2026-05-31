@@ -19,32 +19,44 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update-plvr:
-    runs-on: ubuntu-latest
+  fetch:
+    runs-on: macos-latest
+    outputs:
+      data_updated: ${{ steps.commit.outputs.changes_detected }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build PLVR region shards
-        run: python3 scripts/fetch-plvr-open-data.py
-
-      - name: Build compressed web shards
-        run: python3 scripts/build-plvr-web-assets.py
-
-      - name: Build community browser indexes
-        run: python3 scripts/build-community-index.py
-
-      - name: Build SQLite query assets
-        run: python3 scripts/build-sqlite-assets.py --cities all
-
-      - name: Audit community discovery gaps
-        run: python3 scripts/audit-community-gaps.py
-
-      - name: SQLite smoke test
-        run: python3 scripts/smoke-test-sqlite.py
-
-      - name: Commit updated PLVR data
+      - uses: actions/checkout@v4
+      - run: python3 scripts/fetch-plvr-open-data.py
+      - id: commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Update PLVR region shards
-          file_pattern: data/community-overrides.json data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz data/db/district/**/*.sqlite.gz
+          commit_message: "fetch: update raw open data"
+          file_pattern: "data/plvr/source-urls.json"
+
+  process:
+    needs: fetch
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        script:
+          - "scripts/build-plvr-web-assets.py"
+          - "scripts/build-community-index.py"
+          - "scripts/build-sqlite-assets.py --cities all"
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 ${{ matrix.script }}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "process: ${{ matrix.script }}"
+          file_pattern: "data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/index.sqlite.gz"
+
+  audit:
+    needs: process
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/audit-community-gaps.py
+      - run: python3 scripts/smoke-test-sqlite.py
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "audit: update reports"
+          file_pattern: "data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json"
