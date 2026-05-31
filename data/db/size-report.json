@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T16:22:40.071168+00:00",
+  "generatedAt": "2026-05-31T19:27:39.372960+00:00",
   "budgets": {
     "index.sqlite.gz": 26214400,
     "shard.sqlite.gz": 47185920,
@@ -10,7 +10,7 @@
     {
       "file": "data/db/index.sqlite.gz",
       "label": "index.sqlite.gz",
-      "bytes": 5590097,
+      "bytes": 5556081,
       "budgetBytes": 26214400,
       "ok": true
     },
@@ -31,189 +31,189 @@
     {
       "file": "data/db/district/changhua/unknown.sqlite.gz",
       "label": "changhua/unknown.sqlite.gz",
-      "bytes": 12881,
+      "bytes": 8854,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/23ae7512.sqlite.gz",
       "label": "changhua/23ae7512.sqlite.gz",
-      "bytes": 4039042,
+      "bytes": 3985135,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/a5acf05e.sqlite.gz",
       "label": "changhua/a5acf05e.sqlite.gz",
-      "bytes": 646537,
+      "bytes": 610511,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/caeaeb2a.sqlite.gz",
       "label": "changhua/caeaeb2a.sqlite.gz",
-      "bytes": 2887784,
+      "bytes": 2839280,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/c156be54.sqlite.gz",
       "label": "changhua/c156be54.sqlite.gz",
-      "bytes": 2872440,
+      "bytes": 2820310,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/eeab7430.sqlite.gz",
       "label": "changhua/eeab7430.sqlite.gz",
-      "bytes": 6141100,
+      "bytes": 6085645,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/678ab59a.sqlite.gz",
       "label": "changhua/678ab59a.sqlite.gz",
-      "bytes": 12664466,
+      "bytes": 12604660,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/4e42fa3e.sqlite.gz",
       "label": "changhua/4e42fa3e.sqlite.gz",
-      "bytes": 3088083,
+      "bytes": 3038597,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/5f43a682.sqlite.gz",
       "label": "changhua/5f43a682.sqlite.gz",
-      "bytes": 2076669,
+      "bytes": 2028768,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/dc5fba88.sqlite.gz",
       "label": "changhua/dc5fba88.sqlite.gz",
-      "bytes": 2137753,
+      "bytes": 2090636,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/5a5d8d4c.sqlite.gz",
       "label": "changhua/5a5d8d4c.sqlite.gz",
-      "bytes": 986739,
+      "bytes": 950182,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/db4d1c20.sqlite.gz",
       "label": "changhua/db4d1c20.sqlite.gz",
-      "bytes": 3326832,
+      "bytes": 3280308,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/e2d64d24.sqlite.gz",
       "label": "changhua/e2d64d24.sqlite.gz",
-      "bytes": 17060599,
+      "bytes": 16982559,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/313a41de.sqlite.gz",
       "label": "changhua/313a41de.sqlite.gz",
-      "bytes": 1968945,
+      "bytes": 1919156,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/35abb26f.sqlite.gz",
       "label": "changhua/35abb26f.sqlite.gz",
-      "bytes": 1877256,
+      "bytes": 1832502,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/240a37da.sqlite.gz",
       "label": "changhua/240a37da.sqlite.gz",
-      "bytes": 4027904,
+      "bytes": 3974651,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/2c2fd9a1.sqlite.gz",
       "label": "changhua/2c2fd9a1.sqlite.gz",
-      "bytes": 2966946,
+      "bytes": 2917799,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/8d968c38.sqlite.gz",
       "label": "changhua/8d968c38.sqlite.gz",
-      "bytes": 1733984,
+      "bytes": 1691767,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/f52fa3c8.sqlite.gz",
       "label": "changhua/f52fa3c8.sqlite.gz",
-      "bytes": 2710312,
+      "bytes": 2662424,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/be1d4199.sqlite.gz",
       "label": "changhua/be1d4199.sqlite.gz",
-      "bytes": 2894325,
+      "bytes": 2845183,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/c1928091.sqlite.gz",
       "label": "changhua/c1928091.sqlite.gz",
-      "bytes": 2619232,
+      "bytes": 2573743,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/1d91ef88.sqlite.gz",
       "label": "changhua/1d91ef88.sqlite.gz",
-      "bytes": 961487,
+      "bytes": 923354,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/63945cc3.sqlite.gz",
       "label": "changhua/63945cc3.sqlite.gz",
-      "bytes": 1155808,
+      "bytes": 1115623,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/4d3ea5b3.sqlite.gz",
       "label": "changhua/4d3ea5b3.sqlite.gz",
-      "bytes": 1823623,
+      "bytes": 1780778,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/5bf373d3.sqlite.gz",
       "label": "changhua/5bf373d3.sqlite.gz",
-      "bytes": 3515579,
+      "bytes": 3465173,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/ed99d3e4.sqlite.gz",
       "label": "changhua/ed99d3e4.sqlite.gz",
-      "bytes": 2450501,
+      "bytes": 2408453,
       "budgetBytes": 47185920,
       "ok": true
     },
     {
       "file": "data/db/district/changhua/b8408ca9.sqlite.gz",
       "label": "changhua/b8408ca9.sqlite.gz",
-      "bytes": 5771143,
+      "bytes": 5717751,
       "budgetBytes": 47185920,
       "ok": true
     }

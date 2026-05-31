@@ -137,22 +137,27 @@ def discover_sources(verify_tls: bool) -> list[Source]:
     return sources
 
 
-def download_source(source: Source, download_dir: Path, force: bool = False, verify_tls: bool = False) -> Path:
-    download_dir.mkdir(parents=True, exist_ok=True)
-    zip_path = download_dir / f"{source.id}.zip"
-    if zip_path.exists() and zip_path.stat().st_size > 0 and not force:
-        return zip_path
+import subprocess
 
-    req = Request(source.url, headers={"User-Agent": "Mozilla/5.0"})
-    tmp_path = zip_path.with_suffix(".zip.part")
-    with urlopen(req, timeout=300, context=ssl_context(verify_tls)) as res, tmp_path.open("wb") as out:
-        while True:
-            chunk = res.read(1024 * 1024)
-            if not chunk:
-                break
-            out.write(chunk)
-    tmp_path.replace(zip_path)
-    return zip_path
+def download_sources_aria2(sources: list[Source], download_dir: Path) -> None:
+    download_dir.mkdir(parents=True, exist_ok=True)
+    input_file = download_dir / "aria2.txt"
+    with input_file.open("w", encoding="utf-8") as f:
+        for source in sources:
+            f.write(f"{source.url}\n  out={source.id}.zip\n")
+    
+    cmd = [
+        "aria2c",
+        "-i", str(input_file),
+        "-d", str(download_dir),
+        "-x", "16",
+        "-j", "16",
+        "--allow-overwrite=false",
+        "--auto-file-renaming=false",
+    ]
+    subprocess.run(cmd, check=True)
+    input_file.unlink()
+
 
 
 def parse_file_name(name: str) -> dict[str, str]:
@@ -596,7 +601,7 @@ def main() -> int:
     parser.add_argument("--index-output", default="data/plvr/region-index.json", type=Path)
     parser.add_argument("--shard-dir", default="data/plvr/by-region", type=Path)
     parser.add_argument("--sources-output", default="data/plvr/source-urls.json", type=Path)
-    parser.add_argument("--download-dir", default="downloads/plvr", type=Path)
+    parser.add_argument("--download-dir", default="raw", type=Path)
     parser.add_argument("--source-kind", choices=["all", "current", "history", "season"], default="all")
     parser.add_argument("--max-sources", type=int, help="Useful for smoke tests.")
     parser.add_argument("--force", action="store_true", help="Re-download ZIPs even if cached.")
@@ -621,8 +626,12 @@ def main() -> int:
     write_sources(sources, args.sources_output)
     print(f"Wrote {len(sources)} source URLs to {args.sources_output}", file=sys.stderr)
 
+    download_sources_aria2(sources, args.download_dir)
+    print(f"Downloaded {len(sources)} sources to {args.download_dir}", file=sys.stderr)
+
     if args.sources_only:
         return 0
+
 
     if args.single_json:
         count = write_json(
