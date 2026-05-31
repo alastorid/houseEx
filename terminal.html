@@ -25,17 +25,24 @@
         <section class="filter-section">
           <div class="section-head">
             <strong>Range</strong>
-            <button id="applyRangeFilters" type="button">套用</button>
           </div>
           <div class="range-grid">
-            <label>建坪<input id="buildingMin" inputmode="decimal" placeholder="min" /></label>
-            <label>&nbsp;<input id="buildingMax" inputmode="decimal" placeholder="max" /></label>
-            <label>地坪<input id="landMin" inputmode="decimal" placeholder="min" /></label>
-            <label>&nbsp;<input id="landMax" inputmode="decimal" placeholder="max" /></label>
-            <label>總價(萬)<input id="priceMin" inputmode="decimal" placeholder="min" /></label>
-            <label>&nbsp;<input id="priceMax" inputmode="decimal" placeholder="max" /></label>
-            <label>單價/坪(萬)<input id="unitMin" inputmode="decimal" placeholder="min" /></label>
-            <label>&nbsp;<input id="unitMax" inputmode="decimal" placeholder="max" /></label>
+            <div class="range-control" data-range="building_area_ping">
+              <div><span>建坪</span><output id="buildingRangeLabel">--</output></div>
+              <div class="dual-range"><div class="range-fill" id="buildingFill"></div><input id="buildingMin" type="range" /><input id="buildingMax" type="range" /></div>
+            </div>
+            <div class="range-control" data-range="land_area_ping">
+              <div><span>地坪</span><output id="landRangeLabel">--</output></div>
+              <div class="dual-range"><div class="range-fill" id="landFill"></div><input id="landMin" type="range" /><input id="landMax" type="range" /></div>
+            </div>
+            <div class="range-control" data-range="total_price">
+              <div><span>總價(萬)</span><output id="priceRangeLabel">--</output></div>
+              <div class="dual-range"><div class="range-fill" id="priceFill"></div><input id="priceMin" type="range" /><input id="priceMax" type="range" /></div>
+            </div>
+            <div class="range-control" data-range="unit_price_ping">
+              <div><span>單價/坪(萬)</span><output id="unitRangeLabel">--</output></div>
+              <div class="dual-range"><div class="range-fill" id="unitFill"></div><input id="unitMin" type="range" /><input id="unitMax" type="range" /></div>
+            </div>
           </div>
         </section>
 

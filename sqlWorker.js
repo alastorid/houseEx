@@ -638,9 +638,9 @@ function queryColumnAnalytics(payload = {}) {
         ${where}
         GROUP BY ${field.expr}
         ORDER BY count DESC
-        LIMIT 20
+        LIMIT ?
       `,
-      params,
+      [...params, Math.min(Number(payload.limit) || 20, 200)],
     );
   }
   return withMeta("queryColumnAnalytics", payload.city, started, rows);

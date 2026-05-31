@@ -39,7 +39,10 @@ const state = {
   metadata: null,
   city: "彰化縣",
   district: "",
+  districtOptions: [],
+  districtCounts: {},
   excludedDistricts: [],
+  rangeBounds: {},
   keyword: "",
   filters: [],
   rows: [],
@@ -56,6 +59,13 @@ const state = {
 const el = (selector) => document.querySelector(selector);
 const money = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 0 });
 const decimal = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 2 });
+const debounce = (fn, wait = 220) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), wait);
+  };
+};
 
 function loadColumnPrefs() {
   try {
@@ -120,8 +130,11 @@ function filterPayload() {
 async function reloadDistricts() {
   const result = await queryService.queryCommunities({ city: state.city, limit: 2000 });
   const names = [...new Set((result.rows || []).map((row) => row.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, "zh-Hant"));
+  state.districtOptions = names;
+  state.districtCounts = Object.fromEntries(names.map((name) => [name, 0]));
   el("#districtSelect").innerHTML = `<option value="">全部</option>${names.map((name) => `<option value="${name}">${name}</option>`).join("")}`;
   el("#districtSelect").value = state.district;
+  renderTownTags();
 }
 
 async function runQuery({ append = false } = {}) {
@@ -142,12 +155,18 @@ async function runQuery({ append = false } = {}) {
 }
 
 async function refreshTownTags() {
-  const result = await queryService.queryColumnAnalytics({ ...filterPayload(), field: "district" });
-  const rows = result.rows || [];
-  el("#townTags").innerHTML = rows.map((row) => {
-    const district = row.value || "";
-    const active = !state.excludedDistricts.includes(district);
-    return `<button type="button" class="${active ? "active" : ""}" data-town-tag="${district}">${district} <span>${money.format(row.count || 0)}</span></button>`;
+  const payload = filterPayload();
+  payload.filters = (payload.filters || []).filter((filter) => !(filter.field === "district" && filter.operator === "notIn"));
+  const result = await queryService.queryColumnAnalytics({ ...payload, field: "district", limit: 200 });
+  state.districtCounts = Object.fromEntries((result.rows || []).map((row) => [row.value || "", row.count || 0]));
+  renderTownTags();
+}
+
+function renderTownTags() {
+  el("#townTags").innerHTML = state.districtOptions.map((district) => {
+    const excluded = state.excludedDistricts.includes(district);
+    const selected = state.district && state.district !== district;
+    return `<button type="button" class="${excluded || selected ? "" : "active"}" data-town-tag="${district}">${district} <span>${money.format(state.districtCounts[district] || 0)}</span></button>`;
   }).join("");
 }
 
@@ -156,21 +175,56 @@ async function refreshRangeHints() {
   state.analyticsLoading = true;
   try {
     const baseRows = state.rows.length ? state.rows : [];
-    for (const [field, minId, maxId, formatter] of [
-      ["building_area_ping", "buildingMin", "buildingMax", (v) => decimal.format(v)],
-      ["land_area_ping", "landMin", "landMax", (v) => decimal.format(v)],
-      ["total_price", "priceMin", "priceMax", (v) => money.format(v / 10000)],
-      ["unit_price_ping", "unitMin", "unitMax", (v) => decimal.format(v / 10000)],
+    for (const item of [
+      ["building_area_ping", "buildingMin", "buildingMax", "buildingRangeLabel", "buildingFill", (v) => decimal.format(v), 0.5],
+      ["land_area_ping", "landMin", "landMax", "landRangeLabel", "landFill", (v) => decimal.format(v), 0.5],
+      ["total_price", "priceMin", "priceMax", "priceRangeLabel", "priceFill", (v) => money.format(v / 10000), 10],
+      ["unit_price_ping", "unitMin", "unitMax", "unitRangeLabel", "unitFill", (v) => decimal.format(v / 10000), 1],
     ]) {
+      const [field, minId, maxId, labelId, fillId, formatter, displayStep] = item;
       const values = baseRows.map((row) => Number(row[field]) || 0).filter((value) => value > 0);
       const min = values.length ? Math.min(...values) : 0;
       const max = values.length ? Math.max(...values) : 0;
-      el(`#${minId}`).placeholder = min ? `min ${formatter(min)}` : "min";
-      el(`#${maxId}`).placeholder = max ? `max ${formatter(max)}` : "max";
+      const scale = field === "total_price" || field === "unit_price_ping" ? 10000 : 1;
+      const inputMin = el(`#${minId}`);
+      const inputMax = el(`#${maxId}`);
+      const current = state.rangeBounds[field] || {};
+      const lo = Math.floor(min / scale);
+      const hi = Math.ceil(max / scale);
+      inputMin.min = String(lo);
+      inputMin.max = String(hi);
+      inputMin.step = String(displayStep);
+      inputMax.min = String(lo);
+      inputMax.max = String(hi);
+      inputMax.step = String(displayStep);
+      if (!current.touched) {
+        inputMin.value = String(lo);
+        inputMax.value = String(hi);
+      }
+      state.rangeBounds[field] = { min: lo, max: hi, scale, fillId, labelId, minId, maxId, formatter, touched: current.touched || false };
+      updateRangeLabel(field);
     }
   } finally {
     state.analyticsLoading = false;
   }
+}
+
+function updateRangeLabel(field) {
+  const bounds = state.rangeBounds[field];
+  if (!bounds) return;
+  const minInput = el(`#${bounds.minId}`);
+  const maxInput = el(`#${bounds.maxId}`);
+  let minValue = Number(minInput.value);
+  let maxValue = Number(maxInput.value);
+  if (minValue > maxValue) [minValue, maxValue] = [maxValue, minValue];
+  const format = bounds.formatter || ((v) => decimal.format(v));
+  el(`#${bounds.labelId}`).textContent = `${format(minValue * bounds.scale)} ~ ${format(maxValue * bounds.scale)}`;
+  const spread = Math.max(bounds.max - bounds.min, 1);
+  const left = ((minValue - bounds.min) / spread) * 100;
+  const right = ((maxValue - bounds.min) / spread) * 100;
+  const fill = el(`#${bounds.fillId}`);
+  fill.style.left = `${left}%`;
+  fill.style.width = `${Math.max(0, right - left)}%`;
 }
 
 function populateFields() {
@@ -249,6 +303,8 @@ function addFilter(field, operator, value, value2 = "") {
   runQuery();
 }
 
+const debouncedApplyRangeFilters = debounce(applyRangeFilters, 260);
+
 function removeAutoFilters(fields) {
   state.filters = state.filters.filter((filter) => !fields.includes(filter.field));
 }
@@ -261,11 +317,11 @@ function applyRangeFilters() {
     ["total_price", "priceMin", "priceMax"],
     ["unit_price_ping", "unitMin", "unitMax"],
   ]) {
-    const min = el(`#${minId}`).value.trim();
-    const max = el(`#${maxId}`).value.trim();
-    if (min && max) addFilter(field, "between", min, max);
-    else if (min) addFilter(field, ">=", min);
-    else if (max) addFilter(field, "<=", max);
+    const bounds = state.rangeBounds[field];
+    if (!bounds) continue;
+    const min = Math.min(Number(el(`#${minId}`).value), Number(el(`#${maxId}`).value));
+    const max = Math.max(Number(el(`#${minId}`).value), Number(el(`#${maxId}`).value));
+    if (min > bounds.min || max < bounds.max) state.filters.push({ field, operator: "between", value: min * bounds.scale, value2: max * bounds.scale });
   }
   renderFilters();
   runQuery();
@@ -379,7 +435,14 @@ function bind() {
   el("#fieldSelect").addEventListener("change", updateOperators);
   el("#operatorSelect").addEventListener("change", updateOperators);
   el("#addFilter").addEventListener("click", () => addFilter(el("#fieldSelect").value, el("#operatorSelect").value, el("#filterValue").value, el("#filterValue2").value));
-  el("#applyRangeFilters").addEventListener("click", applyRangeFilters);
+  document.querySelectorAll(".dual-range input").forEach((input) => input.addEventListener("input", () => {
+    const control = input.closest("[data-range]");
+    if (!control) return;
+    const field = control.dataset.range;
+    if (state.rangeBounds[field]) state.rangeBounds[field].touched = true;
+    updateRangeLabel(field);
+    debouncedApplyRangeFilters();
+  }));
   el("#addStringFilter").addEventListener("click", () => {
     const raw = el("#stringValue").value.trim();
     const value = el("#stringOperator").value === "anyContains" ? raw.split(/[,\s，、]+/).filter(Boolean) : raw;
