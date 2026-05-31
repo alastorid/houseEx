@@ -23,26 +23,13 @@
         <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
 
         <section class="filter-section">
-          <div class="section-head">
-            <strong>Range</strong>
-          </div>
-          <div class="range-grid">
-            <div class="range-control" data-range="building_area_ping">
-              <div><span>建坪</span><output id="buildingRangeLabel">--</output></div>
-              <div class="dual-range"><div class="range-fill" id="buildingFill"></div><input id="buildingMin" type="range" /><input id="buildingMax" type="range" /></div>
-            </div>
-            <div class="range-control" data-range="land_area_ping">
-              <div><span>地坪</span><output id="landRangeLabel">--</output></div>
-              <div class="dual-range"><div class="range-fill" id="landFill"></div><input id="landMin" type="range" /><input id="landMax" type="range" /></div>
-            </div>
-            <div class="range-control" data-range="total_price">
-              <div><span>總價(萬)</span><output id="priceRangeLabel">--</output></div>
-              <div class="dual-range"><div class="range-fill" id="priceFill"></div><input id="priceMin" type="range" /><input id="priceMax" type="range" /></div>
-            </div>
-            <div class="range-control" data-range="unit_price_ping">
-              <div><span>單價/坪(萬)</span><output id="unitRangeLabel">--</output></div>
-              <div class="dual-range"><div class="range-fill" id="unitFill"></div><input id="unitMin" type="range" /><input id="unitMax" type="range" /></div>
-            </div>
+          <div class="section-head"><strong>數值篩選</strong></div>
+          <div class="range-inputs">
+            <div class="input-row" data-field="building_area_ping"><span>建坪</span><input id="minBuilding" placeholder="min" /><input id="maxBuilding" placeholder="max" /></div>
+            <div class="input-row" data-field="land_area_ping"><span>地坪</span><input id="minLand" placeholder="min" /><input id="maxLand" placeholder="max" /></div>
+            <div class="input-row" data-field="total_price"><span>總價(萬)</span><input id="minPrice" placeholder="min" /><input id="maxPrice" placeholder="max" /></div>
+            <div class="input-row" data-field="unit_price_ping"><span>單價(萬)</span><input id="minUnit" placeholder="min" /><input id="maxUnit" placeholder="max" /></div>
+            <button id="applyNumericFilters" type="button" class="wide-button">套用數值篩選</button>
           </div>
         </section>
 

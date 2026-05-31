@@ -96,65 +96,31 @@ label {
   gap: 6px;
 }
 
-.range-grid {
+.range-inputs {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
-.range-control {
+.input-row {
   display: grid;
-  gap: 7px;
+  grid-template-columns: 80px 1fr 1fr;
+  gap: 6px;
+  align-items: center;
 }
 
-.range-control > div:first-child {
+.filter-line {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding: 4px 0;
 }
 
-.dual-range {
-  position: relative;
-  height: 24px;
-}
-
-.dual-range::before,
-.range-fill {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 10px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--line);
-}
-
-.range-fill {
-  right: auto;
-  background: var(--accent);
-}
-
-.dual-range input[type="range"] {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  min-height: 24px;
-  padding: 0;
+.filter-line button {
+  min-height: 20px;
+  padding: 0 6px;
   border: 0;
+  color: var(--muted);
   background: transparent;
-  pointer-events: none;
-  appearance: none;
-}
-
-.dual-range input[type="range"]::-webkit-slider-thumb {
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  background: var(--panel);
-  pointer-events: auto;
-  appearance: none;
 }
 
 .filter-builder {
