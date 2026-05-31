@@ -264,9 +264,22 @@ function humanFilter(filter) {
 
 function renderFilters() {
   el("#activeFilters").innerHTML = state.filters.map((filter, index) => (
-    `<div class="filter-line">${humanFilter(filter)}<button type="button" data-remove-filter="${index}">×</button></div>`
+    `<div class="filter-line" data-index="${index}">
+      <small>${fieldDef(filter.field)[1]} ${filter.operator}</small>
+      <input type="text" value="${filter.value}" data-edit-val="${index}" />
+      <button type="button" data-remove-filter="${index}">×</button>
+    </div>`
   )).join("");
 }
+
+// Add event listener for inline filter editing
+el("#activeFilters").addEventListener("input", (e) => {
+  const target = e.target;
+  const index = target.dataset.editVal;
+  if (index === undefined) return;
+  state.filters[index].value = convertValue(state.filters[index].field, target.value);
+  runQuery();
+});
 
 function convertValue(field, value) {
   if (value === "" || value == null) return "";
@@ -325,7 +338,9 @@ function hideColumn(field) {
 }
 
 async function showAnalytics(field) {
-  const [key, label, type] = fieldDef(field);
+  const def = fieldDef(field);
+  if (!def) return;
+  const [key, label, type] = def;
   const result = await queryService.queryColumnAnalytics({ ...filterPayload(), field: key });
   setMeta(result.meta);
   el("#analyticsTitle").textContent = label;
@@ -370,13 +385,6 @@ async function init() {
 }
 
 function bind() {
-  el("#applyNumericFilters").addEventListener("click", applyNumericFilters);
-  el("#addStringFilter").addEventListener("click", () => {
-    const raw = el("#stringValue").value.trim();
-    const value = el("#stringOperator").value === "anyContains" ? raw.split(/[,\s，、]+/).filter(Boolean) : raw;
-    addFilter(el("#stringField").value, el("#stringOperator").value, value);
-  });
-  el("#detachedParkingScreen").addEventListener("click", applyDetachedParkingScreen);
   el("#keywordInput").addEventListener("input", () => {
     clearTimeout(bind.keywordTimer);
     bind.keywordTimer = setTimeout(() => {
