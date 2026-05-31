@@ -174,7 +174,7 @@ async function refreshRangeHints() {
   if (state.analyticsLoading || !state.city) return;
   state.analyticsLoading = true;
   try {
-    const baseRows = state.rows.length ? state.rows : [];
+    const payload = filterPayload();
     for (const item of [
       ["building_area_ping", "buildingMin", "buildingRangeLabel", (v) => decimal.format(v), 0.5],
       ["land_area_ping", "landMin", "landRangeLabel", (v) => decimal.format(v), 0.5],
@@ -182,13 +182,12 @@ async function refreshRangeHints() {
       ["unit_price_ping", "unitMin", "unitRangeLabel", (v) => decimal.format(v / 10000), 1],
     ]) {
       const [field, minId, labelId, formatter, displayStep] = item;
-      const values = baseRows.map((row) => Number(row[field]) || 0).filter((value) => value > 0);
-      const min = values.length ? Math.min(...values) : 0;
-      const max = values.length ? Math.max(...values) : 0;
+      const result = await queryService.queryColumnAnalytics({ ...payload, field });
+      const row = result.rows[0] || { min: 0, max: 0 };
       const scale = field === "total_price" || field === "unit_price_ping" ? 10000 : 1;
       const inputMin = el(`#${minId}`);
-      const lo = Math.floor(min / scale);
-      const hi = Math.ceil(max / scale);
+      const lo = Math.floor(row.min / scale);
+      const hi = Math.ceil(row.max / scale);
       inputMin.min = String(lo);
       inputMin.max = String(hi);
       inputMin.step = String(displayStep);
