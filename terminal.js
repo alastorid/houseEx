@@ -417,10 +417,6 @@ function bind() {
     state.offset = 0;
     runQuery();
   });
-  elsParking().forEach((button) => button.addEventListener("click", () => {
-    elsParking().forEach((item) => item.classList.toggle("active", item === button));
-    setParkingFilter(button.dataset.parking);
-  }));
   el("#activeFilters").addEventListener("click", (event) => {
     const button = event.target.closest("[data-remove-filter]");
     if (!button) return;
