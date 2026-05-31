@@ -554,15 +554,23 @@ function bind() {
       options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${value}">>= ${value}</button>`);
       options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${value}"><= ${value}</button>`);
     }
+    if (field === "full_address") {
+      const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
+      options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
+    }
     menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
     menu.style.top = `${event.clientY}px`;
     menu.classList.add("open");
   });
   el("#contextMenu").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-filter]");
-    if (!button) return;
-    addFilter(button.dataset.filter, button.dataset.op, button.dataset.val);
+    const filterBtn = event.target.closest("[data-filter]");
+    const streetViewBtn = event.target.closest("[data-map-streetview]");
+    if (filterBtn) {
+      addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
+    } else if (streetViewBtn) {
+      window.open(`https://www.google.com/maps?layer=c&cbll=&cbp=1,0,,0,0&q=${streetViewBtn.dataset.mapStreetview}`, "_blank", "noopener");
+    }
     el("#contextMenu").classList.remove("open");
   });
   el("#savePreset").addEventListener("click", () => {
