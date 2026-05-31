@@ -311,33 +311,6 @@ function applyRangeFilters() {
   runQuery();
 }
 
-function setParkingFilter(value) {
-  removeAutoFilters(["has_parking"]);
-  if (value) state.filters.push({ field: "has_parking", operator: "=", value: value === "true" });
-  state.offset = 0;
-  renderFilters();
-  runQuery();
-}
-
-function readPresets() {
-  try {
-    return JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function savePresets(items) {
-  localStorage.setItem(FILTER_PRESETS_KEY, JSON.stringify(items.slice(0, 30)));
-  renderPresets();
-}
-
-function renderPresets() {
-  el("#savedPresets").innerHTML = readPresets().map((item, index) => `
-    <span class="filter-chip"><button type="button" data-load-preset="${index}">${item.name}</button><button type="button" data-delete-preset="${index}">×</button></span>
-  `).join("");
-}
-
 function renderColumnsPopover() {
   el("#columnPopover").innerHTML = columns.map(([key, label]) => `
     <button class="${state.visibleColumns.includes(key) ? "active" : ""}" type="button" data-toggle-column="${key}">${label}</button>
@@ -366,24 +339,6 @@ async function showAnalytics(field) {
   el("#analyticsBody").innerHTML = result.rows.map((row) => `
     <div class="stat-line"><span>${row.value || "(blank)"}</span><strong>${money.format(row.count || 0)}</strong></div>
   `).join("");
-}
-
-function applyDetachedParkingScreen() {
-  state.filters = [
-    { field: "building_area_ping", operator: ">", value: 50 },
-    { field: "property_type", operator: "anyContains", value: ["透天", "別墅"] },
-    { field: "has_parking", operator: "=", value: true },
-  ];
-  el("#buildingMin").value = "50";
-  el("#stringValue").value = "透天,別墅";
-  elsParking().forEach((button) => button.classList.toggle("active", button.dataset.parking === "true"));
-  state.offset = 0;
-  renderFilters();
-  runQuery();
-}
-
-function elsParking() {
-  return [...document.querySelectorAll("[data-parking]")];
 }
 
 function exportCsv() {

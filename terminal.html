@@ -33,44 +33,7 @@
           </div>
         </section>
 
-        <section class="filter-section">
-          <strong>Boolean</strong>
-          <div class="segmented" data-toggle-group="parking">
-            <button type="button" class="active" data-parking="">不限</button>
-            <button type="button" data-parking="true">有車位</button>
-            <button type="button" data-parking="false">無車位</button>
-          </div>
-        </section>
-
-        <section class="filter-section">
-          <strong>String</strong>
-          <div class="string-filter">
-            <select id="stringField">
-              <option value="property_type">型態</option>
-              <option value="community_name">社區</option>
-              <option value="full_address">地址</option>
-              <option value="building_no">棟及號</option>
-              <option value="road">路名</option>
-            </select>
-            <select id="stringOperator">
-              <option value="contains">contains</option>
-              <option value="notContains">not contains</option>
-              <option value="anyContains">any contains</option>
-              <option value="exact">exact</option>
-            </select>
-            <input id="stringValue" placeholder="透天, 別墅" />
-            <button id="addStringFilter" type="button">加入</button>
-          </div>
-          <button id="detachedParkingScreen" class="wide-button" type="button">建坪 > 50 · 透天/別墅 · 有車位</button>
-        </section>
-
         <div class="active-filters" id="activeFilters"></div>
-
-        <div class="saved">
-          <input id="presetName" placeholder="命名目前條件" />
-          <button id="savePreset" type="button">儲存</button>
-          <div id="savedPresets"></div>
-        </div>
       </aside>
 
       <section class="grid-stage">
