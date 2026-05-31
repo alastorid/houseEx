@@ -1,6 +1,6 @@
 {
-  "version": "2026-05-31-053057",
-  "generated_at": "2026-05-31T05:30:57.556879+00:00",
+  "version": "2026-05-31-155528",
+  "generated_at": "2026-05-31T15:55:28.168081+00:00",
   "cities": {
     "彰化縣": {
       "city": "彰化縣",
@@ -9,11 +9,11 @@
       "db": "data/db/city/changhua.sqlite",
       "gzip": "data/db/city/changhua.sqlite.gz",
       "path": "data/db/city/changhua.sqlite.gz",
-      "size": 751828992,
-      "compressedBytes": 90809589,
-      "compressed_bytes": 90809589,
-      "uncompressedBytes": 751828992,
-      "hash": "08491a483134d4a165fc92116a59a572aec23911a58e4e1c23c5f06ad20f26c4",
+      "size": 750174208,
+      "compressedBytes": 91765394,
+      "compressed_bytes": 91765394,
+      "uncompressedBytes": 750174208,
+      "hash": "e46e2f5b8992421d61466d7ab2e5c8fb250fa3597addbf9ac9e0ac2a9487db81",
       "transactionCount": 197596,
       "transaction_count": 197596,
       "communityCount": 680,
@@ -25,7 +25,7 @@
         "rowsMissingPrice": 4987,
         "rowsMissingAddress": 0,
         "rowsMissingLatLng": 0,
-        "duplicatedTransactionCandidates": 2297,
+        "duplicatedTransactionCandidates": 2330,
         "abnormalUnitPrice": 27727,
         "abnormalBuildingArea": 402,
         "cityDistrictMismatch": 0,
@@ -98,10 +98,10 @@
     "db": "data/db/index.sqlite",
     "gzip": "data/db/index.sqlite.gz",
     "path": "data/db/index.sqlite.gz",
-    "size": 23822336,
-    "compressedBytes": 5580029,
-    "compressed_bytes": 5580029,
-    "uncompressedBytes": 23822336,
-    "hash": "10dcc6f9c46f62477143c38fbc4ae2fc66c1967f25b6f63f7e6d9a3f571009c3"
+    "size": 23875584,
+    "compressedBytes": 5590078,
+    "compressed_bytes": 5590078,
+    "uncompressedBytes": 23875584,
+    "hash": "87564e44da6b1ad162df337c78549a161c61ce3aea33a493f65e1c9fc2bd4226"
   }
 }

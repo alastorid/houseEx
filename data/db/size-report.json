@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T05:30:57.556879+00:00",
+  "generatedAt": "2026-05-31T15:55:28.168081+00:00",
   "budgets": {
     "index.sqlite.gz": 5242880,
     "city.sqlite.gz": 52428800,
@@ -10,14 +10,14 @@
     {
       "file": "data/db/index.sqlite.gz",
       "label": "index.sqlite.gz",
-      "bytes": 5580029,
+      "bytes": 5590078,
       "budgetBytes": 5242880,
       "ok": false
     },
     {
       "file": "script.js",
       "label": "script.js",
-      "bytes": 61981,
+      "bytes": 61973,
       "budgetBytes": 307200,
       "ok": true
     },
@@ -31,13 +31,13 @@
     {
       "file": "data/db/city/changhua.sqlite.gz",
       "label": "changhua.sqlite.gz",
-      "bytes": 90809589,
+      "bytes": 91765394,
       "budgetBytes": 52428800,
       "ok": false
     }
   ],
   "warnings": [
-    "index.sqlite.gz is 5580029 bytes; budget is 5242880 bytes",
-    "changhua.sqlite.gz is 90809589 bytes; budget is 52428800 bytes"
+    "index.sqlite.gz is 5590078 bytes; budget is 5242880 bytes",
+    "changhua.sqlite.gz is 91765394 bytes; budget is 52428800 bytes"
   ]
 }

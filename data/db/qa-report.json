@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T05:30:57.556879+00:00",
+  "generatedAt": "2026-05-31T15:55:28.168081+00:00",
   "totalRows": 197596,
   "cities": {
     "彰化縣": {
@@ -8,7 +8,7 @@
       "rowsMissingPrice": 4987,
       "rowsMissingAddress": 0,
       "rowsMissingLatLng": 0,
-      "duplicatedTransactionCandidates": 2297,
+      "duplicatedTransactionCandidates": 2330,
       "abnormalUnitPrice": 27727,
       "abnormalBuildingArea": 402,
       "cityDistrictMismatch": 0,

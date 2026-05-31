@@ -40,8 +40,6 @@ const state = {
   city: "彰化縣",
   district: "",
   districtOptions: [],
-  districtCounts: {},
-  excludedDistricts: [],
   keyword: "",
   filters: [],
   rows: [],
@@ -55,6 +53,7 @@ const state = {
     !["city", "road", "has_parking", "parking_price", "building_age", "source_batch", "repeat_sale"].includes(key)
   ),
   widths: Object.fromEntries(columns.map(([key, , , width]) => [key, width])),
+  restoringHash: false,
 };
 
 const el = (selector) => document.querySelector(selector);
@@ -78,6 +77,58 @@ function loadColumnPrefs() {
 
 function saveColumnPrefs() {
   localStorage.setItem(COLUMN_KEY, JSON.stringify({ visibleColumns: state.visibleColumns, widths: state.widths }));
+  writeHashState();
+}
+
+function readHashState() {
+  const raw = new URLSearchParams(window.location.hash.slice(1)).get("state");
+  if (!raw) return null;
+  try {
+    return JSON.parse(decodeURIComponent(raw));
+  } catch {
+    return null;
+  }
+}
+
+function applyHashState() {
+  const saved = readHashState();
+  if (!saved || typeof saved !== "object") return;
+  state.restoringHash = true;
+  if (saved.city && state.metadata?.cities?.[saved.city]) state.city = saved.city;
+  state.district = saved.district || "";
+  state.keyword = saved.keyword || "";
+  if (Array.isArray(saved.filters)) state.filters = saved.filters;
+  if (saved.sortBy && fieldDef(saved.sortBy)) state.sortBy = saved.sortBy;
+  state.sortDir = saved.sortDir === "ASC" ? "ASC" : "DESC";
+  if (Array.isArray(saved.visibleColumns)) {
+    const valid = saved.visibleColumns.filter((key) => columns.some(([columnKey]) => columnKey === key));
+    if (valid.length) state.visibleColumns = valid;
+  }
+  if (saved.widths && typeof saved.widths === "object") {
+    const validWidths = Object.fromEntries(Object.entries(saved.widths).filter(([key, value]) => columns.some(([columnKey]) => columnKey === key) && Number.isFinite(Number(value))));
+    state.widths = { ...state.widths, ...validWidths };
+  }
+  state.offset = 0;
+  state.restoringHash = false;
+}
+
+function writeHashState() {
+  if (state.restoringHash) return;
+  const snapshot = {
+    city: state.city,
+    district: state.district,
+    keyword: state.keyword,
+    filters: state.filters,
+    sortBy: state.sortBy,
+    sortDir: state.sortDir,
+    visibleColumns: state.visibleColumns,
+    widths: state.widths,
+  };
+  const encoded = encodeURIComponent(JSON.stringify(snapshot));
+  const next = `${window.location.pathname}${window.location.search}#state=${encoded}`;
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
+    window.history.replaceState(null, "", next);
+  }
 }
 
 function setMeta(meta) {
@@ -117,7 +168,6 @@ function cellHtml(row, field) {
 function filterPayload() {
   const filters = [...state.filters];
   if (state.district) filters.push({ field: "district", operator: "exact", value: state.district });
-  if (state.excludedDistricts.length) filters.push({ field: "district", operator: "notIn", value: state.excludedDistricts });
   return {
     city: state.city,
     keyword: state.keyword,
@@ -133,10 +183,9 @@ async function reloadDistricts() {
   const result = await queryService.queryCommunities({ city: state.city, limit: 2000 });
   const names = [...new Set((result.rows || []).map((row) => row.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, "zh-Hant"));
   state.districtOptions = names;
-  state.districtCounts = Object.fromEntries(names.map((name) => [name, 0]));
   el("#districtSelect").innerHTML = `<option value="">全部</option>${names.map((name) => `<option value="${name}">${name}</option>`).join("")}`;
+  if (state.district && !names.includes(state.district)) state.district = "";
   el("#districtSelect").value = state.district;
-  renderTownTags();
 }
 
 async function runQuery({ append = false } = {}) {
@@ -149,26 +198,10 @@ async function runQuery({ append = false } = {}) {
     state.total = result.total || 0;
     state.rows = append ? [...state.rows, ...(result.rows || [])] : result.rows || [];
     renderRows();
-    if (!append) refreshTownTags();
+    if (!append) writeHashState();
   } finally {
     state.loading = false;
   }
-}
-
-async function refreshTownTags() {
-  const payload = filterPayload();
-  payload.filters = (payload.filters || []).filter((filter) => !(filter.field === "district" && filter.operator === "notIn"));
-  const result = await queryService.queryColumnAnalytics({ ...payload, field: "district", limit: 200 });
-  state.districtCounts = Object.fromEntries((result.rows || []).map((row) => [row.value || "", row.count || 0]));
-  renderTownTags();
-}
-
-function renderTownTags() {
-  el("#townTags").innerHTML = state.districtOptions.map((district) => {
-    const excluded = state.excludedDistricts.includes(district);
-    const selected = state.district && state.district !== district;
-    return `<button type="button" class="${excluded || selected ? "" : "active"}" data-town-tag="${district}">${district} <span>${money.format(state.districtCounts[district] || 0)}</span></button>`;
-  }).join("");
 }
 
 function populateFields() {
@@ -244,6 +277,8 @@ el("#activeFilters").addEventListener("input", (e) => {
   const index = target.dataset.editVal;
   if (index === undefined) return;
   state.filters[index].value = convertValue(state.filters[index].field, target.value);
+  state.offset = 0;
+  writeHashState();
   runQuery();
 });
 
@@ -275,11 +310,24 @@ function addFilter(field, operator, value, value2 = "") {
   });
   state.offset = 0;
   renderFilters();
+  writeHashState();
   runQuery();
 }
 
 function removeAutoFilters(fields) {
   state.filters = state.filters.filter((filter) => !fields.includes(filter.field));
+}
+
+function applyLargeDetachedPreset() {
+  removeAutoFilters(["building_area_ping", "land_area_ping"]);
+  state.filters.push(
+    { field: "building_area_ping", operator: ">", value: 99, value2: "" },
+    { field: "land_area_ping", operator: ">", value: 99, value2: "" },
+  );
+  state.offset = 0;
+  renderFilters();
+  writeHashState();
+  runQuery();
 }
 
 function renderColumnsPopover() {
@@ -335,8 +383,12 @@ async function init() {
   state.metadata = initResult.metadata;
   setMeta(initResult.meta);
   el("#citySelect").innerHTML = Object.keys(state.metadata.cities || {}).map((city) => `<option value="${city}">${city}</option>`).join("");
+  applyHashState();
   el("#citySelect").value = state.city;
   await reloadDistricts();
+  el("#keywordInput").value = state.keyword;
+  el("#districtSelect").value = state.district;
+  renderFilters();
   renderColumnsPopover();
   await runQuery();
 }
@@ -347,31 +399,22 @@ function bind() {
     bind.keywordTimer = setTimeout(() => {
       state.keyword = el("#keywordInput").value.trim();
       state.offset = 0;
+      writeHashState();
       runQuery();
     }, 180);
   });
   el("#citySelect").addEventListener("change", async () => {
     state.city = el("#citySelect").value;
     state.district = "";
-    state.excludedDistricts = [];
     state.offset = 0;
     await reloadDistricts();
+    writeHashState();
     runQuery();
   });
   el("#districtSelect").addEventListener("change", () => {
     state.district = el("#districtSelect").value;
-    state.excludedDistricts = [];
     state.offset = 0;
-    runQuery();
-  });
-  el("#townTags").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-town-tag]");
-    if (!button) return;
-    const district = button.dataset.townTag;
-    state.excludedDistricts = state.excludedDistricts.includes(district)
-      ? state.excludedDistricts.filter((item) => item !== district)
-      : [...state.excludedDistricts, district];
-    state.offset = 0;
+    writeHashState();
     runQuery();
   });
   el("#activeFilters").addEventListener("click", (event) => {
@@ -380,6 +423,7 @@ function bind() {
     state.filters.splice(Number(button.dataset.removeFilter), 1);
     state.offset = 0;
     renderFilters();
+    writeHashState();
     runQuery();
   });
   el("#gridHead").addEventListener("click", (event) => {
@@ -394,6 +438,7 @@ function bind() {
     }
     state.offset = 0;
     showAnalytics(field);
+    writeHashState();
     runQuery();
   });
   el("#gridHead").addEventListener("contextmenu", (event) => {
@@ -450,6 +495,7 @@ function bind() {
     if (state.visibleColumns.includes(field)) hideColumn(field);
     else state.visibleColumns.push(field);
     saveColumnPrefs();
+    writeHashState();
     renderRows();
   });
   el("#gridWrap").addEventListener("scroll", () => {
@@ -507,6 +553,17 @@ function bind() {
     el("#contextMenu").classList.remove("open");
   });
   el("#exportCsv").addEventListener("click", exportCsv);
+  el("#largeDetachedPreset").addEventListener("click", applyLargeDetachedPreset);
+  window.addEventListener("hashchange", async () => {
+    applyHashState();
+    el("#citySelect").value = state.city;
+    await reloadDistricts();
+    el("#keywordInput").value = state.keyword;
+    el("#districtSelect").value = state.district;
+    renderFilters();
+    renderColumnsPopover();
+    await runQuery();
+  });
 }
 
 bind();

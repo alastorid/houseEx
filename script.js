@@ -131,10 +131,12 @@ function toNumber(value) {
 
 function normalizeText(value) {
   return String(value || "")
+    .normalize("NFKC")
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, "")
-    .replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0));
+    .replace(/巿/g, "市")
+    .replace(/臺/g, "台")
+    .replace(/\s+/g, "");
 }
 
 function formatWan(value) {

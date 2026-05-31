@@ -12,10 +12,29 @@ const M2_PER_PING = 3.305785;
 
 function normalizeText(value) {
   return String(value || "")
+    .normalize("NFKC")
     .toLowerCase()
     .trim()
+    .replace(/巿/g, "市")
+    .replace(/臺/g, "台")
     .replace(/\s+/g, "")
-    .replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0));
+}
+
+function searchVariants(value) {
+  const original = String(value || "").trim();
+  const normalized = normalizeText(original);
+  const variants = [original, normalized];
+  if (normalized.includes("台")) variants.push(normalized.replace(/台/g, "臺"));
+  if (normalized.includes("市")) variants.push(normalized.replace(/市/g, "巿"));
+  return [...new Set(variants.filter(Boolean))];
+}
+
+function likeAny(expr, value) {
+  const variants = searchVariants(value);
+  return {
+    clause: `(${variants.map(() => `${expr} LIKE ?`).join(" OR ")})`,
+    params: variants.map((item) => `%${item}%`),
+  };
 }
 
 function now() {
@@ -372,15 +391,16 @@ function txWhere(payload = {}) {
     if (op === "anycontains") {
       const values = Array.isArray(value) ? value : String(value || "").split(/[,\s，、]+/).filter(Boolean);
       if (!values.length) return;
-      clauses.push(`(${values.map(() => `${field.expr} LIKE ?`).join(" OR ")})`);
-      params.push(...values.map((item) => `%${item}%`));
+      const variants = [...new Set(values.flatMap(searchVariants))];
+      clauses.push(`(${variants.map(() => `${field.expr} LIKE ?`).join(" OR ")})`);
+      params.push(...variants.map((item) => `%${item}%`));
       return;
     }
     if (op === "notcontains") {
-      const text = String(value || "");
-      if (!text) return;
-      clauses.push(`(${field.expr} NOT LIKE ? OR ${field.expr} IS NULL)`);
-      params.push(`%${text}%`);
+      const variants = searchVariants(value);
+      if (!variants.length) return;
+      clauses.push(`(${variants.map(() => `${field.expr} NOT LIKE ?`).join(" AND ")} OR ${field.expr} IS NULL)`);
+      params.push(...variants.map((item) => `%${item}%`));
       return;
     }
     if (op === "between") {
@@ -389,13 +409,13 @@ function txWhere(payload = {}) {
       params.push(field.type === "number" ? Number(value) : value, field.type === "number" ? Number(value2) : value2);
       return;
     }
-    if (field.type === "number" && [">", ">=", "<", "<=", "="].includes(op)) {
+    if (field.type === "number" && [">", ">=", "<", "<=", "=", "!="].includes(op)) {
       if (value === "" || value == null) return;
       clauses.push(`${field.expr} ${op} ?`);
       params.push(Number(value));
       return;
     }
-    if (field.type === "date" && [">", ">=", "<", "<=", "="].includes(op)) {
+    if (field.type === "date" && [">", ">=", "<", "<=", "=", "!="].includes(op)) {
       if (!value) return;
       clauses.push(`${field.expr} ${op} ?`);
       params.push(value);
@@ -403,7 +423,10 @@ function txWhere(payload = {}) {
     }
     const text = String(value || "");
     if (!text) return;
-    if (op === "exact") {
+    if (op === "!=" || op === "not") {
+      clauses.push(`(${field.expr} != ? OR ${field.expr} IS NULL)`);
+      params.push(text);
+    } else if (op === "exact") {
       clauses.push(`${field.expr} = ?`);
       params.push(text);
     } else if (op === "starts") {
@@ -431,17 +454,22 @@ function txWhere(payload = {}) {
     params.push(payload.communityName);
   }
   if (payload.address) {
-    clauses.push("full_address LIKE ?");
-    params.push(`%${payload.address}%`);
+    const match = likeAny("full_address", payload.address);
+    clauses.push(match.clause);
+    params.push(...match.params);
   }
   if (payload.buildingNo) {
-    clauses.push("building_no LIKE ?");
-    params.push(`%${payload.buildingNo}%`);
+    const match = likeAny("building_no", payload.buildingNo);
+    clauses.push(match.clause);
+    params.push(...match.params);
   }
   if (payload.keyword) {
-    clauses.push("(community_name LIKE ? OR full_address LIKE ? OR building_no LIKE ? OR source_batch LIKE ? OR raw_json LIKE ?)");
-    const like = `%${payload.keyword}%`;
-    params.push(like, like, like, like, like);
+    const variants = searchVariants(payload.keyword);
+    clauses.push(`(${variants.map(() => "(community_name LIKE ? OR full_address LIKE ? OR building_no LIKE ? OR source_batch LIKE ? OR raw_json LIKE ?)").join(" OR ")})`);
+    variants.forEach((item) => {
+      const like = `%${item}%`;
+      params.push(like, like, like, like, like);
+    });
   }
   if (payload.bounds) {
     const south = Number(payload.bounds.south);

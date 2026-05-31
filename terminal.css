@@ -123,29 +123,24 @@ label {
 
 .preset-bar,
 .active-filters,
-#savedPresets,
-.town-tags {
+#savedPresets {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin: 8px 0;
 }
 
-.town-tags button,
 .segmented button,
+.preset-bar button,
 .column-popover button {
   color: var(--muted);
 }
 
-.town-tags button.active,
 .segmented button.active,
+.preset-bar button.active,
 .column-popover button.active {
   color: var(--ink);
   border-color: var(--accent);
-}
-
-.town-tags span {
-  color: var(--warn);
 }
 
 .filter-chip {

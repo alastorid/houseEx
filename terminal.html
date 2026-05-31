@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>some random data terminal</title>
-    <link rel="stylesheet" href="terminal.css?v=20260531-terminal-controls" />
+    <link rel="stylesheet" href="terminal.css?v=20260531-terminal-hash" />
   </head>
   <body>
     <header class="terminal-top">
@@ -19,8 +19,10 @@
           <label>縣市<select id="citySelect"></select></label>
           <label>鄉鎮<select id="districtSelect"></select></label>
         </div>
-        <div class="town-tags" id="townTags"></div>
         <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
+        <div class="preset-bar">
+          <button id="largeDetachedPreset" type="button">非暴躁鼠鼠</button>
+        </div>
 
         <div class="active-filters" id="activeFilters"></div>
       </aside>
@@ -50,6 +52,6 @@
     <div class="context-menu" id="contextMenu"></div>
 
     <script src="queryService.js?v=20260531-sqlite-hardening" defer></script>
-    <script src="terminal.js?v=20260531-terminal-controls" defer></script>
+    <script src="terminal.js?v=20260531-terminal-hash" defer></script>
   </body>
 </html>

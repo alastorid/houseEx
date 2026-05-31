@@ -11,6 +11,7 @@ import math
 import re
 import shutil
 import sqlite3
+import unicodedata
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -65,12 +66,17 @@ def to_number(value: object) -> float:
 
 
 def normalize_text(value: object) -> str:
-    text = str(value or "").strip().replace(" ", "")
-    return "".join(chr(ord(ch) - 0xFEE0) if "０" <= ch <= "９" else ch for ch in text)
+    text = unicodedata.normalize("NFKC", str(value or ""))
+    return re.sub(r"\s+", "", text)
 
 
 def normalize_address(value: object) -> str:
-    return normalize_text(value).replace("員林鎮", "員林市")
+    return (
+        normalize_text(value)
+        .replace("巿", "市")
+        .replace("臺", "台")
+        .replace("員林鎮", "員林市")
+    )
 
 
 def load_overrides(path: Path) -> list[dict]:
@@ -450,7 +456,7 @@ def transaction_row(record: dict, index: int) -> tuple:
     values = record.get("values") or {}
     city = record.get("city_name") or ""
     district = values.get("鄉鎮市區") or ""
-    full_address = values.get("土地位置建物門牌") or values.get("土地位置") or ""
+    full_address = normalize_address(values.get("土地位置建物門牌") or values.get("土地位置") or "")
     building_no = values.get("棟及號") or ""
     community_name = values.get("建案名稱") or override_name(city, district, full_address)
     date = tw_date(values.get("交易年月日"))
