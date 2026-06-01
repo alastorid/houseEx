@@ -34,10 +34,10 @@ jobs:
             plvr-zips-
 
       - name: Fetch raw PLVR data
-        run: python3 scripts/fetch-plvr-open-data.py --downloader auto --aria-connections 8 --sleep 0
+        run: python3 scripts/fetch-plvr-open-data.py --downloader auto --aria-connections 8 --sleep 0 --tables main
 
       - name: Build compressed web shards
-        run: python3 scripts/build-plvr-web-assets.py
+        run: python3 scripts/build-plvr-web-assets.py --compresslevel 6
 
       - name: Build community index
         run: python3 scripts/build-community-index.py

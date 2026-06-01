@@ -239,7 +239,12 @@ def parse_file_name(name: str) -> dict[str, str]:
     }
 
 
-def csv_rows_from_zip(zip_path: Path, source: Source, include_schemas: bool) -> Iterable[dict[str, object]]:
+def csv_rows_from_zip(
+    zip_path: Path,
+    source: Source,
+    include_schemas: bool,
+    table_filter: set[str] | None = None,
+) -> Iterable[dict[str, object]]:
     with zipfile.ZipFile(zip_path) as zf:
         names = sorted(
             name
@@ -248,6 +253,9 @@ def csv_rows_from_zip(zip_path: Path, source: Source, include_schemas: bool) -> 
             and (include_schemas or not Path(name).name.lower().startswith(("schema-", "manifest")))
         )
         for name in names:
+            meta = parse_file_name(name)
+            if table_filter and meta.get("table_kind") not in table_filter:
+                continue
             with zf.open(name) as raw:
                 text = io.TextIOWrapper(raw, encoding="utf-8-sig", errors="replace", newline="")
                 reader = csv.reader(text)
@@ -270,7 +278,7 @@ def csv_rows_from_zip(zip_path: Path, source: Source, include_schemas: bool) -> 
 
 def source_region_lookup(zip_path: Path, source: Source, include_schemas: bool) -> dict[str, str]:
     lookup: dict[str, str] = {}
-    for record in csv_rows_from_zip(zip_path, source, include_schemas):
+    for record in csv_rows_from_zip(zip_path, source, include_schemas, {TABLE_KINDS["main"]}):
         if record.get("table_kind") != TABLE_KINDS["main"]:
             continue
         values = record.get("values")
@@ -443,6 +451,7 @@ def write_records_array(
     zip_path: Path,
     source: Source,
     include_schemas: bool,
+    table_filter: set[str] | None,
 ) -> dict[str, object]:
     count = 0
     first = True
@@ -452,7 +461,7 @@ def write_records_array(
     table_kinds: dict[str, int] = {}
 
     out.write(',\n  "records": [\n')
-    for record in csv_rows_from_zip(zip_path, source, include_schemas):
+    for record in csv_rows_from_zip(zip_path, source, include_schemas, table_filter):
         if first:
             first = False
         else:
@@ -486,6 +495,7 @@ def write_json(
     verify_tls: bool,
     downloader: str,
     aria_connections: int,
+    table_filter: set[str] | None,
 ) -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     count = 0
@@ -500,7 +510,7 @@ def write_json(
         for idx, source in enumerate(sources, start=1):
             print(f"[{idx}/{len(sources)}] {source.id} {source.url}", file=sys.stderr)
             zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
-            for record in csv_rows_from_zip(zip_path, source, include_schemas):
+            for record in csv_rows_from_zip(zip_path, source, include_schemas, table_filter):
                 if first:
                     first = False
                 else:
@@ -527,6 +537,7 @@ def write_source_shards(
     verify_tls: bool,
     downloader: str,
     aria_connections: int,
+    table_filter: set[str] | None,
 ) -> int:
     index_path.parent.mkdir(parents=True, exist_ok=True)
     shard_dir.mkdir(parents=True, exist_ok=True)
@@ -544,7 +555,7 @@ def write_source_shards(
             write_json_header(out)
             out.write(',\n  "source": ')
             json.dump(source_payload, out, ensure_ascii=False, indent=2)
-            stats = write_records_array(out, zip_path, source, include_schemas)
+            stats = write_records_array(out, zip_path, source, include_schemas, table_filter)
 
         tmp_path.replace(shard_path)
         total_count += int(stats["record_count"])
@@ -585,6 +596,7 @@ def write_region_shards(
     verify_tls: bool,
     downloader: str,
     aria_connections: int,
+    table_filter: set[str] | None,
 ) -> int:
     index_path.parent.mkdir(parents=True, exist_ok=True)
     tmp_root = shard_dir.with_name(f"{shard_dir.name}.part")
@@ -602,7 +614,7 @@ def write_region_shards(
             zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
             lookup = source_region_lookup(zip_path, source, include_schemas)
             source_count = 0
-            for record in csv_rows_from_zip(zip_path, source, include_schemas):
+            for record in csv_rows_from_zip(zip_path, source, include_schemas, table_filter):
                 attach_derived_region(record, lookup)
                 writer.write_record(record)
                 source_count += 1
@@ -673,6 +685,12 @@ def main() -> int:
     parser.add_argument("--max-sources", type=int, help="Useful for smoke tests.")
     parser.add_argument("--force", action="store_true", help="Re-download ZIPs even if cached.")
     parser.add_argument("--include-schemas", action="store_true", help="Also include manifest/schema CSV rows as records.")
+    parser.add_argument(
+        "--tables",
+        choices=["all", "main"],
+        default="all",
+        help="CSV table set to ingest. 'main' keeps transaction master records only.",
+    )
     parser.add_argument("--sources-only", action="store_true", help="Only write the source URL manifest.")
     parser.add_argument("--by-source", action="store_true", help="Write one shard per official source date/season.")
     parser.add_argument("--single-json", action="store_true", help="Write one huge JSON file instead of source-date shards.")
@@ -696,6 +714,7 @@ def main() -> int:
         sources = [source for source in sources if source.kind == args.source_kind]
     if args.max_sources:
         sources = sources[: args.max_sources]
+    table_filter = {TABLE_KINDS["main"]} if args.tables == "main" else None
 
     write_sources(sources, args.sources_output)
     print(f"Wrote {len(sources)} source URLs to {args.sources_output}", file=sys.stderr)
@@ -714,6 +733,7 @@ def main() -> int:
             verify_tls=args.verify_tls,
             downloader=args.downloader,
             aria_connections=args.aria_connections,
+            table_filter=table_filter,
         )
         print(f"Wrote {count} records to {args.output}", file=sys.stderr)
         return 0
@@ -730,6 +750,7 @@ def main() -> int:
             verify_tls=args.verify_tls,
             downloader=args.downloader,
             aria_connections=args.aria_connections,
+            table_filter=table_filter,
         )
         print(f"Wrote {count} records across {len(sources)} source shards under {args.shard_dir}", file=sys.stderr)
         return 0
@@ -745,6 +766,7 @@ def main() -> int:
         verify_tls=args.verify_tls,
         downloader=args.downloader,
         aria_connections=args.aria_connections,
+        table_filter=table_filter,
     )
     print(f"Wrote {count} records into region shards under {args.shard_dir}", file=sys.stderr)
     return 0
