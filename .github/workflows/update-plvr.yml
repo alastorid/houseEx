@@ -12,9 +12,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
-  id-token: write
 
 concurrency:
   group: plvr-data
@@ -124,10 +123,18 @@ jobs:
           cp data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz site/data/db/
           cp -R data/db/district site/data/db/
 
-      - uses: actions/configure-pages@v5
+      - name: Publish to gh-pages in split pushes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/publish-gh-pages-split.py --site-dir site
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - uses: actions/deploy-pages@v4
+      - name: Point GitHub Pages at gh-pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          curl -sSf -X PUT \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages" \
+            -d '{"source":{"branch":"gh-pages","path":"/"}}'
