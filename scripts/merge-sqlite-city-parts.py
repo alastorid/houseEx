@@ -9,6 +9,37 @@ import shutil
 from pathlib import Path
 
 
+def find_shard_source(path: str, source_root: Path) -> Path:
+    raw = Path(path)
+    candidates = []
+    if raw.is_absolute():
+        candidates.append(raw)
+    else:
+        candidates.append(source_root / raw)
+        if "db-part" in raw.parts:
+            candidates.append(source_root / Path(*raw.parts[raw.parts.index("db-part") + 1 :]))
+        if "district" in raw.parts:
+            candidates.append(source_root / Path(*raw.parts[raw.parts.index("district") :]))
+
+    seen = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        if resolved.exists():
+            return resolved
+
+    raise FileNotFoundError(f"Cannot find shard {path!r} under {source_root}")
+
+
+def deployed_shard_rel(path: str) -> Path:
+    parts = Path(path).parts
+    if "district" in parts:
+        return Path(*parts[parts.index("district") :])
+    return Path("district") / Path(path).name
+
+
 def rewrite_shard_paths(value: object, source_root: Path, output_dir: Path) -> object:
     if isinstance(value, list):
         return [rewrite_shard_paths(item, source_root, output_dir) for item in value]
@@ -16,18 +47,8 @@ def rewrite_shard_paths(value: object, source_root: Path, output_dir: Path) -> o
         rewritten = {key: rewrite_shard_paths(item, source_root, output_dir) for key, item in value.items()}
         path = rewritten.get("path") or rewritten.get("gzip")
         if isinstance(path, str) and path.endswith(".sqlite.gz"):
-            source = (source_root / path).resolve() if not Path(path).is_absolute() else Path(path)
-            try:
-                rel = source.relative_to(source_root / "data/db-part")
-            except ValueError:
-                try:
-                    rel = source.relative_to(source_root)
-                except ValueError:
-                    rel = Path(path)
-            if "district" in rel.parts:
-                rel = Path(*rel.parts[rel.parts.index("district") :])
-            else:
-                rel = Path("district") / rel
+            source = find_shard_source(path, source_root)
+            rel = deployed_shard_rel(path)
             target = output_dir / rel
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
