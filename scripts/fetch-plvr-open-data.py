@@ -640,19 +640,15 @@ def write_region_shards(
             if source.kind != "current" and not force and valid_source_cache(source, source_cache_dir, include_schemas):
                 print(f"parsed cache hit: {source.id}", file=sys.stderr)
                 zip_path = download_dir / f"{source.id}.zip"
-                for record in iter_cached_source_records(source, source_cache_dir):
-                    writer.write_record(record)
-                    source_count += 1
+                records = iter_cached_source_records(source, source_cache_dir)
             else:
                 zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
-                source_count = write_uncached_source_to_regions(
-                    source=source,
-                    zip_path=zip_path,
-                    writer=writer,
-                    cache_dir=source_cache_dir,
-                    include_schemas=include_schemas,
-                    write_cache=source.kind != "current",
-                )
+                write_source_record_cache(source, zip_path, source_cache_dir, include_schemas)
+                records = iter_cached_source_records(source, source_cache_dir)
+
+            for record in records:
+                writer.write_record(record)
+                source_count += 1
             total_count += source_count
             source_entries.append({**asdict(source), "zip": zip_path.as_posix(), "record_count": source_count})
             if sleep_seconds:
@@ -768,57 +764,6 @@ def write_source_record_cache(
     tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     tmp_records.replace(records_path)
     tmp_meta.replace(meta_path)
-    return count
-
-
-def write_uncached_source_to_regions(
-    source: Source,
-    zip_path: Path,
-    writer: RegionShardWriter,
-    cache_dir: Path,
-    include_schemas: bool,
-    write_cache: bool,
-) -> int:
-    lookup = source_region_lookup(zip_path, source, include_schemas)
-    count = 0
-    cache_out = None
-    tmp_records: Path | None = None
-    tmp_meta: Path | None = None
-
-    if write_cache:
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        records_path, meta_path = source_cache_paths(source, cache_dir)
-        tmp_records = records_path.with_suffix(records_path.suffix + ".part")
-        tmp_meta = meta_path.with_suffix(meta_path.suffix + ".part")
-        cache_out = gzip.open(tmp_records, "wt", encoding="utf-8", compresslevel=4)
-
-    try:
-        for record in csv_rows_from_zip(zip_path, source, include_schemas):
-            attach_derived_region(record, lookup)
-            writer.write_record(record)
-            if cache_out is not None:
-                json.dump(record, cache_out, ensure_ascii=False, separators=(",", ":"))
-                cache_out.write("\n")
-            count += 1
-    finally:
-        if cache_out is not None:
-            cache_out.close()
-
-    if write_cache and tmp_records is not None and tmp_meta is not None:
-        records_path, meta_path = source_cache_paths(source, cache_dir)
-        meta = {
-            "cache_version": SOURCE_CACHE_VERSION,
-            "source_id": source.id,
-            "source_kind": source.kind,
-            "source_url": source.url,
-            "include_schemas": include_schemas,
-            "record_count": count,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-        }
-        tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        tmp_records.replace(records_path)
-        tmp_meta.replace(meta_path)
-
     return count
 
 
