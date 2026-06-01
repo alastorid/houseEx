@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import gzip
 import io
 import json
 import re
@@ -710,7 +709,7 @@ def write_sources(sources: list[Source], path: Path) -> None:
 
 
 def source_cache_paths(source: Source, cache_dir: Path) -> tuple[Path, Path]:
-    return cache_dir / f"{safe_path_part(source.id)}.jsonl.gz", cache_dir / f"{safe_path_part(source.id)}.meta.json"
+    return cache_dir / f"{safe_path_part(source.id)}.jsonl", cache_dir / f"{safe_path_part(source.id)}.meta.json"
 
 
 def valid_source_cache(source: Source, cache_dir: Path, include_schemas: bool) -> bool:
@@ -732,7 +731,7 @@ def valid_source_cache(source: Source, cache_dir: Path, include_schemas: bool) -
 
 def iter_cached_source_records(source: Source, cache_dir: Path) -> Iterable[dict[str, object]]:
     records_path, _ = source_cache_paths(source, cache_dir)
-    with gzip.open(records_path, "rt", encoding="utf-8") as raw:
+    with records_path.open("r", encoding="utf-8") as raw:
         for line in raw:
             if line.strip():
                 yield json.loads(line)
@@ -750,7 +749,7 @@ def write_source_record_cache(
     tmp_meta = meta_path.with_suffix(meta_path.suffix + ".part")
     lookup = source_region_lookup(zip_path, source, include_schemas)
     count = 0
-    with gzip.open(tmp_records, "wt", encoding="utf-8", compresslevel=4) as out:
+    with tmp_records.open("w", encoding="utf-8") as out:
         for record in csv_rows_from_zip(zip_path, source, include_schemas):
             attach_derived_region(record, lookup)
             json.dump(record, out, ensure_ascii=False, separators=(",", ":"))
@@ -790,7 +789,7 @@ def write_uncached_source_to_regions(
         records_path, meta_path = source_cache_paths(source, cache_dir)
         tmp_records = records_path.with_suffix(records_path.suffix + ".part")
         tmp_meta = meta_path.with_suffix(meta_path.suffix + ".part")
-        cache_out = gzip.open(tmp_records, "wt", encoding="utf-8", compresslevel=4)
+        cache_out = tmp_records.open("w", encoding="utf-8")
 
     try:
         for record in csv_rows_from_zip(zip_path, source, include_schemas):
