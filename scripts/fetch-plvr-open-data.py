@@ -10,6 +10,7 @@ import json
 import re
 import shutil
 import ssl
+import subprocess
 import sys
 import time
 import zipfile
@@ -137,21 +138,86 @@ def discover_sources(verify_tls: bool) -> list[Source]:
     return sources
 
 
-def download_source(source: Source, download_dir: Path, force: bool = False, verify_tls: bool = False) -> Path:
-    download_dir.mkdir(parents=True, exist_ok=True)
-    zip_path = download_dir / f"{source.id}.zip"
-    if zip_path.exists() and zip_path.stat().st_size > 0 and not force:
-        return zip_path
-
+def download_with_python(source: Source, target: Path, verify_tls: bool = False) -> None:
     req = Request(source.url, headers={"User-Agent": "Mozilla/5.0"})
-    tmp_path = zip_path.with_suffix(".zip.part")
+    tmp_path = target.with_suffix(target.suffix + ".part")
     with urlopen(req, timeout=300, context=ssl_context(verify_tls)) as res, tmp_path.open("wb") as out:
         while True:
             chunk = res.read(1024 * 1024)
             if not chunk:
                 break
             out.write(chunk)
-    tmp_path.replace(zip_path)
+    tmp_path.replace(target)
+
+
+def download_with_aria2c(source: Source, target: Path, verify_tls: bool = False, connections: int = 8) -> bool:
+    aria = shutil.which("aria2c")
+    if not aria:
+        return False
+    tmp_path = target.with_suffix(target.suffix + ".part")
+    tmp_path.unlink(missing_ok=True)
+    Path(f"{tmp_path}.aria2").unlink(missing_ok=True)
+    command = [
+        aria,
+        "--allow-overwrite=true",
+        "--auto-file-renaming=false",
+        "--continue=true",
+        "--file-allocation=none",
+        "--summary-interval=0",
+        "--console-log-level=warn",
+        "--max-connection-per-server",
+        str(connections),
+        "--split",
+        str(connections),
+        "--min-split-size=1M",
+        "--user-agent=Mozilla/5.0",
+        "--dir",
+        str(target.parent),
+        "--out",
+        tmp_path.name,
+    ]
+    if not verify_tls:
+        command.append("--check-certificate=false")
+    command.append(source.url)
+    try:
+        subprocess.run(command, check=True)
+    except (OSError, subprocess.CalledProcessError) as error:
+        print(f"aria2c failed for {source.id}, falling back to Python downloader: {error}", file=sys.stderr)
+        tmp_path.unlink(missing_ok=True)
+        Path(f"{tmp_path}.aria2").unlink(missing_ok=True)
+        return False
+    if not tmp_path.exists() or tmp_path.stat().st_size <= 0:
+        print(f"aria2c produced no file for {source.id}, falling back to Python downloader", file=sys.stderr)
+        tmp_path.unlink(missing_ok=True)
+        Path(f"{tmp_path}.aria2").unlink(missing_ok=True)
+        return False
+    tmp_path.replace(target)
+    Path(f"{tmp_path}.aria2").unlink(missing_ok=True)
+    return True
+
+
+def download_source(
+    source: Source,
+    download_dir: Path,
+    force: bool = False,
+    verify_tls: bool = False,
+    downloader: str = "auto",
+    aria_connections: int = 8,
+) -> Path:
+    download_dir.mkdir(parents=True, exist_ok=True)
+    zip_path = download_dir / f"{source.id}.zip"
+    should_refresh = force or source.kind == "current"
+    if zip_path.exists() and zip_path.stat().st_size > 0 and not should_refresh:
+        print(f"cache hit: {source.id} -> {zip_path}", file=sys.stderr)
+        return zip_path
+
+    print(f"download: {source.id} ({source.kind})", file=sys.stderr)
+    if downloader in {"auto", "aria2c"}:
+        if download_with_aria2c(source, zip_path, verify_tls=verify_tls, connections=aria_connections):
+            return zip_path
+        if downloader == "aria2c":
+            raise RuntimeError(f"aria2c failed for {source.id}")
+    download_with_python(source, zip_path, verify_tls=verify_tls)
     return zip_path
 
 
@@ -418,6 +484,8 @@ def write_json(
     include_schemas: bool,
     sleep_seconds: float,
     verify_tls: bool,
+    downloader: str,
+    aria_connections: int,
 ) -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     count = 0
@@ -431,7 +499,7 @@ def write_json(
 
         for idx, source in enumerate(sources, start=1):
             print(f"[{idx}/{len(sources)}] {source.id} {source.url}", file=sys.stderr)
-            zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls)
+            zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
             for record in csv_rows_from_zip(zip_path, source, include_schemas):
                 if first:
                     first = False
@@ -457,6 +525,8 @@ def write_source_shards(
     include_schemas: bool,
     sleep_seconds: float,
     verify_tls: bool,
+    downloader: str,
+    aria_connections: int,
 ) -> int:
     index_path.parent.mkdir(parents=True, exist_ok=True)
     shard_dir.mkdir(parents=True, exist_ok=True)
@@ -465,7 +535,7 @@ def write_source_shards(
 
     for idx, source in enumerate(sources, start=1):
         print(f"[{idx}/{len(sources)}] {source.id} {source.url}", file=sys.stderr)
-        zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls)
+        zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
         shard_path = shard_dir / f"{source.id}.json"
         tmp_path = shard_path.with_suffix(".json.part")
         source_payload = asdict(source)
@@ -513,6 +583,8 @@ def write_region_shards(
     include_schemas: bool,
     sleep_seconds: float,
     verify_tls: bool,
+    downloader: str,
+    aria_connections: int,
 ) -> int:
     index_path.parent.mkdir(parents=True, exist_ok=True)
     tmp_root = shard_dir.with_name(f"{shard_dir.name}.part")
@@ -527,7 +599,7 @@ def write_region_shards(
     try:
         for idx, source in enumerate(sources, start=1):
             print(f"[{idx}/{len(sources)}] {source.id} {source.url}", file=sys.stderr)
-            zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls)
+            zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
             lookup = source_region_lookup(zip_path, source, include_schemas)
             source_count = 0
             for record in csv_rows_from_zip(zip_path, source, include_schemas):
@@ -606,6 +678,13 @@ def main() -> int:
     parser.add_argument("--single-json", action="store_true", help="Write one huge JSON file instead of source-date shards.")
     parser.add_argument("--sleep", type=float, default=0.2, help="Pause between source downloads.")
     parser.add_argument(
+        "--downloader",
+        choices=["auto", "aria2c", "python"],
+        default="auto",
+        help="Downloader for ZIP files. auto uses aria2c when available and falls back to Python.",
+    )
+    parser.add_argument("--aria-connections", type=int, default=8, help="aria2c split/connection count per ZIP.")
+    parser.add_argument(
         "--verify-tls",
         action="store_true",
         help="Use strict TLS verification. Off by default because this public site currently fails Python certificate checks.",
@@ -633,6 +712,8 @@ def main() -> int:
             include_schemas=args.include_schemas,
             sleep_seconds=args.sleep,
             verify_tls=args.verify_tls,
+            downloader=args.downloader,
+            aria_connections=args.aria_connections,
         )
         print(f"Wrote {count} records to {args.output}", file=sys.stderr)
         return 0
@@ -647,6 +728,8 @@ def main() -> int:
             include_schemas=args.include_schemas,
             sleep_seconds=args.sleep,
             verify_tls=args.verify_tls,
+            downloader=args.downloader,
+            aria_connections=args.aria_connections,
         )
         print(f"Wrote {count} records across {len(sources)} source shards under {args.shard_dir}", file=sys.stderr)
         return 0
@@ -660,6 +743,8 @@ def main() -> int:
         include_schemas=args.include_schemas,
         sleep_seconds=args.sleep,
         verify_tls=args.verify_tls,
+        downloader=args.downloader,
+        aria_connections=args.aria_connections,
     )
     print(f"Wrote {count} records into region shards under {args.shard_dir}", file=sys.stderr)
     return 0
