@@ -23,7 +23,7 @@ def rewrite_shard_paths(value: object, source_root: Path, output_dir: Path) -> o
                 try:
                     rel = source.relative_to(source_root)
                 except ValueError:
-                    rel = Path(path).name
+                    rel = Path(path)
             if "district" in rel.parts:
                 rel = Path(*rel.parts[rel.parts.index("district") :])
             else:
