@@ -32,6 +32,14 @@ jobs:
           restore-keys: |
             plvr-zips-
 
+      - name: Cache normalized immutable PLVR records
+        uses: actions/cache@v4
+        with:
+          path: cache/plvr-source-regions
+          key: plvr-source-regions-${{ github.run_id }}
+          restore-keys: |
+            plvr-source-regions-
+
       - name: Fetch raw PLVR data
         run: python3 scripts/fetch-plvr-open-data.py --downloader auto --aria-connections 8 --sleep 0
 
