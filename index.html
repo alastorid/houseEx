@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random data</title>
+    <meta
+      name="description"
+      content="一些公開資料的查詢頁。"
+    />
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=20260530-building-no" />
+    <link rel="stylesheet" href="styles.css?v=20260530-building-no" />
+  </head>
+  <body>
+    <header class="app-header">
+      <nav class="topbar" aria-label="主選單">
+        <a class="brand" href="#top">
+          <span class="brand-mark">DATA</span>
+          <span>some random data</span>
+        </a>
+        <div class="toolbar">
+          <button class="icon-button" id="themeToggle" type="button" title="切換深色模式">◐</button>
+          <a href="terminal.html">Terminal</a>
+          <a href="#repeatSales">重複轉手</a>
+          <a href="#records">交易明細</a>
+          <a href="#radar">市場雷達</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="app-shell">
+      <aside class="control-panel" aria-label="查詢控制">
+        <div class="panel-block">
+          <p class="eyebrow">Search</p>
+          <h1>some random data</h1>
+          <p class="muted">搜尋社區、地址、日期、價格、來源批次與原始欄位。</p>
+        </div>
+
+        <div class="form-grid sticky-filter">
+          <label>
+            <span>縣市</span>
+            <select id="citySelect"></select>
+          </label>
+          <label>
+            <span>鄉鎮市區</span>
+            <select id="townSelect"></select>
+          </label>
+        </div>
+
+        <label class="search-box">
+          <span>全資料搜尋</span>
+          <input id="queryInput" type="search" placeholder="高鐵湛、門牌、115S1、+4.5%、車位" />
+        </label>
+        <div class="suggest-list" id="suggestList" aria-label="搜尋建議"></div>
+
+        <div class="browse-panel">
+          <div class="browse-head">
+            <div>
+              <span>縣市社區瀏覽</span>
+              <small id="communityStatus">尚未載入</small>
+            </div>
+            <button id="loadCityCommunities" type="button">載入縣市</button>
+          </div>
+          <input id="communitySearch" type="search" placeholder="搜尋社區名稱、鄉鎮、門牌樣本" />
+          <div class="community-list" id="communityList"></div>
+        </div>
+
+        <button class="button primary" id="loadButton" type="button">載入區域資料</button>
+        <button class="button ghost-dark cache-button" id="clearCache" type="button">清除快取</button>
+        <p class="status" id="loadStatus">正在讀取索引...</p>
+      </aside>
+
+      <section class="main-stage">
+        <section class="map-stage" aria-label="地圖">
+          <div id="map"></div>
+          <div class="map-overlay">
+            <div>
+              <p class="eyebrow">Map</p>
+              <h2 id="viewTitle">等待資料載入</h2>
+              <p id="viewSubtitle">尚未載入資料。</p>
+            </div>
+            <div class="data-pill" id="dataPill">--</div>
+          </div>
+          <div class="perf-badge" id="perfBadge">SQLite</div>
+          <div class="legend" id="legend"></div>
+          <div class="map-limit-control">
+            <span id="annotationLimitValue">13</span>
+            <input id="annotationLimit" type="range" min="1" max="9999" step="1" value="13" />
+          </div>
+        </section>
+
+        <section class="kpi-grid" id="kpiGrid">
+          <button class="metric-card" data-action="metric" data-metric="count"><span>成交筆數</span><strong id="kpiCount">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="avgPrice"><span>平均總價</span><strong id="kpiAvgPrice">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="avgUnit"><span>平均單價</span><strong id="kpiAvgUnit">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="repeat"><span>重複轉手門牌</span><strong id="kpiRepeat">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="high"><span>最高總價</span><strong id="kpiHigh">--</strong></button>
+          <button class="metric-card" data-action="metric" data-metric="latest"><span>最新成交</span><strong id="kpiLatest">--</strong></button>
+        </section>
+
+        <section class="section community-board" id="communities">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Communities</p>
+              <h2>社區列表</h2>
+            </div>
+            <label class="board-search">
+              <span>搜尋</span>
+              <input id="communityTableSearch" type="search" placeholder="社區、鄉鎮、門牌樣本" />
+            </label>
+          </div>
+          <div class="table-meta" id="communityTableMeta">--</div>
+          <div class="table-wrap board-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>社區</th>
+                  <th>鄉鎮市區</th>
+                  <th>成交</th>
+                  <th>中位總價</th>
+                  <th>中位單價</th>
+                  <th>最高總價</th>
+                  <th>最新</th>
+                  <th>主要標的</th>
+                </tr>
+              </thead>
+              <tbody id="communityRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="chart-grid">
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>總價趨勢</h3>
+              <span id="priceTrendNote">--</span>
+            </div>
+            <canvas id="priceChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>單價趨勢</h3>
+              <select id="unitMode">
+                <option value="median">中位數</option>
+                <option value="avg">平均</option>
+                <option value="max">最高</option>
+                <option value="min">最低</option>
+              </select>
+            </div>
+            <canvas id="unitChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>月成交量</h3>
+              <span>點擊月份篩選</span>
+            </div>
+            <canvas id="volumeChart" width="760" height="280"></canvas>
+          </article>
+          <article class="chart-card">
+            <div class="card-head">
+              <h3>交易標的</h3>
+              <span>點擊類型篩選</span>
+            </div>
+            <canvas id="mixChart" width="760" height="280"></canvas>
+          </article>
+        </section>
+
+        <section class="section" id="radar">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Radar</p>
+              <h2>市場雷達</h2>
+            </div>
+            <p class="muted">每張卡都會同步地圖、表格與右側明細。</p>
+          </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </section>
+
+        <section class="section" id="repeatSales">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Repeat Sales</p>
+              <h2>同一門牌重複轉手</h2>
+            </div>
+            <div class="segmented">
+              <button class="active" type="button" data-repeat-sort="gain">漲幅</button>
+              <button type="button" data-repeat-sort="loss">跌幅</button>
+              <button type="button" data-repeat-sort="days">短期</button>
+            </div>
+          </div>
+          <div class="repeat-grid" id="repeatGrid"></div>
+        </section>
+
+        <section class="section" id="records">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Transactions</p>
+              <h2>交易明細</h2>
+            </div>
+            <div class="table-actions">
+              <button class="button ghost-dark" id="modeToggle" type="button">專業模式</button>
+              <button class="button ghost-dark" id="columnToggle" type="button">欄位</button>
+              <button class="button ghost-dark" id="toggleDetailRows" type="button">顯示土地/建物/車位明細</button>
+              <button class="button ghost-dark" id="downloadCsv" type="button">CSV</button>
+              <button class="button ghost-dark" id="downloadFiltered" type="button">JSON</button>
+            </div>
+          </div>
+          <div class="column-panel" id="columnPanel"></div>
+          <div class="table-meta" id="tableMeta">--</div>
+          <div class="table-wrap" id="tableWrap">
+            <table>
+              <thead id="recordHead"></thead>
+              <tbody id="recordRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <aside class="detail-drawer" id="detailDrawer" aria-label="詳細資料" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <p class="eyebrow" id="drawerType">Detail</p>
+          <h2 id="drawerTitle">詳細資料</h2>
+        </div>
+        <button class="icon-button" id="closeDrawer" type="button" title="關閉">×</button>
+      </div>
+      <div id="drawerBody"></div>
+    </aside>
+
+    <script src="vendor/leaflet/leaflet.js?v=20260531-sqlite-hardening"></script>
+    <script src="queryService.js?v=20260531-sqlite-hardening" defer></script>
+    <script src="script.js?v=20260531-sqlite-hardening" defer></script>
+  </body>
+</html>

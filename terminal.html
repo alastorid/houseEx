@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random data terminal</title>
+    <link rel="stylesheet" href="terminal.css?v=20260531-terminal-hash" />
+  </head>
+  <body>
+    <header class="terminal-top">
+      <a href="index.html">some random data</a>
+      <strong>Property Terminal</strong>
+      <span id="perfBadge">SQLite</span>
+    </header>
+
+    <main class="terminal-shell">
+      <aside class="filter-rail">
+        <div class="filter-row">
+          <label>縣市<select id="citySelect"></select></label>
+          <label>鄉鎮<select id="districtSelect"></select></label>
+        </div>
+        <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
+        <div class="preset-bar">
+          <button id="largeDetachedPreset" type="button">非暴躁鼠鼠</button>
+        </div>
+
+        <div class="active-filters" id="activeFilters"></div>
+      </aside>
+
+      <section class="grid-stage">
+        <div class="grid-toolbar">
+          <span id="resultMeta">--</span>
+          <div class="toolbar-actions">
+            <button id="columnButton" type="button">欄位</button>
+            <button id="exportCsv" type="button">CSV</button>
+          </div>
+        </div>
+        <div class="column-popover" id="columnPopover"></div>
+        <div class="data-grid" id="gridWrap">
+          <table>
+            <thead id="gridHead"></thead>
+            <tbody id="gridRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="analytics-panel">
+        <h2 id="analyticsTitle">Column</h2>
+        <div id="analyticsBody">點欄位看分布。</div>
+      </aside>
+    </main>
+    <div class="context-menu" id="contextMenu"></div>
+
+    <script src="queryService.js?v=20260531-sqlite-hardening" defer></script>
+    <script src="terminal.js?v=20260531-terminal-hash" defer></script>
+  </body>
+</html>
