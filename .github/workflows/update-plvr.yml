@@ -12,7 +12,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: plvr-data
@@ -111,7 +113,21 @@ jobs:
       - name: Smoke test SQLite assets
         run: python3 scripts/smoke-test-sqlite.py
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Prepare GitHub Pages artifact
+        run: |
+          rm -rf site
+          mkdir -p site/data/plvr site/data/db
+          cp index.html terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css site/
+          cp -R vendor site/vendor
+          cp data/plvr/source-urls.json data/plvr/web-index.json data/plvr/community-index.json site/data/plvr/
+          cp -R data/plvr/web data/plvr/communities site/data/plvr/
+          cp data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz site/data/db/
+          cp -R data/db/district site/data/db/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          commit_message: "Update PLVR generated data"
-          file_pattern: "data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz data/db/district/**/*.sqlite.gz"
+          path: site
+
+      - uses: actions/deploy-pages@v4
