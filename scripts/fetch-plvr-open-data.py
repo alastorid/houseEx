@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import gzip
 import io
 import json
 import re
@@ -71,7 +70,6 @@ TABLE_KINDS = {
 }
 
 REGION_FIELD = "鄉鎮市區"
-SOURCE_CACHE_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -270,44 +268,11 @@ def csv_rows_from_zip(zip_path: Path, source: Source, include_schemas: bool) -> 
                     yield make_record(source, name, headers, row)
 
 
-def csv_records_from_zip(
-    zip_path: Path,
-    source: Source,
-    include_schemas: bool,
-    table_kind: str | None = None,
-) -> Iterable[dict[str, object]]:
-    with zipfile.ZipFile(zip_path) as zf:
-        names = sorted(
-            name
-            for name in zf.namelist()
-            if name.lower().endswith(".csv")
-            and (include_schemas or not Path(name).name.lower().startswith(("schema-", "manifest")))
-            and (table_kind is None or parse_file_name(name).get("table_kind") == table_kind)
-        )
-        for name in names:
-            with zf.open(name) as raw:
-                text = io.TextIOWrapper(raw, encoding="utf-8-sig", errors="replace", newline="")
-                reader = csv.reader(text)
-                try:
-                    headers = next(reader)
-                except StopIteration:
-                    continue
-
-                first_data = next(reader, None)
-                if first_data and is_english_description_row(first_data):
-                    pass
-                elif first_data:
-                    yield make_record(source, name, headers, first_data)
-
-                for row in reader:
-                    if not any(cell.strip() for cell in row):
-                        continue
-                    yield make_record(source, name, headers, row)
-
-
 def source_region_lookup(zip_path: Path, source: Source, include_schemas: bool) -> dict[str, str]:
     lookup: dict[str, str] = {}
-    for record in csv_records_from_zip(zip_path, source, include_schemas, table_kind=TABLE_KINDS["main"]):
+    for record in csv_rows_from_zip(zip_path, source, include_schemas):
+        if record.get("table_kind") != TABLE_KINDS["main"]:
+            continue
         values = record.get("values")
         if not isinstance(values, dict):
             continue
@@ -614,7 +579,6 @@ def write_region_shards(
     index_path: Path,
     shard_dir: Path,
     download_dir: Path,
-    source_cache_dir: Path,
     force: bool,
     include_schemas: bool,
     sleep_seconds: float,
@@ -635,18 +599,11 @@ def write_region_shards(
     try:
         for idx, source in enumerate(sources, start=1):
             print(f"[{idx}/{len(sources)}] {source.id} {source.url}", file=sys.stderr)
+            zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
+            lookup = source_region_lookup(zip_path, source, include_schemas)
             source_count = 0
-
-            if source.kind != "current" and not force and valid_source_cache(source, source_cache_dir, include_schemas):
-                print(f"parsed cache hit: {source.id}", file=sys.stderr)
-                zip_path = download_dir / f"{source.id}.zip"
-                records = iter_cached_source_records(source, source_cache_dir)
-            else:
-                zip_path = download_source(source, download_dir, force=force, verify_tls=verify_tls, downloader=downloader, aria_connections=aria_connections)
-                write_source_record_cache(source, zip_path, source_cache_dir, include_schemas)
-                records = iter_cached_source_records(source, source_cache_dir)
-
-            for record in records:
+            for record in csv_rows_from_zip(zip_path, source, include_schemas):
+                attach_derived_region(record, lookup)
                 writer.write_record(record)
                 source_count += 1
             total_count += source_count
@@ -705,68 +662,6 @@ def write_sources(sources: list[Source], path: Path) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def source_cache_paths(source: Source, cache_dir: Path) -> tuple[Path, Path]:
-    return cache_dir / f"{safe_path_part(source.id)}.jsonl.gz", cache_dir / f"{safe_path_part(source.id)}.meta.json"
-
-
-def valid_source_cache(source: Source, cache_dir: Path, include_schemas: bool) -> bool:
-    records_path, meta_path = source_cache_paths(source, cache_dir)
-    if not records_path.exists() or not meta_path.exists():
-        return False
-    try:
-        meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return False
-    return (
-        meta.get("cache_version") == SOURCE_CACHE_VERSION
-        and meta.get("source_id") == source.id
-        and meta.get("source_url") == source.url
-        and meta.get("include_schemas") == include_schemas
-        and int(meta.get("record_count") or 0) > 0
-    )
-
-
-def iter_cached_source_records(source: Source, cache_dir: Path) -> Iterable[dict[str, object]]:
-    records_path, _ = source_cache_paths(source, cache_dir)
-    with gzip.open(records_path, "rt", encoding="utf-8") as raw:
-        for line in raw:
-            if line.strip():
-                yield json.loads(line)
-
-
-def write_source_record_cache(
-    source: Source,
-    zip_path: Path,
-    cache_dir: Path,
-    include_schemas: bool,
-) -> int:
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    records_path, meta_path = source_cache_paths(source, cache_dir)
-    tmp_records = records_path.with_suffix(records_path.suffix + ".part")
-    tmp_meta = meta_path.with_suffix(meta_path.suffix + ".part")
-    lookup = source_region_lookup(zip_path, source, include_schemas)
-    count = 0
-    with gzip.open(tmp_records, "wt", encoding="utf-8", compresslevel=4) as out:
-        for record in csv_rows_from_zip(zip_path, source, include_schemas):
-            attach_derived_region(record, lookup)
-            json.dump(record, out, ensure_ascii=False, separators=(",", ":"))
-            out.write("\n")
-            count += 1
-    meta = {
-        "cache_version": SOURCE_CACHE_VERSION,
-        "source_id": source.id,
-        "source_kind": source.kind,
-        "source_url": source.url,
-        "include_schemas": include_schemas,
-        "record_count": count,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
-    tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    tmp_records.replace(records_path)
-    tmp_meta.replace(meta_path)
-    return count
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", default="data/plvr/plvr-land-transactions.json", type=Path)
@@ -774,7 +669,6 @@ def main() -> int:
     parser.add_argument("--shard-dir", default="data/plvr/by-region", type=Path)
     parser.add_argument("--sources-output", default="data/plvr/source-urls.json", type=Path)
     parser.add_argument("--download-dir", default="downloads/plvr", type=Path)
-    parser.add_argument("--source-cache-dir", default="cache/plvr-source-regions", type=Path)
     parser.add_argument("--source-kind", choices=["all", "current", "history", "season"], default="all")
     parser.add_argument("--max-sources", type=int, help="Useful for smoke tests.")
     parser.add_argument("--force", action="store_true", help="Re-download ZIPs even if cached.")
@@ -845,7 +739,6 @@ def main() -> int:
         index_path=args.index_output,
         shard_dir=args.shard_dir,
         download_dir=args.download_dir,
-        source_cache_dir=args.source_cache_dir,
         force=args.force,
         include_schemas=args.include_schemas,
         sleep_seconds=args.sleep,
