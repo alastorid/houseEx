@@ -19,10 +19,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  fetch:
+  update-plvr:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Cache raw ZIP downloads
         uses: actions/cache@v4
         with:
@@ -30,38 +31,26 @@ jobs:
           key: plvr-zips-${{ github.sha }}
           restore-keys: |
             plvr-zips-
-      - run: python3 scripts/fetch-plvr-open-data.py
-      - id: commit
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "fetch: update raw open data"
-          file_pattern: "data/plvr/source-urls.json"
 
-  process:
-    needs: fetch
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        script:
-          - "scripts/build-plvr-web-assets.py"
-          - "scripts/build-community-index.py"
-          - "scripts/build-sqlite-assets.py --cities all"
-    steps:
-      - uses: actions/checkout@v4
-      - run: python3 ${{ matrix.script }}
+      - name: Fetch raw PLVR data
+        run: python3 scripts/fetch-plvr-open-data.py
+
+      - name: Build compressed web shards
+        run: python3 scripts/build-plvr-web-assets.py
+
+      - name: Build community index
+        run: python3 scripts/build-community-index.py
+
+      - name: Build SQLite district shards
+        run: python3 scripts/build-sqlite-assets.py --cities all
+
+      - name: Audit generated data
+        run: python3 scripts/audit-community-gaps.py
+
+      - name: Smoke test SQLite assets
+        run: python3 scripts/smoke-test-sqlite.py
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "process: ${{ matrix.script }}"
-          file_pattern: "data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/index.sqlite.gz"
-
-  audit:
-    needs: process
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: python3 scripts/audit-community-gaps.py
-      - run: python3 scripts/smoke-test-sqlite.py
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "audit: update reports"
-          file_pattern: "data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json"
+          commit_message: "Update PLVR generated data"
+          file_pattern: "data/plvr/source-urls.json data/plvr/web-index.json data/plvr/web/*.json.gz data/plvr/community-index.json data/plvr/communities/*.json.gz data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz data/db/district/**/*.sqlite.gz"
