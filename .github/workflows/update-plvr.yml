@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update-plvr:
+  prepare:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,8 +41,69 @@ jobs:
       - name: Build community index
         run: python3 scripts/build-community-index.py
 
-      - name: Build SQLite district shards
-        run: python3 scripts/build-sqlite-assets.py --cities all
+      - name: Upload prepared PLVR assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: plvr-prepared
+          path: |
+            data/plvr/source-urls.json
+            data/plvr/web-index.json
+            data/plvr/web/*.json.gz
+            data/plvr/community-index.json
+            data/plvr/communities/*.json.gz
+          retention-days: 1
+
+  sqlite-city:
+    needs: prepare
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        city: [a, b, c, d, e, f, g, h, i, j, k, m, n, o, p, q, t, u, v, w, x, z]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download prepared PLVR assets
+        uses: actions/download-artifact@v4
+        with:
+          name: plvr-prepared
+          path: .
+
+      - name: Build SQLite shards for city
+        run: python3 scripts/build-sqlite-assets.py --cities ${{ matrix.city }} --output-dir data/db-part
+
+      - name: Upload SQLite city artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqlite-${{ matrix.city }}
+          path: |
+            data/db-part/metadata.json
+            data/db-part/district/**/*.sqlite.gz
+          retention-days: 1
+
+  merge:
+    needs: sqlite-city
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download prepared PLVR assets
+        uses: actions/download-artifact@v4
+        with:
+          name: plvr-prepared
+          path: .
+
+      - name: Download SQLite city artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: sqlite-*
+          path: city-parts
+
+      - name: Build SQLite index
+        run: python3 scripts/build-sqlite-assets.py
+
+      - name: Merge SQLite city shards
+        run: python3 scripts/merge-sqlite-city-parts.py --parts-dir city-parts
 
       - name: Audit generated data
         run: python3 scripts/audit-community-gaps.py

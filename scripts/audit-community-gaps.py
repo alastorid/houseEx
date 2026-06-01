@@ -6,6 +6,8 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import gzip
+import tempfile
 from collections import Counter
 from pathlib import Path
 
@@ -32,6 +34,16 @@ def address_cluster(address: str) -> str:
 def main() -> int:
     city_dir = ROOT / "data/db/district/changhua"
     db_paths = list(city_dir.glob("*.sqlite"))
+    tmp_path = None
+    if not db_paths:
+        gz_paths = list(city_dir.glob("*.sqlite.gz"))
+        if gz_paths:
+            tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
+            tmp_path = Path(tmp.name)
+            tmp.close()
+            with gzip.open(gz_paths[0], "rb") as src, tmp_path.open("wb") as dst:
+                dst.write(src.read())
+            db_paths = [tmp_path]
     if not db_paths:
         print(f"No sqlite files found in {city_dir}")
         return 1
@@ -105,6 +117,8 @@ def main() -> int:
     print(f"named missing: {len(present_missing)}")
     print(f"blank-name clusters: {len(top_blank_clusters)}")
     conn.close()
+    if tmp_path:
+        tmp_path.unlink(missing_ok=True)
     return 0
 
 
