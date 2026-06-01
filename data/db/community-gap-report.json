@@ -1,0 +1,1884 @@
+{
+  "generatedAt": "2026-06-01T23:14:10.299059+00:00",
+  "cityDb": "/var/folders/8d/778wjbv96mq1760tv6gk374m0000gn/T/tmp_c2kk1ct.sqlite",
+  "communitiesPresentInTransactionsButMissingFromSearchableIndex": [],
+  "blankCommunityNameAddressClusters": [
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "仁愛段683地號",
+      "transactionCount": 25,
+      "sampleAddresses": [
+        "仁愛段683地號"
+      ],
+      "latestTransactionDate": "2025-06-24",
+      "sourceBatches": {
+        "114S2": 21,
+        "114S3": 3,
+        "111S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉太平路120-139號",
+      "transactionCount": 17,
+      "sampleAddresses": [
+        "彰化縣溪州鄉太平路135號四樓之3",
+        "彰化縣溪州鄉太平路135號五樓之1",
+        "彰化縣溪州鄉太平路135號四樓之1",
+        "彰化縣溪州鄉太平路135號三樓之6",
+        "彰化縣溪州鄉太平路135號四樓之2",
+        "彰化縣溪州鄉太平路135號二樓之2",
+        "彰化縣溪州鄉太平路135號二樓之1",
+        "彰化縣溪州鄉太平路135號三樓之1"
+      ],
+      "latestTransactionDate": "2025-11-04",
+      "sourceBatches": {
+        "114S2": 15,
+        "114S4": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段732地號",
+      "transactionCount": 17,
+      "sampleAddresses": [
+        "復興段732地號"
+      ],
+      "latestTransactionDate": "2025-01-10",
+      "sourceBatches": {
+        "114S1": 17
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉登山路四段199巷0-19號",
+      "transactionCount": 16,
+      "sampleAddresses": [
+        "彰化縣溪州鄉登山路四段199巷8號",
+        "彰化縣溪州鄉登山路四段199巷7號",
+        "彰化縣溪州鄉登山路四段199巷6號",
+        "彰化縣溪州鄉登山路四段199巷11號",
+        "彰化縣溪州鄉登山路四段199巷2號",
+        "彰化縣溪州鄉登山路四段199巷5號",
+        "彰化縣溪州鄉登山路四段199巷3號",
+        "彰化縣溪州鄉登山路四段199巷1號"
+      ],
+      "latestTransactionDate": "2024-08-21",
+      "sourceBatches": {
+        "103S2": 14,
+        "113S4": 1,
+        "110S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中和路35巷0-19號",
+      "transactionCount": 14,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中和路35巷9號",
+        "彰化縣溪州鄉中和路35巷18號三樓之5",
+        "彰化縣溪州鄉中和路35巷18號三樓之1",
+        "彰化縣溪州鄉中和路35巷18號五樓之1",
+        "彰化縣溪州鄉中和路35巷2號",
+        "彰化縣溪州鄉中和路35巷12號",
+        "彰化縣溪州鄉中和路35巷16號",
+        "彰化縣溪州鄉中和路35巷8號"
+      ],
+      "latestTransactionDate": "2026-01-15",
+      "sourceBatches": {
+        "114S4": 10,
+        "115S1": 3,
+        "20260501": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路二段120巷30弄",
+      "transactionCount": 14,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路二段120巷30弄17號",
+        "彰化縣溪州鄉中山路二段120巷30弄19號",
+        "彰化縣溪州鄉中山路二段120巷30弄25號",
+        "彰化縣溪州鄉中山路二段120巷30弄8號",
+        "彰化縣溪州鄉中山路二段120巷30弄13號"
+      ],
+      "latestTransactionDate": "2024-12-15",
+      "sourceBatches": {
+        "109S2": 4,
+        "105S1": 2,
+        "114S2": 1,
+        "108S2": 1,
+        "106S3": 1,
+        "106S2": 1,
+        "105S2": 1,
+        "104S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉西安路48巷0-19號",
+      "transactionCount": 13,
+      "sampleAddresses": [
+        "彰化縣溪州鄉西安路48巷17號",
+        "彰化縣溪州鄉西安路48巷16號",
+        "彰化縣溪州鄉西安路48巷6號",
+        "彰化縣溪州鄉西安路48巷10號",
+        "彰化縣溪州鄉西安路48巷18號",
+        "彰化縣溪州鄉西安路48巷8號",
+        "彰化縣溪州鄉西安路48巷12號",
+        "彰化縣溪州鄉西安路48巷2號"
+      ],
+      "latestTransactionDate": "2023-05-12",
+      "sourceBatches": {
+        "110S4": 11,
+        "112S3": 1,
+        "106S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中和路9巷0-19號",
+      "transactionCount": 13,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中和路9巷5號",
+        "彰化縣溪州鄉中和路9巷10號",
+        "彰化縣溪州鄉中和路9巷8號",
+        "彰化縣溪州鄉中和路9巷3號",
+        "彰化縣溪州鄉中和路9巷7號",
+        "彰化縣溪州鄉中和路9巷16號",
+        "彰化縣溪州鄉中和路9巷18號",
+        "彰化縣溪州鄉中和路9巷1號"
+      ],
+      "latestTransactionDate": "2023-05-29",
+      "sourceBatches": {
+        "111S3": 11,
+        "112S3": 1,
+        "112S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街40-59號",
+      "transactionCount": 13,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街46號",
+        "彰化縣溪州鄉公平街58號",
+        "彰化縣溪州鄉公平街47號",
+        "彰化縣溪州鄉公平街43號",
+        "彰化縣溪州鄉公平街45號",
+        "彰化縣溪州鄉公平街56號",
+        "彰化縣溪州鄉公平街40號",
+        "彰化縣溪州鄉公平街42號"
+      ],
+      "latestTransactionDate": "2021-06-29",
+      "sourceBatches": {
+        "103S1": 5,
+        "109S3": 3,
+        "110S3": 1,
+        "104S4": 1,
+        "104S2": 1,
+        "103S2": 1,
+        "102S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉仁愛路20-39號",
+      "transactionCount": 12,
+      "sampleAddresses": [
+        "彰化縣溪州鄉仁愛路20號",
+        "彰化縣溪州鄉仁愛路30號",
+        "彰化縣溪州鄉仁愛路36號",
+        "彰化縣溪州鄉仁愛路32號",
+        "彰化縣溪州鄉仁愛路26號",
+        "彰化縣溪州鄉仁愛路22號",
+        "彰化縣溪州鄉仁愛路28號"
+      ],
+      "latestTransactionDate": "2024-10-21",
+      "sourceBatches": {
+        "107S1": 2,
+        "106S4": 2,
+        "105S2": 2,
+        "103S1": 2,
+        "102S3": 2,
+        "113S4": 1,
+        "107S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉西安路48巷20-39號",
+      "transactionCount": 12,
+      "sampleAddresses": [
+        "彰化縣溪州鄉西安路48巷23號",
+        "彰化縣溪州鄉西安路48巷36號",
+        "彰化縣溪州鄉西安路48巷27號",
+        "彰化縣溪州鄉西安路48巷22號",
+        "彰化縣溪州鄉西安路48巷28號",
+        "彰化縣溪州鄉西安路48巷26號",
+        "彰化縣溪州鄉西安路48巷21號",
+        "彰化縣溪州鄉西安路48巷20號"
+      ],
+      "latestTransactionDate": "2022-12-29",
+      "sourceBatches": {
+        "110S4": 11,
+        "112S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉太平路103巷0-19號",
+      "transactionCount": 11,
+      "sampleAddresses": [
+        "彰化縣溪州鄉太平路103巷9號",
+        "彰化縣溪州鄉太平路103巷5號",
+        "彰化縣溪州鄉太平路103巷12號",
+        "彰化縣溪州鄉太平路103巷16號",
+        "彰化縣溪州鄉太平路103巷1號",
+        "彰化縣溪州鄉太平路103巷8號",
+        "彰化縣溪州鄉太平路103巷7號",
+        "彰化縣溪州鄉太平路103巷6號"
+      ],
+      "latestTransactionDate": "2022-04-12",
+      "sourceBatches": {
+        "111S2": 8,
+        "111S1": 3
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉俊仁路100-119號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉俊仁路116號",
+        "彰化縣溪州鄉俊仁路100號",
+        "彰化縣溪州鄉俊仁路108號",
+        "彰化縣溪州鄉俊仁路106號",
+        "彰化縣溪州鄉俊仁路102號",
+        "彰化縣溪州鄉俊仁路110號",
+        "彰化縣溪州鄉俊仁路118號",
+        "彰化縣溪州鄉俊仁路112號"
+      ],
+      "latestTransactionDate": "2026-03-01",
+      "sourceBatches": {
+        "114S1": 4,
+        "113S4": 4,
+        "20260411": 1,
+        "114S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路四段455巷20-39號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路四段455巷30號",
+        "彰化縣溪州鄉中山路四段455巷24號",
+        "彰化縣溪州鄉中山路四段455巷23號",
+        "彰化縣溪州鄉中山路四段455巷32號",
+        "彰化縣溪州鄉中山路四段455巷25號",
+        "彰化縣溪州鄉中山路四段455巷35號",
+        "彰化縣溪州鄉中山路四段455巷34號",
+        "彰化縣溪州鄉中山路四段455巷22號"
+      ],
+      "latestTransactionDate": "2025-05-22",
+      "sourceBatches": {
+        "107S1": 2,
+        "104S2": 2,
+        "114S3": 1,
+        "111S4": 1,
+        "111S3": 1,
+        "110S3": 1,
+        "104S3": 1,
+        "103S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉莒光路580-599號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉莒光路597號",
+        "彰化縣溪州鄉莒光路589號",
+        "彰化縣溪州鄉莒光路581號",
+        "彰化縣溪州鄉莒光路593號",
+        "彰化縣溪州鄉莒光路591號",
+        "彰化縣溪州鄉莒光路583號",
+        "彰化縣溪州鄉莒光路587號",
+        "彰化縣溪州鄉莒光路585號"
+      ],
+      "latestTransactionDate": "2024-07-05",
+      "sourceBatches": {
+        "106S4": 4,
+        "108S2": 2,
+        "113S3": 1,
+        "108S4": 1,
+        "108S1": 1,
+        "107S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街60-79號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街73號",
+        "彰化縣溪州鄉公平街75號",
+        "彰化縣溪州鄉公平街69號",
+        "彰化縣溪州鄉公平街71號",
+        "彰化縣溪州鄉公平街67號",
+        "彰化縣溪州鄉公平街60號",
+        "彰化縣溪州鄉公平街62號",
+        "彰化縣溪州鄉公平街66號"
+      ],
+      "latestTransactionDate": "2024-06-10",
+      "sourceBatches": {
+        "110S4": 5,
+        "102S4": 4,
+        "113S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光路68巷0-19號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光路68巷18號",
+        "彰化縣溪州鄉光路68巷16號",
+        "彰化縣溪州鄉光路68巷1號",
+        "彰化縣溪州鄉光路68巷10號",
+        "彰化縣溪州鄉光路68巷13號",
+        "彰化縣溪州鄉光路68巷11號",
+        "彰化縣溪州鄉光路68巷8號",
+        "彰化縣溪州鄉光路68巷12號"
+      ],
+      "latestTransactionDate": "2022-05-15",
+      "sourceBatches": {
+        "104S4": 6,
+        "111S3": 1,
+        "110S3": 1,
+        "107S4": 1,
+        "105S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉忠孝路80-99號",
+      "transactionCount": 10,
+      "sampleAddresses": [
+        "彰化縣溪州鄉忠孝路88號",
+        "彰化縣溪州鄉忠孝路85號",
+        "彰化縣溪州鄉忠孝路81號",
+        "彰化縣溪州鄉忠孝路87號",
+        "彰化縣溪州鄉忠孝路83號",
+        "彰化縣溪州鄉忠孝路91號",
+        "彰化縣溪州鄉忠孝路89號",
+        "彰化縣溪州鄉忠孝路86號"
+      ],
+      "latestTransactionDate": "2020-04-11",
+      "sourceBatches": {
+        "109S3": 2,
+        "109S1": 2,
+        "108S2": 2,
+        "103S1": 2,
+        "105S3": 1,
+        "105S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段760-1地號",
+      "transactionCount": 9,
+      "sampleAddresses": [
+        "復興段760-1地號"
+      ],
+      "latestTransactionDate": "2025-01-10",
+      "sourceBatches": {
+        "114S2": 9
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉黃厝路8巷0-19號",
+      "transactionCount": 9,
+      "sampleAddresses": [
+        "彰化縣溪州鄉黃厝路8巷14號",
+        "彰化縣溪州鄉黃厝路8巷13號",
+        "彰化縣溪州鄉黃厝路8巷8號",
+        "彰化縣溪州鄉黃厝路8巷10號",
+        "彰化縣溪州鄉黃厝路8巷18號",
+        "彰化縣溪州鄉黃厝路8巷7號"
+      ],
+      "latestTransactionDate": "2024-05-16",
+      "sourceBatches": {
+        "107S4": 2,
+        "113S4": 1,
+        "111S3": 1,
+        "111S2": 1,
+        "105S2": 1,
+        "103S4": 1,
+        "102S3": 1,
+        "102S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉東光路56巷0-19號",
+      "transactionCount": 9,
+      "sampleAddresses": [
+        "彰化縣溪州鄉東光路56巷11號",
+        "彰化縣溪州鄉東光路56巷3號",
+        "彰化縣溪州鄉東光路56巷15號",
+        "彰化縣溪州鄉東光路56巷12號",
+        "彰化縣溪州鄉東光路56巷5號",
+        "彰化縣溪州鄉東光路56巷13號",
+        "彰化縣溪州鄉東光路56巷9號"
+      ],
+      "latestTransactionDate": "2018-04-14",
+      "sourceBatches": {
+        "107S3": 1,
+        "107S2": 1,
+        "106S3": 1,
+        "106S2": 1,
+        "105S4": 1,
+        "105S3": 1,
+        "103S4": 1,
+        "103S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "新西畔段764地號",
+      "transactionCount": 9,
+      "sampleAddresses": [
+        "新西畔段764地號"
+      ],
+      "latestTransactionDate": "2017-09-08",
+      "sourceBatches": {
+        "104S2": 4,
+        "106S4": 1,
+        "106S2": 1,
+        "105S3": 1,
+        "105S2": 1,
+        "103S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路三段758巷0-19號",
+      "transactionCount": 8,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路三段758巷6號",
+        "彰化縣溪州鄉中山路三段758巷10號",
+        "彰化縣溪州鄉中山路三段758巷18號",
+        "彰化縣溪州鄉中山路三段758巷12號",
+        "彰化縣溪州鄉中山路三段758巷7號",
+        "彰化縣溪州鄉中山路三段758巷9號",
+        "彰化縣溪州鄉中山路三段758巷16號",
+        "彰化縣溪州鄉中山路三段758巷1號"
+      ],
+      "latestTransactionDate": "2025-12-28",
+      "sourceBatches": {
+        "114S2": 4,
+        "115S1": 2,
+        "114S4": 1,
+        "113S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段675-1地號",
+      "transactionCount": 8,
+      "sampleAddresses": [
+        "復興段675-1地號"
+      ],
+      "latestTransactionDate": "2025-01-10",
+      "sourceBatches": {
+        "114S1": 8
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉仁愛路40-59號",
+      "transactionCount": 8,
+      "sampleAddresses": [
+        "彰化縣溪州鄉仁愛路46號",
+        "彰化縣溪州鄉仁愛路42號",
+        "彰化縣溪州鄉仁愛路50號",
+        "彰化縣溪州鄉仁愛路52號",
+        "彰化縣溪州鄉仁愛路56號",
+        "彰化縣溪州鄉仁愛路58號",
+        "彰化縣溪州鄉仁愛路45號"
+      ],
+      "latestTransactionDate": "2021-09-11",
+      "sourceBatches": {
+        "107S4": 3,
+        "108S1": 2,
+        "110S4": 1,
+        "109S3": 1,
+        "103S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "公正街200-219號",
+      "transactionCount": 8,
+      "sampleAddresses": [
+        "公正街213號",
+        "公正街211號",
+        "公正街217號",
+        "公正街207號",
+        "公正街215號",
+        "公正街219號",
+        "公正街209號",
+        "公正街205號"
+      ],
+      "latestTransactionDate": "2020-12-26",
+      "sourceBatches": {
+        "109S4": 6,
+        "110S1": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "湄洲段534地號",
+      "transactionCount": 8,
+      "sampleAddresses": [
+        "湄洲段534地號"
+      ],
+      "latestTransactionDate": "2018-12-01",
+      "sourceBatches": {
+        "107S2": 2,
+        "106S4": 2,
+        "108S1": 1,
+        "106S3": 1,
+        "106S2": 1,
+        "105S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路四段16巷0-19號",
+      "transactionCount": 7,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路四段16巷11號",
+        "彰化縣溪州鄉中山路四段16巷1號",
+        "彰化縣溪州鄉中山路四段16巷9號",
+        "彰化縣溪州鄉中山路四段16巷5號",
+        "彰化縣溪州鄉中山路四段16巷3號",
+        "彰化縣溪州鄉中山路四段16巷7號"
+      ],
+      "latestTransactionDate": "2025-10-23",
+      "sourceBatches": {
+        "110S4": 2,
+        "109S2": 2,
+        "114S4": 1,
+        "111S1": 1,
+        "110S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段742地號",
+      "transactionCount": 7,
+      "sampleAddresses": [
+        "復興段742地號"
+      ],
+      "latestTransactionDate": "2025-01-24",
+      "sourceBatches": {
+        "114S2": 7
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉進元路160-179號",
+      "transactionCount": 7,
+      "sampleAddresses": [
+        "彰化縣溪州鄉進元路175號",
+        "彰化縣溪州鄉進元路167號",
+        "彰化縣溪州鄉進元路163號",
+        "彰化縣溪州鄉進元路171號",
+        "彰化縣溪州鄉進元路169號",
+        "彰化縣溪州鄉進元路177號"
+      ],
+      "latestTransactionDate": "2018-04-09",
+      "sourceBatches": {
+        "103S1": 2,
+        "107S2": 1,
+        "105S3": 1,
+        "105S2": 1,
+        "103S3": 1,
+        "102S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中和路15巷0-19號",
+      "transactionCount": 7,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中和路15巷6號",
+        "彰化縣溪州鄉中和路15巷18號",
+        "彰化縣溪州鄉中和路15巷10號",
+        "彰化縣溪州鄉中和路15巷12號",
+        "彰化縣溪州鄉中和路15巷2號",
+        "彰化縣溪州鄉中和路15巷8號",
+        "彰化縣溪州鄉中和路15巷16號"
+      ],
+      "latestTransactionDate": "2017-11-15",
+      "sourceBatches": {
+        "106S4": 5,
+        "107S1": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉登山路四段174巷0-19號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉登山路四段174巷13號",
+        "彰化縣溪州鄉登山路四段174巷17號",
+        "彰化縣溪州鄉登山路四段174巷9號",
+        "彰化縣溪州鄉登山路四段174巷15號"
+      ],
+      "latestTransactionDate": "2025-12-22",
+      "sourceBatches": {
+        "115S1": 1,
+        "112S4": 1,
+        "111S4": 1,
+        "105S2": 1,
+        "104S1": 1,
+        "103S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路二段120巷20-39號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路二段120巷22號",
+        "彰化縣溪州鄉中山路二段120巷36號",
+        "彰化縣溪州鄉中山路二段120巷32號"
+      ],
+      "latestTransactionDate": "2025-04-19",
+      "sourceBatches": {
+        "114S3": 1,
+        "109S3": 1,
+        "107S3": 1,
+        "105S4": 1,
+        "104S4": 1,
+        "103S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路四段225巷0-19號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路四段225巷13號",
+        "彰化縣溪州鄉中山路四段225巷1號",
+        "彰化縣溪州鄉中山路四段225巷8號",
+        "彰化縣溪州鄉中山路四段225巷14號",
+        "彰化縣溪州鄉中山路四段225巷2號"
+      ],
+      "latestTransactionDate": "2024-11-08",
+      "sourceBatches": {
+        "114S3": 1,
+        "113S4": 1,
+        "113S3": 1,
+        "108S4": 1,
+        "107S1": 1,
+        "106S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "綠筍段1079地號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "綠筍段1079地號"
+      ],
+      "latestTransactionDate": "2025-04-23",
+      "sourceBatches": {
+        "114S2": 1,
+        "113S4": 1,
+        "108S4": 1,
+        "106S3": 1,
+        "106S2": 1,
+        "105S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段735地號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "復興段735地號"
+      ],
+      "latestTransactionDate": "2025-01-21",
+      "sourceBatches": {
+        "114S1": 6
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街180-199號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街195號",
+        "彰化縣溪州鄉公平街197號",
+        "彰化縣溪州鄉公平街193號",
+        "彰化縣溪州鄉公平街180號",
+        "彰化縣溪州鄉公平街186號",
+        "彰化縣溪州鄉公平街182號"
+      ],
+      "latestTransactionDate": "2024-03-13",
+      "sourceBatches": {
+        "102S2": 3,
+        "113S4": 2,
+        "114S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉東州路60-79號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉東州路66號",
+        "彰化縣溪州鄉東州路78號",
+        "彰化縣溪州鄉東州路70號",
+        "彰化縣溪州鄉東州路76號",
+        "彰化縣溪州鄉東州路68號"
+      ],
+      "latestTransactionDate": "2024-05-18",
+      "sourceBatches": {
+        "113S3": 2,
+        "112S2": 1,
+        "108S3": 1,
+        "107S4": 1,
+        "101S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉和平路60-79號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉和平路62號",
+        "彰化縣溪州鄉和平路60號",
+        "彰化縣溪州鄉和平路70號",
+        "彰化縣溪州鄉和平路68號",
+        "彰化縣溪州鄉和平路66號"
+      ],
+      "latestTransactionDate": "2023-11-07",
+      "sourceBatches": {
+        "112S4": 1,
+        "108S4": 1,
+        "107S4": 1,
+        "107S3": 1,
+        "106S3": 1,
+        "105S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公正街100-119號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公正街112號",
+        "彰化縣溪州鄉公正街110號",
+        "彰化縣溪州鄉公正街108號",
+        "彰化縣溪州鄉公正街118號",
+        "彰化縣溪州鄉公正街116號"
+      ],
+      "latestTransactionDate": "2022-02-27",
+      "sourceBatches": {
+        "111S3": 5,
+        "105S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中央路二段316巷160-179號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中央路二段316巷176號",
+        "彰化縣溪州鄉中央路二段316巷160號",
+        "彰化縣溪州鄉中央路二段316巷172號",
+        "彰化縣溪州鄉中央路二段316巷166號",
+        "彰化縣溪州鄉中央路二段316巷170號",
+        "彰化縣溪州鄉中央路二段316巷178號"
+      ],
+      "latestTransactionDate": "2021-11-11",
+      "sourceBatches": {
+        "109S3": 5,
+        "111S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "中和路21巷0-19號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "中和路21巷12號",
+        "中和路21巷18號",
+        "中和路21巷8號",
+        "中和路21巷16號",
+        "中和路21巷6號",
+        "中和路21巷2號"
+      ],
+      "latestTransactionDate": "2021-03-23",
+      "sourceBatches": {
+        "110S1": 3,
+        "110S2": 2,
+        "109S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "北州路40-59號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "北州路58號",
+        "北州路48號",
+        "北州路56號",
+        "北州路52號",
+        "北州路46號",
+        "北州路50號"
+      ],
+      "latestTransactionDate": "2021-03-15",
+      "sourceBatches": {
+        "110S2": 6
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "中央路二段316巷180-199號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "中央路二段316巷192號",
+        "中央路二段316巷198號",
+        "中央路二段316巷186號",
+        "中央路二段316巷180號",
+        "中央路二段316巷182號",
+        "中央路二段316巷188號"
+      ],
+      "latestTransactionDate": "2020-11-04",
+      "sourceBatches": {
+        "109S3": 3,
+        "110S1": 2,
+        "109S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉福德巷60-79號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉福德巷70號",
+        "彰化縣溪州鄉福德巷66號",
+        "彰化縣溪州鄉福德巷72號",
+        "彰化縣溪州鄉福德巷68號",
+        "彰化縣溪州鄉福德巷62號",
+        "彰化縣溪州鄉福德巷60號"
+      ],
+      "latestTransactionDate": "2019-09-03",
+      "sourceBatches": {
+        "108S2": 4,
+        "108S4": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路三段57巷20-39號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路三段57巷22號",
+        "彰化縣溪州鄉中山路三段57巷20號",
+        "彰化縣溪州鄉中山路三段57巷26號",
+        "彰化縣溪州鄉中山路三段57巷28號",
+        "彰化縣溪州鄉中山路三段57巷32號",
+        "彰化縣溪州鄉中山路三段57巷30號"
+      ],
+      "latestTransactionDate": "2019-01-25",
+      "sourceBatches": {
+        "108S2": 3,
+        "108S1": 3
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光明二街60-79號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光明二街62號",
+        "彰化縣溪州鄉光明二街66號",
+        "彰化縣溪州鄉光明二街68號",
+        "彰化縣溪州鄉光明二街60號"
+      ],
+      "latestTransactionDate": "2018-10-26",
+      "sourceBatches": {
+        "103S2": 2,
+        "107S4": 1,
+        "106S3": 1,
+        "103S1": 1,
+        "102S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "信義段142-2地號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "信義段142-2地號"
+      ],
+      "latestTransactionDate": "2015-10-13",
+      "sourceBatches": {
+        "105S4": 6
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉農家路200-219號",
+      "transactionCount": 6,
+      "sampleAddresses": [
+        "彰化縣溪州鄉農家路206號",
+        "彰化縣溪州鄉農家路208號",
+        "彰化縣溪州鄉農家路216號",
+        "彰化縣溪州鄉農家路212號",
+        "彰化縣溪州鄉農家路202號",
+        "彰化縣溪州鄉農家路210號"
+      ],
+      "latestTransactionDate": "2016-01-19",
+      "sourceBatches": {
+        "104S4": 2,
+        "104S3": 2,
+        "105S2": 1,
+        "105S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉健中路0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉健中路5號",
+        "彰化縣溪州鄉健中路12號",
+        "彰化縣溪州鄉健中路2號"
+      ],
+      "latestTransactionDate": "2026-03-03",
+      "sourceBatches": {
+        "20260411": 1,
+        "114S1": 1,
+        "111S3": 1,
+        "111S1": 1,
+        "108S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉福德巷40-59號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉福德巷42號",
+        "彰化縣溪州鄉福德巷52號",
+        "彰化縣溪州鄉福德巷58號",
+        "彰化縣溪州鄉福德巷50號",
+        "彰化縣溪州鄉福德巷56號"
+      ],
+      "latestTransactionDate": "2025-05-19",
+      "sourceBatches": {
+        "108S3": 3,
+        "114S3": 1,
+        "108S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路四段13巷0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路四段13巷3號",
+        "彰化縣溪州鄉中山路四段13巷2號",
+        "彰化縣溪州鄉中山路四段13巷6號",
+        "彰化縣溪州鄉中山路四段13巷1號"
+      ],
+      "latestTransactionDate": "2025-05-17",
+      "sourceBatches": {
+        "108S3": 4,
+        "114S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉信義路2巷0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉信義路2巷13號",
+        "彰化縣溪州鄉信義路2巷1號",
+        "彰化縣溪州鄉信義路2巷3號",
+        "彰化縣溪州鄉信義路2巷5號",
+        "彰化縣溪州鄉信義路2巷17號"
+      ],
+      "latestTransactionDate": "2025-04-14",
+      "sourceBatches": {
+        "114S1": 3,
+        "114S3": 1,
+        "114S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光明三街12巷0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光明三街12巷10號",
+        "彰化縣溪州鄉光明三街12巷8號",
+        "彰化縣溪州鄉光明三街12巷6號",
+        "彰化縣溪州鄉光明三街12巷2號"
+      ],
+      "latestTransactionDate": "2025-03-06",
+      "sourceBatches": {
+        "111S3": 4,
+        "114S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路二段707巷0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路二段707巷12號",
+        "彰化縣溪州鄉中山路二段707巷4號",
+        "彰化縣溪州鄉中山路二段707巷8號"
+      ],
+      "latestTransactionDate": "2025-01-25",
+      "sourceBatches": {
+        "114S2": 1,
+        "111S1": 1,
+        "109S2": 1,
+        "109S1": 1,
+        "105S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段755地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "復興段755地號"
+      ],
+      "latestTransactionDate": "2024-12-23",
+      "sourceBatches": {
+        "114S1": 5
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "柑園段112-1地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "柑園段112-1地號"
+      ],
+      "latestTransactionDate": "2024-09-13",
+      "sourceBatches": {
+        "103S2": 2,
+        "113S4": 1,
+        "113S2": 1,
+        "111S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光明三街40-59號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光明三街52號",
+        "彰化縣溪州鄉光明三街50號",
+        "彰化縣溪州鄉光明三街56號"
+      ],
+      "latestTransactionDate": "2024-07-05",
+      "sourceBatches": {
+        "105S3": 2,
+        "113S3": 1,
+        "107S3": 1,
+        "105S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中央路二段316巷180-199號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中央路二段316巷192號",
+        "彰化縣溪州鄉中央路二段316巷196號",
+        "彰化縣溪州鄉中央路二段316巷190號",
+        "彰化縣溪州鄉中央路二段316巷186號",
+        "彰化縣溪州鄉中央路二段316巷180號"
+      ],
+      "latestTransactionDate": "2024-05-07",
+      "sourceBatches": {
+        "110S4": 3,
+        "113S2": 1,
+        "110S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光明二街0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光明二街7號",
+        "彰化縣溪州鄉光明二街1號",
+        "彰化縣溪州鄉光明二街3號",
+        "彰化縣溪州鄉光明二街5號"
+      ],
+      "latestTransactionDate": "2023-11-30",
+      "sourceBatches": {
+        "110S4": 4,
+        "113S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "柑園段419地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "柑園段419地號"
+      ],
+      "latestTransactionDate": "2023-06-09",
+      "sourceBatches": {
+        "112S3": 1,
+        "112S1": 1,
+        "107S1": 1,
+        "106S3": 1,
+        "106S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉蔡厝路18巷20-39號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉蔡厝路18巷31號",
+        "彰化縣溪州鄉蔡厝路18巷35號",
+        "彰化縣溪州鄉蔡厝路18巷33號",
+        "彰化縣溪州鄉蔡厝路18巷29號",
+        "彰化縣溪州鄉蔡厝路18巷37號"
+      ],
+      "latestTransactionDate": "2023-04-10",
+      "sourceBatches": {
+        "111S4": 2,
+        "111S3": 2,
+        "112S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公正街40-59號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公正街42號",
+        "彰化縣溪州鄉公正街48號",
+        "彰化縣溪州鄉公正街46號",
+        "彰化縣溪州鄉公正街40號"
+      ],
+      "latestTransactionDate": "2023-02-17",
+      "sourceBatches": {
+        "109S3": 4,
+        "112S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉移民路71巷20-39號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉移民路71巷30號",
+        "彰化縣溪州鄉移民路71巷28號",
+        "彰化縣溪州鄉移民路71巷26號",
+        "彰化縣溪州鄉移民路71巷20號",
+        "彰化縣溪州鄉移民路71巷22號"
+      ],
+      "latestTransactionDate": "2022-04-23",
+      "sourceBatches": {
+        "111S1": 4,
+        "111S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街80-99號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街93號",
+        "彰化縣溪州鄉公平街95號",
+        "彰化縣溪州鄉公平街99號",
+        "彰化縣溪州鄉公平街97號"
+      ],
+      "latestTransactionDate": "2022-02-27",
+      "sourceBatches": {
+        "110S4": 4,
+        "111S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街100-119號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街108號",
+        "彰化縣溪州鄉公平街106號",
+        "彰化縣溪州鄉公平街118號",
+        "彰化縣溪州鄉公平街110號",
+        "彰化縣溪州鄉公平街116號"
+      ],
+      "latestTransactionDate": "2020-11-09",
+      "sourceBatches": {
+        "110S4": 2,
+        "105S3": 2,
+        "105S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "中央路二段316巷140-159號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "中央路二段316巷152號",
+        "中央路二段316巷158號",
+        "中央路二段316巷150號",
+        "中央路二段316巷156號"
+      ],
+      "latestTransactionDate": "2020-12-21",
+      "sourceBatches": {
+        "110S1": 2,
+        "109S3": 2,
+        "109S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "信義段252地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "信義段252地號"
+      ],
+      "latestTransactionDate": "2020-10-22",
+      "sourceBatches": {
+        "109S4": 3,
+        "109S3": 1,
+        "102S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "新興段2614地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "新興段2614地號"
+      ],
+      "latestTransactionDate": "2020-04-20",
+      "sourceBatches": {
+        "109S3": 1,
+        "109S2": 1,
+        "103S2": 1,
+        "103S1": 1,
+        "102S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街160-179號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街167號",
+        "彰化縣溪州鄉公平街168號",
+        "彰化縣溪州鄉公平街166號",
+        "彰化縣溪州鄉公平街176號",
+        "彰化縣溪州鄉公平街178號"
+      ],
+      "latestTransactionDate": "2019-11-18",
+      "sourceBatches": {
+        "102S2": 2,
+        "109S1": 1,
+        "107S2": 1,
+        "107S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉農家路200巷0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉農家路200巷7號",
+        "彰化縣溪州鄉農家路200巷9號",
+        "彰化縣溪州鄉農家路200巷5號",
+        "彰化縣溪州鄉農家路200巷3號"
+      ],
+      "latestTransactionDate": "2018-07-23",
+      "sourceBatches": {
+        "104S4": 2,
+        "104S3": 2,
+        "107S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街120-139號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街130號",
+        "彰化縣溪州鄉公平街122號",
+        "彰化縣溪州鄉公平街128號",
+        "彰化縣溪州鄉公平街120號",
+        "彰化縣溪州鄉公平街126號"
+      ],
+      "latestTransactionDate": "2018-05-23",
+      "sourceBatches": {
+        "105S4": 2,
+        "107S3": 1,
+        "106S1": 1,
+        "105S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "成功段290地號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "成功段290地號"
+      ],
+      "latestTransactionDate": "2018-04-05",
+      "sourceBatches": {
+        "107S2": 2,
+        "104S3": 2,
+        "106S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公平街0-19號",
+      "transactionCount": 5,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公平街15號",
+        "彰化縣溪州鄉公平街13號",
+        "彰化縣溪州鄉公平街11號",
+        "彰化縣溪州鄉公平街9號",
+        "彰化縣溪州鄉公平街7號"
+      ],
+      "latestTransactionDate": "2017-11-21",
+      "sourceBatches": {
+        "107S1": 3,
+        "102S4": 1,
+        "102S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "新西畔段443地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "新西畔段443地號"
+      ],
+      "latestTransactionDate": "2026-01-08",
+      "sourceBatches": {
+        "20260401": 1,
+        "110S4": 1,
+        "109S3": 1,
+        "108S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路二段553號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路二段553號"
+      ],
+      "latestTransactionDate": "2025-09-20",
+      "sourceBatches": {
+        "115S1": 1,
+        "114S2": 1,
+        "113S4": 1,
+        "111S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉登山路四段593巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉登山路四段593巷3號",
+        "彰化縣溪州鄉登山路四段593巷5號",
+        "彰化縣溪州鄉登山路四段593巷11號",
+        "彰化縣溪州鄉登山路四段593巷7號"
+      ],
+      "latestTransactionDate": "2025-10-08",
+      "sourceBatches": {
+        "114S4": 1,
+        "110S4": 1,
+        "108S3": 1,
+        "105S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路三段758巷20-39號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路三段758巷20號",
+        "彰化縣溪州鄉中山路三段758巷22號",
+        "彰化縣溪州鄉中山路三段758巷28號",
+        "彰化縣溪州鄉中山路三段758巷30號"
+      ],
+      "latestTransactionDate": "2025-09-15",
+      "sourceBatches": {
+        "114S4": 2,
+        "114S2": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中和路40-59號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中和路43號",
+        "彰化縣溪州鄉中和路41號",
+        "彰化縣溪州鄉中和路57號",
+        "彰化縣溪州鄉中和路55號"
+      ],
+      "latestTransactionDate": "2023-11-21",
+      "sourceBatches": {
+        "114S4": 2,
+        "112S2": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "育善段38地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "育善段38地號"
+      ],
+      "latestTransactionDate": "2025-07-09",
+      "sourceBatches": {
+        "114S3": 2,
+        "113S3": 1,
+        "113S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "和平段859地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "和平段859地號"
+      ],
+      "latestTransactionDate": "2025-06-25",
+      "sourceBatches": {
+        "114S3": 4
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中西路二段29巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中西路二段29巷12號",
+        "彰化縣溪州鄉中西路二段29巷10號",
+        "彰化縣溪州鄉中西路二段29巷2號",
+        "彰化縣溪州鄉中西路二段29巷8號"
+      ],
+      "latestTransactionDate": "2025-03-22",
+      "sourceBatches": {
+        "114S3": 4
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段760地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "復興段760地號"
+      ],
+      "latestTransactionDate": "2025-04-14",
+      "sourceBatches": {
+        "114S2": 4
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中和路202巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中和路202巷13號",
+        "彰化縣溪州鄉中和路202巷11號",
+        "彰化縣溪州鄉中和路202巷7號",
+        "彰化縣溪州鄉中和路202巷5號"
+      ],
+      "latestTransactionDate": "2024-12-18",
+      "sourceBatches": {
+        "114S1": 1,
+        "103S3": 1,
+        "103S2": 1,
+        "102S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉溪林路40-59號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉溪林路53號",
+        "彰化縣溪州鄉溪林路59號",
+        "彰化縣溪州鄉溪林路55號",
+        "彰化縣溪州鄉溪林路49號"
+      ],
+      "latestTransactionDate": "2024-11-27",
+      "sourceBatches": {
+        "114S1": 1,
+        "113S3": 1,
+        "111S2": 1,
+        "110S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉信義路0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉信義路6號",
+        "彰化縣溪州鄉信義路7號",
+        "彰化縣溪州鄉信義路3號",
+        "彰化縣溪州鄉信義路5號"
+      ],
+      "latestTransactionDate": "2024-10-25",
+      "sourceBatches": {
+        "114S1": 2,
+        "113S4": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中央路三段48之1號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中央路三段48之1號"
+      ],
+      "latestTransactionDate": "2024-06-15",
+      "sourceBatches": {
+        "114S1": 1,
+        "112S3": 1,
+        "110S3": 1,
+        "108S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉村市路58巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉村市路58巷6號",
+        "彰化縣溪州鄉村市路58巷2號"
+      ],
+      "latestTransactionDate": "2024-02-07",
+      "sourceBatches": {
+        "113S2": 1,
+        "112S4": 1,
+        "112S2": 1,
+        "102S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "進樂段883地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "進樂段883地號"
+      ],
+      "latestTransactionDate": "2023-08-11",
+      "sourceBatches": {
+        "112S4": 1,
+        "111S4": 1,
+        "111S3": 1,
+        "111S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "復興段1145地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "復興段1145地號"
+      ],
+      "latestTransactionDate": "2023-05-03",
+      "sourceBatches": {
+        "112S3": 1,
+        "110S4": 1,
+        "110S3": 1,
+        "102S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉國光路0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉國光路16號",
+        "彰化縣溪州鄉國光路19號",
+        "彰化縣溪州鄉國光路1號",
+        "彰化縣溪州鄉國光路15號"
+      ],
+      "latestTransactionDate": "2023-05-04",
+      "sourceBatches": {
+        "112S3": 1,
+        "111S3": 1,
+        "108S1": 1,
+        "106S4": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉東州路0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉東州路8號",
+        "彰化縣溪州鄉東州路2號",
+        "彰化縣溪州鄉東州路10號",
+        "彰化縣溪州鄉東州路6號"
+      ],
+      "latestTransactionDate": "2023-01-17",
+      "sourceBatches": {
+        "111S4": 3,
+        "112S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉溪下路四段316巷40-59號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉溪下路四段316巷52號",
+        "彰化縣溪州鄉溪下路四段316巷58號",
+        "彰化縣溪州鄉溪下路四段316巷56號",
+        "彰化縣溪州鄉溪下路四段316巷50號"
+      ],
+      "latestTransactionDate": "2022-06-20",
+      "sourceBatches": {
+        "111S4": 2,
+        "111S3": 2
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中山路二段414巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中山路二段414巷9號",
+        "彰化縣溪州鄉中山路二段414巷11號",
+        "彰化縣溪州鄉中山路二段414巷4號"
+      ],
+      "latestTransactionDate": "2022-07-10",
+      "sourceBatches": {
+        "111S3": 1,
+        "109S3": 1,
+        "109S2": 1,
+        "103S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉中央路二段316巷140-159號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉中央路二段316巷150號",
+        "彰化縣溪州鄉中央路二段316巷152號",
+        "彰化縣溪州鄉中央路二段316巷156號",
+        "彰化縣溪州鄉中央路二段316巷158號"
+      ],
+      "latestTransactionDate": "2022-07-30",
+      "sourceBatches": {
+        "110S4": 2,
+        "111S3": 1,
+        "110S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉光明三街0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉光明三街6號",
+        "彰化縣溪州鄉光明三街2號",
+        "彰化縣溪州鄉光明三街10號",
+        "彰化縣溪州鄉光明三街8號"
+      ],
+      "latestTransactionDate": "2021-06-27",
+      "sourceBatches": {
+        "111S3": 4
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "新興段1142地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "新興段1142地號"
+      ],
+      "latestTransactionDate": "2022-05-08",
+      "sourceBatches": {
+        "111S2": 1,
+        "107S2": 1,
+        "104S1": 1,
+        "103S2": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉公園路80-99號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉公園路90號",
+        "彰化縣溪州鄉公園路88號",
+        "彰化縣溪州鄉公園路86號"
+      ],
+      "latestTransactionDate": "2020-07-30",
+      "sourceBatches": {
+        "111S2": 3,
+        "111S1": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "八德段451地號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "八德段451地號"
+      ],
+      "latestTransactionDate": "2021-09-05",
+      "sourceBatches": {
+        "107S3": 2,
+        "110S4": 1,
+        "108S3": 1
+      }
+    },
+    {
+      "city": "彰化縣",
+      "district": "溪州鄉",
+      "addressCluster": "彰化縣溪州鄉村市路56巷0-19號",
+      "transactionCount": 4,
+      "sampleAddresses": [
+        "彰化縣溪州鄉村市路56巷1號",
+        "彰化縣溪州鄉村市路56巷3號",
+        "彰化縣溪州鄉村市路56巷17號",
+        "彰化縣溪州鄉村市路56巷9號"
+      ],
+      "latestTransactionDate": "2021-07-02",
+      "sourceBatches": {
+        "110S3": 1,
+        "106S4": 1,
+        "106S2": 1,
+        "103S3": 1
+      }
+    }
+  ]
+}

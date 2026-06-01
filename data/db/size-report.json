@@ -1,0 +1,2819 @@
+{
+  "generatedAt": "2026-06-01T23:13:52.825097+00:00",
+  "budgets": {
+    "index.sqlite.gz": 26214400,
+    "shard.sqlite.gz": 47185920,
+    "script.js": 307200,
+    "styles.css": 81920
+  },
+  "files": [
+    {
+      "file": "data/db/index.sqlite.gz",
+      "label": "index.sqlite.gz",
+      "bytes": 5591638,
+      "budgetBytes": 26214400,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/unknown.sqlite.gz",
+      "label": "taipei/unknown.sqlite.gz",
+      "bytes": 4928,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/512f9148.sqlite.gz",
+      "label": "taipei/512f9148.sqlite.gz",
+      "bytes": 40277042,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/5e12352b.sqlite.gz",
+      "label": "taipei/5e12352b.sqlite.gz",
+      "bytes": 15970295,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/89a6d092.sqlite.gz",
+      "label": "taipei/89a6d092.sqlite.gz",
+      "bytes": 20148156,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/55d32af5.sqlite.gz",
+      "label": "taipei/55d32af5.sqlite.gz",
+      "bytes": 29186355,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/970fb05c.sqlite.gz",
+      "label": "taipei/970fb05c.sqlite.gz",
+      "bytes": 24161390,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/96c36c83.sqlite.gz",
+      "label": "taipei/96c36c83.sqlite.gz",
+      "bytes": 12074914,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/bacdceea.sqlite.gz",
+      "label": "taipei/bacdceea.sqlite.gz",
+      "bytes": 22407986,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/bb9765d7.sqlite.gz",
+      "label": "taipei/bb9765d7.sqlite.gz",
+      "bytes": 14110567,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/3f3f8e61.sqlite.gz",
+      "label": "taipei/3f3f8e61.sqlite.gz",
+      "bytes": 26174865,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/fa47d8f7.sqlite.gz",
+      "label": "taipei/fa47d8f7.sqlite.gz",
+      "bytes": 22474574,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/9465595c.sqlite.gz",
+      "label": "taipei/9465595c.sqlite.gz",
+      "bytes": 16939215,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taipei/6904703c.sqlite.gz",
+      "label": "taipei/6904703c.sqlite.gz",
+      "bytes": 17385853,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/unknown.sqlite.gz",
+      "label": "taichung/unknown.sqlite.gz",
+      "bytes": 85822,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/cbd7c199.sqlite.gz",
+      "label": "taichung/cbd7c199.sqlite.gz",
+      "bytes": 4279644,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/45d0bc5f.sqlite.gz",
+      "label": "taichung/45d0bc5f.sqlite.gz",
+      "bytes": 28807764,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/63ce57c5__01.sqlite.gz",
+      "label": "taichung/63ce57c5__01.sqlite.gz",
+      "bytes": 23398895,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/63ce57c5__02.sqlite.gz",
+      "label": "taichung/63ce57c5__02.sqlite.gz",
+      "bytes": 22993246,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/63ce57c5__03.sqlite.gz",
+      "label": "taichung/63ce57c5__03.sqlite.gz",
+      "bytes": 23016289,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/19ea2059.sqlite.gz",
+      "label": "taichung/19ea2059.sqlite.gz",
+      "bytes": 22944076,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/bec59908.sqlite.gz",
+      "label": "taichung/bec59908.sqlite.gz",
+      "bytes": 34245398,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/ce0f0291.sqlite.gz",
+      "label": "taichung/ce0f0291.sqlite.gz",
+      "bytes": 4801586,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/6ad5688e.sqlite.gz",
+      "label": "taichung/6ad5688e.sqlite.gz",
+      "bytes": 349673,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/fbffe585.sqlite.gz",
+      "label": "taichung/fbffe585.sqlite.gz",
+      "bytes": 2859443,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/3f3f8e61.sqlite.gz",
+      "label": "taichung/3f3f8e61.sqlite.gz",
+      "bytes": 1169366,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/96ee6fc6.sqlite.gz",
+      "label": "taichung/96ee6fc6.sqlite.gz",
+      "bytes": 5517693,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/4ec788ce.sqlite.gz",
+      "label": "taichung/4ec788ce.sqlite.gz",
+      "bytes": 4806575,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/34d80232.sqlite.gz",
+      "label": "taichung/34d80232.sqlite.gz",
+      "bytes": 21679751,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/b7e3a1f5.sqlite.gz",
+      "label": "taichung/b7e3a1f5.sqlite.gz",
+      "bytes": 8890934,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/c50a2eeb.sqlite.gz",
+      "label": "taichung/c50a2eeb.sqlite.gz",
+      "bytes": 28259633,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/dba42857.sqlite.gz",
+      "label": "taichung/dba42857.sqlite.gz",
+      "bytes": 2127303,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/f241fd43.sqlite.gz",
+      "label": "taichung/f241fd43.sqlite.gz",
+      "bytes": 4553329,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/7cf504e8.sqlite.gz",
+      "label": "taichung/7cf504e8.sqlite.gz",
+      "bytes": 10105608,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/e4864982.sqlite.gz",
+      "label": "taichung/e4864982.sqlite.gz",
+      "bytes": 12458443,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/32927de2.sqlite.gz",
+      "label": "taichung/32927de2.sqlite.gz",
+      "bytes": 14858357,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/a5c7afd1.sqlite.gz",
+      "label": "taichung/a5c7afd1.sqlite.gz",
+      "bytes": 11774329,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/151c5794.sqlite.gz",
+      "label": "taichung/151c5794.sqlite.gz",
+      "bytes": 13233452,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/4a972125.sqlite.gz",
+      "label": "taichung/4a972125.sqlite.gz",
+      "bytes": 14349881,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/2da761ef.sqlite.gz",
+      "label": "taichung/2da761ef.sqlite.gz",
+      "bytes": 1053172,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/0f83b0e2.sqlite.gz",
+      "label": "taichung/0f83b0e2.sqlite.gz",
+      "bytes": 5189547,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/aa8ffb87.sqlite.gz",
+      "label": "taichung/aa8ffb87.sqlite.gz",
+      "bytes": 19336618,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/18a265be__01.sqlite.gz",
+      "label": "taichung/18a265be__01.sqlite.gz",
+      "bytes": 19259641,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/18a265be__02.sqlite.gz",
+      "label": "taichung/18a265be__02.sqlite.gz",
+      "bytes": 19206859,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/18a265be__03.sqlite.gz",
+      "label": "taichung/18a265be__03.sqlite.gz",
+      "bytes": 19166627,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/51b91edc.sqlite.gz",
+      "label": "taichung/51b91edc.sqlite.gz",
+      "bytes": 14507287,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/fa954c92.sqlite.gz",
+      "label": "taichung/fa954c92.sqlite.gz",
+      "bytes": 6909060,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taichung/46279641.sqlite.gz",
+      "label": "taichung/46279641.sqlite.gz",
+      "bytes": 10663043,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/unknown.sqlite.gz",
+      "label": "keelung/unknown.sqlite.gz",
+      "bytes": 15146,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/bec02cc1.sqlite.gz",
+      "label": "keelung/bec02cc1.sqlite.gz",
+      "bytes": 5639673,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/512f9148.sqlite.gz",
+      "label": "keelung/512f9148.sqlite.gz",
+      "bytes": 3998472,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/5e12352b.sqlite.gz",
+      "label": "keelung/5e12352b.sqlite.gz",
+      "bytes": 8705244,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/827462d3.sqlite.gz",
+      "label": "keelung/827462d3.sqlite.gz",
+      "bytes": 3192458,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/89a6d092.sqlite.gz",
+      "label": "keelung/89a6d092.sqlite.gz",
+      "bytes": 6908069,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/db11ba75.sqlite.gz",
+      "label": "keelung/db11ba75.sqlite.gz",
+      "bytes": 10907928,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/keelung/88ce87c2.sqlite.gz",
+      "label": "keelung/88ce87c2.sqlite.gz",
+      "bytes": 5348771,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/unknown.sqlite.gz",
+      "label": "tainan/unknown.sqlite.gz",
+      "bytes": 44948,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/390e4e15.sqlite.gz",
+      "label": "tainan/390e4e15.sqlite.gz",
+      "bytes": 1816861,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/469ad9b8.sqlite.gz",
+      "label": "tainan/469ad9b8.sqlite.gz",
+      "bytes": 1761297,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/b5e9c4c5.sqlite.gz",
+      "label": "tainan/b5e9c4c5.sqlite.gz",
+      "bytes": 11578360,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/8fb622e9.sqlite.gz",
+      "label": "tainan/8fb622e9.sqlite.gz",
+      "bytes": 12665216,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/ba085a2e.sqlite.gz",
+      "label": "tainan/ba085a2e.sqlite.gz",
+      "bytes": 6299053,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/adbf1840.sqlite.gz",
+      "label": "tainan/adbf1840.sqlite.gz",
+      "bytes": 1934110,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/45d0bc5f.sqlite.gz",
+      "label": "tainan/45d0bc5f.sqlite.gz",
+      "bytes": 16195807,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/66b6d2ba.sqlite.gz",
+      "label": "tainan/66b6d2ba.sqlite.gz",
+      "bytes": 637019,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/5a024d3f.sqlite.gz",
+      "label": "tainan/5a024d3f.sqlite.gz",
+      "bytes": 445650,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/19ea2059.sqlite.gz",
+      "label": "tainan/19ea2059.sqlite.gz",
+      "bytes": 12949035,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/7875292b.sqlite.gz",
+      "label": "tainan/7875292b.sqlite.gz",
+      "bytes": 10540915,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/1a611ea1.sqlite.gz",
+      "label": "tainan/1a611ea1.sqlite.gz",
+      "bytes": 959073,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/075c1517.sqlite.gz",
+      "label": "tainan/075c1517.sqlite.gz",
+      "bytes": 2727734,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/5c7cb1c3.sqlite.gz",
+      "label": "tainan/5c7cb1c3.sqlite.gz",
+      "bytes": 27048505,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/18b07e7c.sqlite.gz",
+      "label": "tainan/18b07e7c.sqlite.gz",
+      "bytes": 4425948,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/799b0700.sqlite.gz",
+      "label": "tainan/799b0700.sqlite.gz",
+      "bytes": 14261919,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/2a5c820d.sqlite.gz",
+      "label": "tainan/2a5c820d.sqlite.gz",
+      "bytes": 2709307,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/babb80f3.sqlite.gz",
+      "label": "tainan/babb80f3.sqlite.gz",
+      "bytes": 1532382,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/6b782374.sqlite.gz",
+      "label": "tainan/6b782374.sqlite.gz",
+      "bytes": 873344,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/6e8829ac.sqlite.gz",
+      "label": "tainan/6e8829ac.sqlite.gz",
+      "bytes": 515132,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/b8d88e13.sqlite.gz",
+      "label": "tainan/b8d88e13.sqlite.gz",
+      "bytes": 2073244,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/678c901c.sqlite.gz",
+      "label": "tainan/678c901c.sqlite.gz",
+      "bytes": 3925227,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/6058f8c1.sqlite.gz",
+      "label": "tainan/6058f8c1.sqlite.gz",
+      "bytes": 7559135,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/8bc38cb1.sqlite.gz",
+      "label": "tainan/8bc38cb1.sqlite.gz",
+      "bytes": 8836649,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/7cf504e8.sqlite.gz",
+      "label": "tainan/7cf504e8.sqlite.gz",
+      "bytes": 23436518,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/198c6eff.sqlite.gz",
+      "label": "tainan/198c6eff.sqlite.gz",
+      "bytes": 1946227,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/3404677e.sqlite.gz",
+      "label": "tainan/3404677e.sqlite.gz",
+      "bytes": 2368292,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/889f86c4.sqlite.gz",
+      "label": "tainan/889f86c4.sqlite.gz",
+      "bytes": 734545,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/b9bc3685.sqlite.gz",
+      "label": "tainan/b9bc3685.sqlite.gz",
+      "bytes": 10095058,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/f800187a.sqlite.gz",
+      "label": "tainan/f800187a.sqlite.gz",
+      "bytes": 37360155,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/1ecdacf3.sqlite.gz",
+      "label": "tainan/1ecdacf3.sqlite.gz",
+      "bytes": 1331568,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/0a80aaa9.sqlite.gz",
+      "label": "tainan/0a80aaa9.sqlite.gz",
+      "bytes": 2675590,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/4857fe8e.sqlite.gz",
+      "label": "tainan/4857fe8e.sqlite.gz",
+      "bytes": 2894387,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/550f8fc0.sqlite.gz",
+      "label": "tainan/550f8fc0.sqlite.gz",
+      "bytes": 4244045,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/b5a0943f.sqlite.gz",
+      "label": "tainan/b5a0943f.sqlite.gz",
+      "bytes": 2804708,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/beccfa4f.sqlite.gz",
+      "label": "tainan/beccfa4f.sqlite.gz",
+      "bytes": 5248499,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/tainan/879ddf71.sqlite.gz",
+      "label": "tainan/879ddf71.sqlite.gz",
+      "bytes": 400417,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/unknown.sqlite.gz",
+      "label": "kaohsiung/unknown.sqlite.gz",
+      "bytes": 107091,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/3254363d.sqlite.gz",
+      "label": "kaohsiung/3254363d.sqlite.gz",
+      "bytes": 45781343,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/473faae9.sqlite.gz",
+      "label": "kaohsiung/473faae9.sqlite.gz",
+      "bytes": 15579566,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/65acfdb7.sqlite.gz",
+      "label": "kaohsiung/65acfdb7.sqlite.gz",
+      "bytes": 778927,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/835a1430.sqlite.gz",
+      "label": "kaohsiung/835a1430.sqlite.gz",
+      "bytes": 881932,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/67c34fcf.sqlite.gz",
+      "label": "kaohsiung/67c34fcf.sqlite.gz",
+      "bytes": 7634666,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/a31ad639.sqlite.gz",
+      "label": "kaohsiung/a31ad639.sqlite.gz",
+      "bytes": 21547675,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/10ae951b.sqlite.gz",
+      "label": "kaohsiung/10ae951b.sqlite.gz",
+      "bytes": 14046543,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/907adb6f.sqlite.gz",
+      "label": "kaohsiung/907adb6f.sqlite.gz",
+      "bytes": 3433222,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/7adae7e2.sqlite.gz",
+      "label": "kaohsiung/7adae7e2.sqlite.gz",
+      "bytes": 4682231,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/9bb35663.sqlite.gz",
+      "label": "kaohsiung/9bb35663.sqlite.gz",
+      "bytes": 14357811,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/d5b0e2d1.sqlite.gz",
+      "label": "kaohsiung/d5b0e2d1.sqlite.gz",
+      "bytes": 10035592,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/3ee8297e.sqlite.gz",
+      "label": "kaohsiung/3ee8297e.sqlite.gz",
+      "bytes": 30445370,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/fb4c57cf.sqlite.gz",
+      "label": "kaohsiung/fb4c57cf.sqlite.gz",
+      "bytes": 981305,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/43f4c8fa.sqlite.gz",
+      "label": "kaohsiung/43f4c8fa.sqlite.gz",
+      "bytes": 9465609,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/12773a53.sqlite.gz",
+      "label": "kaohsiung/12773a53.sqlite.gz",
+      "bytes": 2736168,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/8ea4f1db.sqlite.gz",
+      "label": "kaohsiung/8ea4f1db.sqlite.gz",
+      "bytes": 492448,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/5b13ddd1.sqlite.gz",
+      "label": "kaohsiung/5b13ddd1.sqlite.gz",
+      "bytes": 806414,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/eee36e96.sqlite.gz",
+      "label": "kaohsiung/eee36e96.sqlite.gz",
+      "bytes": 5873233,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/2266ac47.sqlite.gz",
+      "label": "kaohsiung/2266ac47.sqlite.gz",
+      "bytes": 161310,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/bc1b6b1a.sqlite.gz",
+      "label": "kaohsiung/bc1b6b1a.sqlite.gz",
+      "bytes": 2843491,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/a010f4cf.sqlite.gz",
+      "label": "kaohsiung/a010f4cf.sqlite.gz",
+      "bytes": 33779955,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/932f713d.sqlite.gz",
+      "label": "kaohsiung/932f713d.sqlite.gz",
+      "bytes": 8280262,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/4f977925.sqlite.gz",
+      "label": "kaohsiung/4f977925.sqlite.gz",
+      "bytes": 716299,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/ef1ea80b.sqlite.gz",
+      "label": "kaohsiung/ef1ea80b.sqlite.gz",
+      "bytes": 3773589,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/856b54a5.sqlite.gz",
+      "label": "kaohsiung/856b54a5.sqlite.gz",
+      "bytes": 3912751,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/5eeccde1.sqlite.gz",
+      "label": "kaohsiung/5eeccde1.sqlite.gz",
+      "bytes": 657938,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/dd66c62e.sqlite.gz",
+      "label": "kaohsiung/dd66c62e.sqlite.gz",
+      "bytes": 358084,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/7cfe9b2b.sqlite.gz",
+      "label": "kaohsiung/7cfe9b2b.sqlite.gz",
+      "bytes": 3006393,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/eb16a689.sqlite.gz",
+      "label": "kaohsiung/eb16a689.sqlite.gz",
+      "bytes": 25885157,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/5938f245.sqlite.gz",
+      "label": "kaohsiung/5938f245.sqlite.gz",
+      "bytes": 76757,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/7f899107.sqlite.gz",
+      "label": "kaohsiung/7f899107.sqlite.gz",
+      "bytes": 1476561,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/36ccfd32.sqlite.gz",
+      "label": "kaohsiung/36ccfd32.sqlite.gz",
+      "bytes": 3895926,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/eebd4976.sqlite.gz",
+      "label": "kaohsiung/eebd4976.sqlite.gz",
+      "bytes": 140464,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/a420726a.sqlite.gz",
+      "label": "kaohsiung/a420726a.sqlite.gz",
+      "bytes": 2027005,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/86d106e9.sqlite.gz",
+      "label": "kaohsiung/86d106e9.sqlite.gz",
+      "bytes": 6057172,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/ac7de271.sqlite.gz",
+      "label": "kaohsiung/ac7de271.sqlite.gz",
+      "bytes": 38313546,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/e1d51174.sqlite.gz",
+      "label": "kaohsiung/e1d51174.sqlite.gz",
+      "bytes": 3901851,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kaohsiung/0a339504.sqlite.gz",
+      "label": "kaohsiung/0a339504.sqlite.gz",
+      "bytes": 23870065,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/unknown.sqlite.gz",
+      "label": "new-taipei/unknown.sqlite.gz",
+      "bytes": 79190,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/e7573866.sqlite.gz",
+      "label": "new-taipei/e7573866.sqlite.gz",
+      "bytes": 16050130,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/ef1de3c0.sqlite.gz",
+      "label": "new-taipei/ef1de3c0.sqlite.gz",
+      "bytes": 4280016,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/83496e52.sqlite.gz",
+      "label": "new-taipei/83496e52.sqlite.gz",
+      "bytes": 44868848,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/dd3294ca.sqlite.gz",
+      "label": "new-taipei/dd3294ca.sqlite.gz",
+      "bytes": 46047737,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/89ce90c2.sqlite.gz",
+      "label": "new-taipei/89ce90c2.sqlite.gz",
+      "bytes": 16145242,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/ad431b45.sqlite.gz",
+      "label": "new-taipei/ad431b45.sqlite.gz",
+      "bytes": 7561221,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/0cd5a53d.sqlite.gz",
+      "label": "new-taipei/0cd5a53d.sqlite.gz",
+      "bytes": 28959625,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/282e0d98.sqlite.gz",
+      "label": "new-taipei/282e0d98.sqlite.gz",
+      "bytes": 340899,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/571b6121.sqlite.gz",
+      "label": "new-taipei/571b6121.sqlite.gz",
+      "bytes": 329445,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/b27b4744.sqlite.gz",
+      "label": "new-taipei/b27b4744.sqlite.gz",
+      "bytes": 40023773,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/5f340b2e__01.sqlite.gz",
+      "label": "new-taipei/5f340b2e__01.sqlite.gz",
+      "bytes": 17220027,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/5f340b2e__02.sqlite.gz",
+      "label": "new-taipei/5f340b2e__02.sqlite.gz",
+      "bytes": 16944329,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/5f340b2e__03.sqlite.gz",
+      "label": "new-taipei/5f340b2e__03.sqlite.gz",
+      "bytes": 17013082,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/fbbe16ee__01.sqlite.gz",
+      "label": "new-taipei/fbbe16ee__01.sqlite.gz",
+      "bytes": 19685218,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/fbbe16ee__02.sqlite.gz",
+      "label": "new-taipei/fbbe16ee__02.sqlite.gz",
+      "bytes": 20070225,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/fbbe16ee__03.sqlite.gz",
+      "label": "new-taipei/fbbe16ee__03.sqlite.gz",
+      "bytes": 19605663,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/d53819e6.sqlite.gz",
+      "label": "new-taipei/d53819e6.sqlite.gz",
+      "bytes": 31509535,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/dbe0064a.sqlite.gz",
+      "label": "new-taipei/dbe0064a.sqlite.gz",
+      "bytes": 15405777,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/827ad895.sqlite.gz",
+      "label": "new-taipei/827ad895.sqlite.gz",
+      "bytes": 18730442,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/7ddb1002.sqlite.gz",
+      "label": "new-taipei/7ddb1002.sqlite.gz",
+      "bytes": 35597206,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/f7251912.sqlite.gz",
+      "label": "new-taipei/f7251912.sqlite.gz",
+      "bytes": 9596975,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/17613eab__01.sqlite.gz",
+      "label": "new-taipei/17613eab__01.sqlite.gz",
+      "bytes": 21083696,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/17613eab__02.sqlite.gz",
+      "label": "new-taipei/17613eab__02.sqlite.gz",
+      "bytes": 20990631,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/17613eab__03.sqlite.gz",
+      "label": "new-taipei/17613eab__03.sqlite.gz",
+      "bytes": 21157059,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/3713c373.sqlite.gz",
+      "label": "new-taipei/3713c373.sqlite.gz",
+      "bytes": 2302401,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/60877170.sqlite.gz",
+      "label": "new-taipei/60877170.sqlite.gz",
+      "bytes": 129288,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/5024b74b.sqlite.gz",
+      "label": "new-taipei/5024b74b.sqlite.gz",
+      "bytes": 2462525,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/2359dfe3.sqlite.gz",
+      "label": "new-taipei/2359dfe3.sqlite.gz",
+      "bytes": 403503,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/a0d0b2d1.sqlite.gz",
+      "label": "new-taipei/a0d0b2d1.sqlite.gz",
+      "bytes": 496174,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/b0214301.sqlite.gz",
+      "label": "new-taipei/b0214301.sqlite.gz",
+      "bytes": 1735006,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/c5c3fc41.sqlite.gz",
+      "label": "new-taipei/c5c3fc41.sqlite.gz",
+      "bytes": 15848360,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/34de520f.sqlite.gz",
+      "label": "new-taipei/34de520f.sqlite.gz",
+      "bytes": 776245,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/36459a92.sqlite.gz",
+      "label": "new-taipei/36459a92.sqlite.gz",
+      "bytes": 1773301,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/8bf9df55.sqlite.gz",
+      "label": "new-taipei/8bf9df55.sqlite.gz",
+      "bytes": 785255,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/new-taipei/44f302da.sqlite.gz",
+      "label": "new-taipei/44f302da.sqlite.gz",
+      "bytes": 12703913,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/unknown.sqlite.gz",
+      "label": "yilan/unknown.sqlite.gz",
+      "bytes": 8944,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/408330a3.sqlite.gz",
+      "label": "yilan/408330a3.sqlite.gz",
+      "bytes": 3920341,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/3b37b9f2.sqlite.gz",
+      "label": "yilan/3b37b9f2.sqlite.gz",
+      "bytes": 7801220,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/b2f3ead2.sqlite.gz",
+      "label": "yilan/b2f3ead2.sqlite.gz",
+      "bytes": 7093510,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/d764abfb.sqlite.gz",
+      "label": "yilan/d764abfb.sqlite.gz",
+      "bytes": 323224,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/0cd29507.sqlite.gz",
+      "label": "yilan/0cd29507.sqlite.gz",
+      "bytes": 4399235,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/e7fb826e.sqlite.gz",
+      "label": "yilan/e7fb826e.sqlite.gz",
+      "bytes": 3602831,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/e7d4c233.sqlite.gz",
+      "label": "yilan/e7d4c233.sqlite.gz",
+      "bytes": 338790,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/7b808f2b.sqlite.gz",
+      "label": "yilan/7b808f2b.sqlite.gz",
+      "bytes": 13618118,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/dcbfd0f7.sqlite.gz",
+      "label": "yilan/dcbfd0f7.sqlite.gz",
+      "bytes": 9018571,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/13746ddd.sqlite.gz",
+      "label": "yilan/13746ddd.sqlite.gz",
+      "bytes": 8039296,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/9feced19.sqlite.gz",
+      "label": "yilan/9feced19.sqlite.gz",
+      "bytes": 3957126,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yilan/66027a58.sqlite.gz",
+      "label": "yilan/66027a58.sqlite.gz",
+      "bytes": 3399256,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/unknown.sqlite.gz",
+      "label": "taoyuan/unknown.sqlite.gz",
+      "bytes": 34032,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/0a793fdf__01.sqlite.gz",
+      "label": "taoyuan/0a793fdf__01.sqlite.gz",
+      "bytes": 31563080,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/0a793fdf__02.sqlite.gz",
+      "label": "taoyuan/0a793fdf__02.sqlite.gz",
+      "bytes": 31698999,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/0a793fdf__03.sqlite.gz",
+      "label": "taoyuan/0a793fdf__03.sqlite.gz",
+      "bytes": 31575695,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/be748466.sqlite.gz",
+      "label": "taoyuan/be748466.sqlite.gz",
+      "bytes": 34582710,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/98e4e361.sqlite.gz",
+      "label": "taoyuan/98e4e361.sqlite.gz",
+      "bytes": 24659233,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/02dc0dff.sqlite.gz",
+      "label": "taoyuan/02dc0dff.sqlite.gz",
+      "bytes": 11809463,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/bab1755f.sqlite.gz",
+      "label": "taoyuan/bab1755f.sqlite.gz",
+      "bytes": 33009839,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/57e6ef3b.sqlite.gz",
+      "label": "taoyuan/57e6ef3b.sqlite.gz",
+      "bytes": 603516,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/d726ff20.sqlite.gz",
+      "label": "taoyuan/d726ff20.sqlite.gz",
+      "bytes": 8275926,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/85d6ba76__01.sqlite.gz",
+      "label": "taoyuan/85d6ba76__01.sqlite.gz",
+      "bytes": 29693734,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/85d6ba76__02.sqlite.gz",
+      "label": "taoyuan/85d6ba76__02.sqlite.gz",
+      "bytes": 29631964,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/85d6ba76__03.sqlite.gz",
+      "label": "taoyuan/85d6ba76__03.sqlite.gz",
+      "bytes": 29493571,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/0063be39.sqlite.gz",
+      "label": "taoyuan/0063be39.sqlite.gz",
+      "bytes": 35295608,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/833601d5.sqlite.gz",
+      "label": "taoyuan/833601d5.sqlite.gz",
+      "bytes": 31117552,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/9960c626.sqlite.gz",
+      "label": "taoyuan/9960c626.sqlite.gz",
+      "bytes": 19109867,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/9d1d5dac.sqlite.gz",
+      "label": "taoyuan/9d1d5dac.sqlite.gz",
+      "bytes": 19569642,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taoyuan/c1667c76.sqlite.gz",
+      "label": "taoyuan/c1667c76.sqlite.gz",
+      "bytes": 41693101,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-city/20838c9d.sqlite.gz",
+      "label": "chiayi-city/20838c9d.sqlite.gz",
+      "bytes": 30803656,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/unknown.sqlite.gz",
+      "label": "hsinchu-county/unknown.sqlite.gz",
+      "bytes": 25888,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/e1d61872.sqlite.gz",
+      "label": "hsinchu-county/e1d61872.sqlite.gz",
+      "bytes": 287625,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/ceb3c2a0.sqlite.gz",
+      "label": "hsinchu-county/ceb3c2a0.sqlite.gz",
+      "bytes": 907529,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/2d78caee.sqlite.gz",
+      "label": "hsinchu-county/2d78caee.sqlite.gz",
+      "bytes": 3691650,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/d9e1d85f.sqlite.gz",
+      "label": "hsinchu-county/d9e1d85f.sqlite.gz",
+      "bytes": 607422,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/dd48d012.sqlite.gz",
+      "label": "hsinchu-county/dd48d012.sqlite.gz",
+      "bytes": 715282,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/5a5ccb0b.sqlite.gz",
+      "label": "hsinchu-county/5a5ccb0b.sqlite.gz",
+      "bytes": 4787033,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/9ce082fe.sqlite.gz",
+      "label": "hsinchu-county/9ce082fe.sqlite.gz",
+      "bytes": 9614038,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/6667f184.sqlite.gz",
+      "label": "hsinchu-county/6667f184.sqlite.gz",
+      "bytes": 1429337,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/a2611992.sqlite.gz",
+      "label": "hsinchu-county/a2611992.sqlite.gz",
+      "bytes": 14045676,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/2b3926f5.sqlite.gz",
+      "label": "hsinchu-county/2b3926f5.sqlite.gz",
+      "bytes": 42368461,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/6981d6d0.sqlite.gz",
+      "label": "hsinchu-county/6981d6d0.sqlite.gz",
+      "bytes": 14515951,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/ed837346.sqlite.gz",
+      "label": "hsinchu-county/ed837346.sqlite.gz",
+      "bytes": 2922328,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-county/c6183edf.sqlite.gz",
+      "label": "hsinchu-county/c6183edf.sqlite.gz",
+      "bytes": 2415819,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/unknown.sqlite.gz",
+      "label": "miaoli/unknown.sqlite.gz",
+      "bytes": 17420,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/fa8c9668.sqlite.gz",
+      "label": "miaoli/fa8c9668.sqlite.gz",
+      "bytes": 1045055,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/01bf8a9f.sqlite.gz",
+      "label": "miaoli/01bf8a9f.sqlite.gz",
+      "bytes": 1497709,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/3ead11cf.sqlite.gz",
+      "label": "miaoli/3ead11cf.sqlite.gz",
+      "bytes": 3019158,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/c87bf264.sqlite.gz",
+      "label": "miaoli/c87bf264.sqlite.gz",
+      "bytes": 1222076,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/2a731c60.sqlite.gz",
+      "label": "miaoli/2a731c60.sqlite.gz",
+      "bytes": 931915,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/36e896c5.sqlite.gz",
+      "label": "miaoli/36e896c5.sqlite.gz",
+      "bytes": 1331128,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/e756b1df.sqlite.gz",
+      "label": "miaoli/e756b1df.sqlite.gz",
+      "bytes": 3877446,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/aeed9d24.sqlite.gz",
+      "label": "miaoli/aeed9d24.sqlite.gz",
+      "bytes": 373541,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/dcfcc453.sqlite.gz",
+      "label": "miaoli/dcfcc453.sqlite.gz",
+      "bytes": 646286,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/b4d2cf22.sqlite.gz",
+      "label": "miaoli/b4d2cf22.sqlite.gz",
+      "bytes": 15682331,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/5e0b4d84.sqlite.gz",
+      "label": "miaoli/5e0b4d84.sqlite.gz",
+      "bytes": 4536094,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/995c8c28.sqlite.gz",
+      "label": "miaoli/995c8c28.sqlite.gz",
+      "bytes": 9759990,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/5b3a93b8.sqlite.gz",
+      "label": "miaoli/5b3a93b8.sqlite.gz",
+      "bytes": 635604,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/0d8161e3.sqlite.gz",
+      "label": "miaoli/0d8161e3.sqlite.gz",
+      "bytes": 2437125,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/672b7015.sqlite.gz",
+      "label": "miaoli/672b7015.sqlite.gz",
+      "bytes": 1720386,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/f466274e.sqlite.gz",
+      "label": "miaoli/f466274e.sqlite.gz",
+      "bytes": 2039956,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/0bb9fa0a.sqlite.gz",
+      "label": "miaoli/0bb9fa0a.sqlite.gz",
+      "bytes": 17439346,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/miaoli/b2a6a9d1.sqlite.gz",
+      "label": "miaoli/b2a6a9d1.sqlite.gz",
+      "bytes": 1015965,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/unknown.sqlite.gz",
+      "label": "nantou/unknown.sqlite.gz",
+      "bytes": 13550,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/85a24b80.sqlite.gz",
+      "label": "nantou/85a24b80.sqlite.gz",
+      "bytes": 1549855,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/8b95c36c.sqlite.gz",
+      "label": "nantou/8b95c36c.sqlite.gz",
+      "bytes": 740419,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/8aa388cd.sqlite.gz",
+      "label": "nantou/8aa388cd.sqlite.gz",
+      "bytes": 258399,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/3237a185.sqlite.gz",
+      "label": "nantou/3237a185.sqlite.gz",
+      "bytes": 9581758,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/23463726.sqlite.gz",
+      "label": "nantou/23463726.sqlite.gz",
+      "bytes": 2521310,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/96f496db.sqlite.gz",
+      "label": "nantou/96f496db.sqlite.gz",
+      "bytes": 1716064,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/33c9d4f7.sqlite.gz",
+      "label": "nantou/33c9d4f7.sqlite.gz",
+      "bytes": 8061074,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/b4a40be3.sqlite.gz",
+      "label": "nantou/b4a40be3.sqlite.gz",
+      "bytes": 1018742,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/794dce8b.sqlite.gz",
+      "label": "nantou/794dce8b.sqlite.gz",
+      "bytes": 5158616,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/948d48e7.sqlite.gz",
+      "label": "nantou/948d48e7.sqlite.gz",
+      "bytes": 10786894,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/f67c555c.sqlite.gz",
+      "label": "nantou/f67c555c.sqlite.gz",
+      "bytes": 836091,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/98bb8d31.sqlite.gz",
+      "label": "nantou/98bb8d31.sqlite.gz",
+      "bytes": 1267025,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/nantou/e11468cc.sqlite.gz",
+      "label": "nantou/e11468cc.sqlite.gz",
+      "bytes": 1674552,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/unknown.sqlite.gz",
+      "label": "changhua/unknown.sqlite.gz",
+      "bytes": 12884,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/23ae7512.sqlite.gz",
+      "label": "changhua/23ae7512.sqlite.gz",
+      "bytes": 4039243,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/a5acf05e.sqlite.gz",
+      "label": "changhua/a5acf05e.sqlite.gz",
+      "bytes": 647382,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/caeaeb2a.sqlite.gz",
+      "label": "changhua/caeaeb2a.sqlite.gz",
+      "bytes": 2888447,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/c156be54.sqlite.gz",
+      "label": "changhua/c156be54.sqlite.gz",
+      "bytes": 2872881,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/eeab7430.sqlite.gz",
+      "label": "changhua/eeab7430.sqlite.gz",
+      "bytes": 6141953,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/678ab59a.sqlite.gz",
+      "label": "changhua/678ab59a.sqlite.gz",
+      "bytes": 12664914,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/4e42fa3e.sqlite.gz",
+      "label": "changhua/4e42fa3e.sqlite.gz",
+      "bytes": 3088820,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/5f43a682.sqlite.gz",
+      "label": "changhua/5f43a682.sqlite.gz",
+      "bytes": 2077668,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/dc5fba88.sqlite.gz",
+      "label": "changhua/dc5fba88.sqlite.gz",
+      "bytes": 2138489,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/5a5d8d4c.sqlite.gz",
+      "label": "changhua/5a5d8d4c.sqlite.gz",
+      "bytes": 987553,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/db4d1c20.sqlite.gz",
+      "label": "changhua/db4d1c20.sqlite.gz",
+      "bytes": 3329470,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/e2d64d24.sqlite.gz",
+      "label": "changhua/e2d64d24.sqlite.gz",
+      "bytes": 17063285,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/313a41de.sqlite.gz",
+      "label": "changhua/313a41de.sqlite.gz",
+      "bytes": 1969793,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/35abb26f.sqlite.gz",
+      "label": "changhua/35abb26f.sqlite.gz",
+      "bytes": 1878148,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/240a37da.sqlite.gz",
+      "label": "changhua/240a37da.sqlite.gz",
+      "bytes": 4028303,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/2c2fd9a1.sqlite.gz",
+      "label": "changhua/2c2fd9a1.sqlite.gz",
+      "bytes": 2967667,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/8d968c38.sqlite.gz",
+      "label": "changhua/8d968c38.sqlite.gz",
+      "bytes": 1734632,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/f52fa3c8.sqlite.gz",
+      "label": "changhua/f52fa3c8.sqlite.gz",
+      "bytes": 2711344,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/be1d4199.sqlite.gz",
+      "label": "changhua/be1d4199.sqlite.gz",
+      "bytes": 2894532,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/c1928091.sqlite.gz",
+      "label": "changhua/c1928091.sqlite.gz",
+      "bytes": 2620090,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/1d91ef88.sqlite.gz",
+      "label": "changhua/1d91ef88.sqlite.gz",
+      "bytes": 962470,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/63945cc3.sqlite.gz",
+      "label": "changhua/63945cc3.sqlite.gz",
+      "bytes": 1157047,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/4d3ea5b3.sqlite.gz",
+      "label": "changhua/4d3ea5b3.sqlite.gz",
+      "bytes": 1825117,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/5bf373d3.sqlite.gz",
+      "label": "changhua/5bf373d3.sqlite.gz",
+      "bytes": 3516392,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/ed99d3e4.sqlite.gz",
+      "label": "changhua/ed99d3e4.sqlite.gz",
+      "bytes": 2451220,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/changhua/b8408ca9.sqlite.gz",
+      "label": "changhua/b8408ca9.sqlite.gz",
+      "bytes": 5772166,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-city/unknown.sqlite.gz",
+      "label": "hsinchu-city/unknown.sqlite.gz",
+      "bytes": 19561,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-city/0ebf5244__01.sqlite.gz",
+      "label": "hsinchu-city/0ebf5244__01.sqlite.gz",
+      "bytes": 22386667,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-city/0ebf5244__02.sqlite.gz",
+      "label": "hsinchu-city/0ebf5244__02.sqlite.gz",
+      "bytes": 22366834,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hsinchu-city/0ebf5244__03.sqlite.gz",
+      "label": "hsinchu-city/0ebf5244__03.sqlite.gz",
+      "bytes": 22414866,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/unknown.sqlite.gz",
+      "label": "yunlin/unknown.sqlite.gz",
+      "bytes": 11310,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/ebca4eac.sqlite.gz",
+      "label": "yunlin/ebca4eac.sqlite.gz",
+      "bytes": 1611861,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/610fa9db.sqlite.gz",
+      "label": "yunlin/610fa9db.sqlite.gz",
+      "bytes": 1560054,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/dfdc59f3.sqlite.gz",
+      "label": "yunlin/dfdc59f3.sqlite.gz",
+      "bytes": 2803362,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/408a90b9.sqlite.gz",
+      "label": "yunlin/408a90b9.sqlite.gz",
+      "bytes": 1012643,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/67fcca71.sqlite.gz",
+      "label": "yunlin/67fcca71.sqlite.gz",
+      "bytes": 2915497,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/e7f31cdc.sqlite.gz",
+      "label": "yunlin/e7f31cdc.sqlite.gz",
+      "bytes": 868332,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/bf66fa6b.sqlite.gz",
+      "label": "yunlin/bf66fa6b.sqlite.gz",
+      "bytes": 1366495,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/801b7b0f.sqlite.gz",
+      "label": "yunlin/801b7b0f.sqlite.gz",
+      "bytes": 2560507,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/6d6a731a.sqlite.gz",
+      "label": "yunlin/6d6a731a.sqlite.gz",
+      "bytes": 1245594,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/b98c4a4d.sqlite.gz",
+      "label": "yunlin/b98c4a4d.sqlite.gz",
+      "bytes": 1812965,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/62e0cacc.sqlite.gz",
+      "label": "yunlin/62e0cacc.sqlite.gz",
+      "bytes": 14433856,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/273782c7.sqlite.gz",
+      "label": "yunlin/273782c7.sqlite.gz",
+      "bytes": 4402990,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/6ceb4610.sqlite.gz",
+      "label": "yunlin/6ceb4610.sqlite.gz",
+      "bytes": 1035854,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/6e13bd45.sqlite.gz",
+      "label": "yunlin/6e13bd45.sqlite.gz",
+      "bytes": 1261788,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/843fb313.sqlite.gz",
+      "label": "yunlin/843fb313.sqlite.gz",
+      "bytes": 1489041,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/4eae9606.sqlite.gz",
+      "label": "yunlin/4eae9606.sqlite.gz",
+      "bytes": 1934179,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/902bf8c4.sqlite.gz",
+      "label": "yunlin/902bf8c4.sqlite.gz",
+      "bytes": 8993777,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/89464324.sqlite.gz",
+      "label": "yunlin/89464324.sqlite.gz",
+      "bytes": 724119,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/93e8eb34.sqlite.gz",
+      "label": "yunlin/93e8eb34.sqlite.gz",
+      "bytes": 3802383,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/yunlin/2889d966.sqlite.gz",
+      "label": "yunlin/2889d966.sqlite.gz",
+      "bytes": 2607901,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/8e94b841.sqlite.gz",
+      "label": "chiayi-county/8e94b841.sqlite.gz",
+      "bytes": 3502424,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/687ed244.sqlite.gz",
+      "label": "chiayi-county/687ed244.sqlite.gz",
+      "bytes": 1652353,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/2b83d5ba.sqlite.gz",
+      "label": "chiayi-county/2b83d5ba.sqlite.gz",
+      "bytes": 131790,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/93e3a556.sqlite.gz",
+      "label": "chiayi-county/93e3a556.sqlite.gz",
+      "bytes": 3013561,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/79bf271e.sqlite.gz",
+      "label": "chiayi-county/79bf271e.sqlite.gz",
+      "bytes": 6574815,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/da3d5614.sqlite.gz",
+      "label": "chiayi-county/da3d5614.sqlite.gz",
+      "bytes": 1342960,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/aed02ad4.sqlite.gz",
+      "label": "chiayi-county/aed02ad4.sqlite.gz",
+      "bytes": 2193082,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/32ffe0b6.sqlite.gz",
+      "label": "chiayi-county/32ffe0b6.sqlite.gz",
+      "bytes": 4715964,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/9302b87c.sqlite.gz",
+      "label": "chiayi-county/9302b87c.sqlite.gz",
+      "bytes": 996923,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/dcd3f115.sqlite.gz",
+      "label": "chiayi-county/dcd3f115.sqlite.gz",
+      "bytes": 1306096,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/bbcf2b8b.sqlite.gz",
+      "label": "chiayi-county/bbcf2b8b.sqlite.gz",
+      "bytes": 7303630,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/e3235445.sqlite.gz",
+      "label": "chiayi-county/e3235445.sqlite.gz",
+      "bytes": 4394388,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/e602c759.sqlite.gz",
+      "label": "chiayi-county/e602c759.sqlite.gz",
+      "bytes": 914582,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/6cd1ad1b.sqlite.gz",
+      "label": "chiayi-county/6cd1ad1b.sqlite.gz",
+      "bytes": 1233508,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/1a0c0da9.sqlite.gz",
+      "label": "chiayi-county/1a0c0da9.sqlite.gz",
+      "bytes": 1695446,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/6648b661.sqlite.gz",
+      "label": "chiayi-county/6648b661.sqlite.gz",
+      "bytes": 1194708,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/a9c9d868.sqlite.gz",
+      "label": "chiayi-county/a9c9d868.sqlite.gz",
+      "bytes": 150448,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/chiayi-county/2c6aec48.sqlite.gz",
+      "label": "chiayi-county/2c6aec48.sqlite.gz",
+      "bytes": 1084131,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/unknown.sqlite.gz",
+      "label": "pingtung/unknown.sqlite.gz",
+      "bytes": 17606,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/4e29020f.sqlite.gz",
+      "label": "pingtung/4e29020f.sqlite.gz",
+      "bytes": 284699,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/22e2a94d.sqlite.gz",
+      "label": "pingtung/22e2a94d.sqlite.gz",
+      "bytes": 1987210,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/02078a39.sqlite.gz",
+      "label": "pingtung/02078a39.sqlite.gz",
+      "bytes": 1210298,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/091a8f0a.sqlite.gz",
+      "label": "pingtung/091a8f0a.sqlite.gz",
+      "bytes": 170137,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/f52f4cbf.sqlite.gz",
+      "label": "pingtung/f52f4cbf.sqlite.gz",
+      "bytes": 8176008,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/515c3ee4.sqlite.gz",
+      "label": "pingtung/515c3ee4.sqlite.gz",
+      "bytes": 921869,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/6c19032f.sqlite.gz",
+      "label": "pingtung/6c19032f.sqlite.gz",
+      "bytes": 20211068,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/23176623.sqlite.gz",
+      "label": "pingtung/23176623.sqlite.gz",
+      "bytes": 968924,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/39598b35.sqlite.gz",
+      "label": "pingtung/39598b35.sqlite.gz",
+      "bytes": 3739521,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/ab7bb1ba.sqlite.gz",
+      "label": "pingtung/ab7bb1ba.sqlite.gz",
+      "bytes": 2122030,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/7a32837a.sqlite.gz",
+      "label": "pingtung/7a32837a.sqlite.gz",
+      "bytes": 835346,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/7805399d.sqlite.gz",
+      "label": "pingtung/7805399d.sqlite.gz",
+      "bytes": 199842,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/4fc6598f.sqlite.gz",
+      "label": "pingtung/4fc6598f.sqlite.gz",
+      "bytes": 4827215,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/c3f91845.sqlite.gz",
+      "label": "pingtung/c3f91845.sqlite.gz",
+      "bytes": 1956388,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/834d408c.sqlite.gz",
+      "label": "pingtung/834d408c.sqlite.gz",
+      "bytes": 295255,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/18443604.sqlite.gz",
+      "label": "pingtung/18443604.sqlite.gz",
+      "bytes": 965406,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/9e294d0b.sqlite.gz",
+      "label": "pingtung/9e294d0b.sqlite.gz",
+      "bytes": 126065,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/e63f6f2a.sqlite.gz",
+      "label": "pingtung/e63f6f2a.sqlite.gz",
+      "bytes": 502908,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/2fb04240.sqlite.gz",
+      "label": "pingtung/2fb04240.sqlite.gz",
+      "bytes": 6417385,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/55747c42.sqlite.gz",
+      "label": "pingtung/55747c42.sqlite.gz",
+      "bytes": 346559,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/54b68b37.sqlite.gz",
+      "label": "pingtung/54b68b37.sqlite.gz",
+      "bytes": 321109,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/f8400063.sqlite.gz",
+      "label": "pingtung/f8400063.sqlite.gz",
+      "bytes": 899652,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/4672548a.sqlite.gz",
+      "label": "pingtung/4672548a.sqlite.gz",
+      "bytes": 86201,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/14560a49.sqlite.gz",
+      "label": "pingtung/14560a49.sqlite.gz",
+      "bytes": 1478315,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/718ce03a.sqlite.gz",
+      "label": "pingtung/718ce03a.sqlite.gz",
+      "bytes": 3819204,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/d597ee64.sqlite.gz",
+      "label": "pingtung/d597ee64.sqlite.gz",
+      "bytes": 1746393,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/147e6814.sqlite.gz",
+      "label": "pingtung/147e6814.sqlite.gz",
+      "bytes": 749218,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/7e4c0dc6.sqlite.gz",
+      "label": "pingtung/7e4c0dc6.sqlite.gz",
+      "bytes": 2182154,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/ebdc32e6.sqlite.gz",
+      "label": "pingtung/ebdc32e6.sqlite.gz",
+      "bytes": 3311049,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/33c25afc.sqlite.gz",
+      "label": "pingtung/33c25afc.sqlite.gz",
+      "bytes": 110311,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/5ace84b3.sqlite.gz",
+      "label": "pingtung/5ace84b3.sqlite.gz",
+      "bytes": 1927982,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/3500ef4a.sqlite.gz",
+      "label": "pingtung/3500ef4a.sqlite.gz",
+      "bytes": 1805095,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/pingtung/1c2d2dec.sqlite.gz",
+      "label": "pingtung/1c2d2dec.sqlite.gz",
+      "bytes": 1372431,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/unknown.sqlite.gz",
+      "label": "hualien/unknown.sqlite.gz",
+      "bytes": 7521,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/9f93101b.sqlite.gz",
+      "label": "hualien/9f93101b.sqlite.gz",
+      "bytes": 1095306,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/a5639d84.sqlite.gz",
+      "label": "hualien/a5639d84.sqlite.gz",
+      "bytes": 201087,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/f040db5d.sqlite.gz",
+      "label": "hualien/f040db5d.sqlite.gz",
+      "bytes": 9041485,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/c7795e2d.sqlite.gz",
+      "label": "hualien/c7795e2d.sqlite.gz",
+      "bytes": 2725902,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/6dcf199d.sqlite.gz",
+      "label": "hualien/6dcf199d.sqlite.gz",
+      "bytes": 958030,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/f238c446.sqlite.gz",
+      "label": "hualien/f238c446.sqlite.gz",
+      "bytes": 2722344,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/543645c4.sqlite.gz",
+      "label": "hualien/543645c4.sqlite.gz",
+      "bytes": 1950113,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/d358dc04.sqlite.gz",
+      "label": "hualien/d358dc04.sqlite.gz",
+      "bytes": 1013640,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/e39afc34.sqlite.gz",
+      "label": "hualien/e39afc34.sqlite.gz",
+      "bytes": 1004802,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/1611fa02.sqlite.gz",
+      "label": "hualien/1611fa02.sqlite.gz",
+      "bytes": 15428417,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/3b7791c7.sqlite.gz",
+      "label": "hualien/3b7791c7.sqlite.gz",
+      "bytes": 375514,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/d41cfd9f.sqlite.gz",
+      "label": "hualien/d41cfd9f.sqlite.gz",
+      "bytes": 290502,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/hualien/509f8b05.sqlite.gz",
+      "label": "hualien/509f8b05.sqlite.gz",
+      "bytes": 992379,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/unknown.sqlite.gz",
+      "label": "taitung/unknown.sqlite.gz",
+      "bytes": 8730,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/12d4a66b.sqlite.gz",
+      "label": "taitung/12d4a66b.sqlite.gz",
+      "bytes": 1389079,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/d43b856b.sqlite.gz",
+      "label": "taitung/d43b856b.sqlite.gz",
+      "bytes": 10951030,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/c11e86d3.sqlite.gz",
+      "label": "taitung/c11e86d3.sqlite.gz",
+      "bytes": 229401,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/06827c11.sqlite.gz",
+      "label": "taitung/06827c11.sqlite.gz",
+      "bytes": 1010059,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/f79eb55b.sqlite.gz",
+      "label": "taitung/f79eb55b.sqlite.gz",
+      "bytes": 167661,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/2c38d873.sqlite.gz",
+      "label": "taitung/2c38d873.sqlite.gz",
+      "bytes": 1100738,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/a4e47437.sqlite.gz",
+      "label": "taitung/a4e47437.sqlite.gz",
+      "bytes": 682895,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/bec47374.sqlite.gz",
+      "label": "taitung/bec47374.sqlite.gz",
+      "bytes": 665216,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/038645d8.sqlite.gz",
+      "label": "taitung/038645d8.sqlite.gz",
+      "bytes": 130531,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/e931b8f1.sqlite.gz",
+      "label": "taitung/e931b8f1.sqlite.gz",
+      "bytes": 314485,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/f3c7e4f8.sqlite.gz",
+      "label": "taitung/f3c7e4f8.sqlite.gz",
+      "bytes": 150644,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/fa4b.sqlite.gz",
+      "label": "taitung/fa4b.sqlite.gz",
+      "bytes": 51858,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/8b97b588.sqlite.gz",
+      "label": "taitung/8b97b588.sqlite.gz",
+      "bytes": 83760,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/ed09f4a1.sqlite.gz",
+      "label": "taitung/ed09f4a1.sqlite.gz",
+      "bytes": 729708,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/ca00c52c.sqlite.gz",
+      "label": "taitung/ca00c52c.sqlite.gz",
+      "bytes": 760356,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/taitung/c956e86c.sqlite.gz",
+      "label": "taitung/c956e86c.sqlite.gz",
+      "bytes": 730993,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/757bccdf.sqlite.gz",
+      "label": "kinmen/757bccdf.sqlite.gz",
+      "bytes": 268121,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/dbe1e6a1.sqlite.gz",
+      "label": "kinmen/dbe1e6a1.sqlite.gz",
+      "bytes": 8677,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/287e7156.sqlite.gz",
+      "label": "kinmen/287e7156.sqlite.gz",
+      "bytes": 1661158,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/65173e13.sqlite.gz",
+      "label": "kinmen/65173e13.sqlite.gz",
+      "bytes": 2614772,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/36339910.sqlite.gz",
+      "label": "kinmen/36339910.sqlite.gz",
+      "bytes": 981666,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/kinmen/aa17202f.sqlite.gz",
+      "label": "kinmen/aa17202f.sqlite.gz",
+      "bytes": 1784511,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/unknown.sqlite.gz",
+      "label": "penghu/unknown.sqlite.gz",
+      "bytes": 15434,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/e1ee1f7e.sqlite.gz",
+      "label": "penghu/e1ee1f7e.sqlite.gz",
+      "bytes": 158024,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/5df6904d.sqlite.gz",
+      "label": "penghu/5df6904d.sqlite.gz",
+      "bytes": 94761,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/6a9fab77.sqlite.gz",
+      "label": "penghu/6a9fab77.sqlite.gz",
+      "bytes": 1343112,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/47a6b16d.sqlite.gz",
+      "label": "penghu/47a6b16d.sqlite.gz",
+      "bytes": 533976,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/0bab23a9.sqlite.gz",
+      "label": "penghu/0bab23a9.sqlite.gz",
+      "bytes": 456304,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/penghu/035eee7d.sqlite.gz",
+      "label": "penghu/035eee7d.sqlite.gz",
+      "bytes": 5370749,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/lienchiang/unknown.sqlite.gz",
+      "label": "lienchiang/unknown.sqlite.gz",
+      "bytes": 10711,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/lienchiang/c3f268da.sqlite.gz",
+      "label": "lienchiang/c3f268da.sqlite.gz",
+      "bytes": 100418,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/lienchiang/93b1fe2a.sqlite.gz",
+      "label": "lienchiang/93b1fe2a.sqlite.gz",
+      "bytes": 264588,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/lienchiang/c29af7c4.sqlite.gz",
+      "label": "lienchiang/c29af7c4.sqlite.gz",
+      "bytes": 42587,
+      "budgetBytes": 47185920,
+      "ok": true
+    },
+    {
+      "file": "data/db/district/lienchiang/33ce22d8.sqlite.gz",
+      "label": "lienchiang/33ce22d8.sqlite.gz",
+      "bytes": 41810,
+      "budgetBytes": 47185920,
+      "ok": true
+    }
+  ],
+  "warnings": []
+}
