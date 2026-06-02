@@ -42,6 +42,7 @@ const state = {
   districtOptions: [],
   keyword: "",
   filters: [],
+  presets: [],
   rows: [],
   total: 0,
   offset: 0,
@@ -170,6 +171,37 @@ function loadColumnPrefs() {
 function saveColumnPrefs() {
   localStorage.setItem(COLUMN_KEY, JSON.stringify({ visibleColumns: state.visibleColumns, widths: state.widths }));
   writeHashState();
+}
+
+function loadFilterPresets() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(FILTER_PRESETS_KEY) || "[]");
+    state.presets = Array.isArray(saved) ? saved.filter((preset) => preset && preset.id && preset.name && preset.payload) : [];
+  } catch {
+    state.presets = [];
+  }
+}
+
+function saveFilterPresets() {
+  localStorage.setItem(FILTER_PRESETS_KEY, JSON.stringify(state.presets));
+}
+
+function currentPresetPayload() {
+  return {
+    city: state.city,
+    district: state.district,
+    keyword: state.keyword,
+    filters: JSON.parse(JSON.stringify(state.filters)),
+    sortBy: state.sortBy,
+    sortDir: state.sortDir,
+  };
+}
+
+function presetName() {
+  const used = new Set(state.presets.map((preset) => preset.name));
+  let index = state.presets.length + 1;
+  while (used.has(`Preset ${index}`)) index += 1;
+  return `Preset ${index}`;
 }
 
 function readHashState() {
@@ -591,6 +623,75 @@ function applyLargeDetachedPreset() {
   runQuery();
 }
 
+function renderPresetButtons() {
+  const target = el("#savedPresets");
+  if (!target) return;
+  target.innerHTML = state.presets.map((preset) => `
+    <button type="button" data-preset-id="${escapeHtml(preset.id)}" title="套用；雙擊改名">${escapeHtml(preset.name)}</button>
+  `).join("");
+}
+
+function addCurrentPreset() {
+  const preset = {
+    id: `preset-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    name: presetName(),
+    payload: currentPresetPayload(),
+  };
+  state.presets.unshift(preset);
+  saveFilterPresets();
+  renderPresetButtons();
+  startPresetRename(preset.id);
+}
+
+async function applySavedPreset(id) {
+  const preset = state.presets.find((item) => item.id === id);
+  if (!preset) return;
+  const payload = preset.payload || {};
+  if (payload.city && state.metadata?.cities?.[payload.city]) state.city = payload.city;
+  state.district = payload.district || "";
+  state.keyword = payload.keyword || "";
+  state.filters = Array.isArray(payload.filters) ? JSON.parse(JSON.stringify(payload.filters)) : [];
+  state.sortBy = payload.sortBy && fieldDef(payload.sortBy) ? payload.sortBy : state.sortBy;
+  state.sortDir = payload.sortDir === "ASC" ? "ASC" : "DESC";
+  state.offset = 0;
+  el("#citySelect").value = state.city;
+  await reloadDistricts();
+  el("#districtSelect").value = state.district;
+  el("#keywordInput").value = state.keyword;
+  renderFilters();
+  writeHashState();
+  runQuery();
+}
+
+function startPresetRename(id) {
+  const preset = state.presets.find((item) => item.id === id);
+  const button = el(`[data-preset-id="${CSS.escape(id)}"]`);
+  if (!preset || !button) return;
+  const input = document.createElement("input");
+  input.className = "preset-name-input";
+  input.value = preset.name;
+  input.setAttribute("aria-label", "preset name");
+  button.replaceWith(input);
+  input.focus();
+  input.select();
+  const commit = () => {
+    const nextName = input.value.trim();
+    if (nextName) {
+      preset.name = nextName;
+      saveFilterPresets();
+    }
+    renderPresetButtons();
+  };
+  input.addEventListener("blur", commit, { once: true });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") input.blur();
+    if (event.key === "Escape") {
+      input.value = preset.name;
+      input.blur();
+    }
+  });
+}
+
 function renderColumnsPopover() {
   el("#columnPopover").innerHTML = columns.map(([key, label]) => `
     <button class="${state.visibleColumns.includes(key) ? "active" : ""}" type="button" data-toggle-column="${key}">${label}</button>
@@ -640,6 +741,7 @@ function exportCsv() {
 
 async function init() {
   loadColumnPrefs();
+  loadFilterPresets();
   const initResult = await queryService.init();
   state.metadata = initResult.metadata;
   setMeta(initResult.meta);
@@ -651,6 +753,7 @@ async function init() {
   el("#districtSelect").value = state.district;
   setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
   renderFilters();
+  renderPresetButtons();
   renderColumnsPopover();
   await runQuery();
 }
@@ -821,6 +924,18 @@ function bind() {
   });
   el("#exportCsv").addEventListener("click", exportCsv);
   el("#largeDetachedPreset").addEventListener("click", applyLargeDetachedPreset);
+  el("#addPreset").addEventListener("click", addCurrentPreset);
+  el("#savedPresets").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-preset-id]");
+    if (!button) return;
+    applySavedPreset(button.dataset.presetId);
+  });
+  el("#savedPresets").addEventListener("dblclick", (event) => {
+    const button = event.target.closest("[data-preset-id]");
+    if (!button) return;
+    event.preventDefault();
+    startPresetRename(button.dataset.presetId);
+  });
   el("#themeToggle").addEventListener("click", () => {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
   });
