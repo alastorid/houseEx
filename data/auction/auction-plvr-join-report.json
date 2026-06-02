@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-06-02T17:39:44+00:00",
+  "auctionCount": 3187,
+  "plvrScannedCount": 6109803,
+  "matchedAuctionCount": 365,
+  "source": {
+    "auction": "法務部行政執行署「已拍定不動產資料」",
+    "plvr": "內政部不動產交易實價登錄 Open Data",
+    "license": "政府資料開放授權條款-第1版",
+    "licenseUrl": "https://data.gov.tw/licenses"
+  },
+  "outputBytes": 18460136
+}
