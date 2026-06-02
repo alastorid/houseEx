@@ -228,13 +228,13 @@
       <div id="drawerBody"></div>
     </aside>
 
-    <div class="load-status-bar" id="loadStatusBar" aria-live="polite">
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span id="loadStatusText">Ready</span>
-      <span class="load-status-track"><span class="load-status-fill"></span></span>
+      <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
     </div>
 
     <script src="vendor/leaflet/leaflet.js?v=20260531-sqlite-hardening"></script>
-    <script src="queryService.js?v=20260601-bottom-progress" defer></script>
-    <script src="script.js?v=20260601-bottom-progress" defer></script>
+    <script src="queryService.js?v=20260602-activity-timeout" defer></script>
+    <script src="script.js?v=20260602-main-load-fix" defer></script>
   </body>
 </html>

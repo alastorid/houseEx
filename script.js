@@ -720,6 +720,17 @@ function setTheme(scheme, { sync = false } = {}) {
 
 function setStatus(message) {
   el("#loadStatus").textContent = message;
+  const bottomText = el("#loadStatusText");
+  if (bottomText && document.body.classList.contains("loading")) bottomText.textContent = message;
+}
+
+function setLoadProgress(value) {
+  const fill = el("#loadStatusFill");
+  const bar = el("#loadStatusBar");
+  if (!fill) return;
+  const progress = Math.max(0, Math.min(1, Number(value) || 0));
+  fill.style.width = `${Math.round(progress * 100)}%`;
+  if (bar) bar.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
 }
 
 function shortPath(path = "") {
@@ -746,15 +757,42 @@ function sqliteStatusText(status = {}) {
   return "";
 }
 
+function sqliteStatusProgress(status = {}) {
+  const phase = status.phase || "";
+  const count = Math.max(1, Number(status.shardCount) || 1);
+  const index = Math.max(1, Number(status.shardIndex) || 1);
+  const loaded = Number(status.loaded) || 0;
+  const total = Number(status.total) || 0;
+  const downloadRatio = total ? Math.max(0, Math.min(1, loaded / total)) : 0.35;
+  const shardBase = 0.18 + ((index - 1) / count) * 0.66;
+  const shardSpan = 0.66 / count;
+  if (phase === "wasm-start") return 0.04;
+  if (phase === "wasm-ready") return 0.1;
+  if (phase === "metadata-start") return 0.12;
+  if (phase === "metadata-ready") return 0.16;
+  if (phase === "city-load-start") return 0.18;
+  if (phase === "cache-check") return status.shardCount ? shardBase + shardSpan * 0.08 : 0.2;
+  if (phase === "cache-hit") return status.shardCount ? shardBase + shardSpan * 0.5 : 0.45;
+  if (phase === "download-start") return status.shardCount ? shardBase + shardSpan * 0.12 : 0.25;
+  if (phase === "download-progress") return status.shardCount ? shardBase + shardSpan * (0.12 + downloadRatio * 0.56) : 0.25 + downloadRatio * 0.45;
+  if (phase === "cache-store") return status.shardCount ? shardBase + shardSpan * 0.76 : 0.72;
+  if (phase === "decompress-start") return status.shardCount ? shardBase + shardSpan * 0.86 : 0.82;
+  if (phase === "db-ready") return status.shardCount ? shardBase + shardSpan * 0.92 : 0.88;
+  if (phase === "shard-open-start") return shardBase;
+  if (phase === "shard-open-ready") return Math.min(0.9, 0.18 + (index / count) * 0.66);
+  if (phase === "city-load-ready") return 0.92;
+  if (phase.endsWith("ready")) return 0.96;
+  return null;
+}
+
 function showSqliteStatus(status = {}) {
   const text = sqliteStatusText(status);
   if (!text) return;
-  setStatus(text);
   const bottomText = el("#loadStatusText");
   if (bottomText) bottomText.textContent = text;
+  const progress = sqliteStatusProgress(status);
+  if (progress != null) setLoadProgress(progress);
   document.body.classList.add("loading-sqlite");
-  const pill = el("#dataPill");
-  if (pill) pill.textContent = text;
   clearTimeout(sqliteStatusTimer);
   if (status.phase?.endsWith("ready")) {
     sqliteStatusTimer = setTimeout(() => {
@@ -775,9 +813,33 @@ function setQueryMeta(meta) {
 async function loadJson(path) {
   const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${path}`);
-  if (!path.endsWith(".gz")) return response.json();
+  const total = Number(response.headers.get("content-length")) || 0;
+  let bytes;
+  if (!response.body?.getReader) {
+    bytes = new Uint8Array(await response.arrayBuffer());
+    setLoadProgress(0.72);
+  } else {
+    const reader = response.body.getReader();
+    const chunks = [];
+    let loaded = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      loaded += value.byteLength;
+      if (total) setLoadProgress(0.08 + Math.min(0.68, (loaded / total) * 0.68));
+    }
+    bytes = new Uint8Array(loaded);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+  }
+  if (!path.endsWith(".gz")) return JSON.parse(new TextDecoder().decode(bytes));
   if (!("DecompressionStream" in window)) throw new Error("此瀏覽器不支援 gzip shard 解壓縮");
-  const stream = response.body.pipeThrough(new DecompressionStream("gzip"));
+  setLoadProgress(0.78);
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
   return JSON.parse(await new Response(stream).text());
 }
 
@@ -839,6 +901,14 @@ function selectRegion(cityName, township) {
   state.township = township;
 }
 
+function clearExplorationState() {
+  state.selectedCommunity = null;
+  state.activeCommunity = null;
+  state.selectedRowId = "";
+  state.mapTouched = false;
+  state.chartHits.clear();
+}
+
 function currentTownEntry() {
   const city = state.index.cities.find((item) => item.city_name === state.city);
   return city?.townships.find((town) => town.township === state.township);
@@ -849,11 +919,13 @@ async function loadSelectedRegion() {
   if (!entry) throw new Error("找不到區域資料");
   el("#loadButton").disabled = true;
   document.body.classList.add("loading");
+  setLoadProgress(0.03);
   setStatus(`正在載入 ${state.city}${state.township}：${numberFormat.format(entry.record_count)} 筆...`);
   try {
     if (state.sqliteReady && state.sqliteMetadata?.cities?.[state.city]) {
       const cityLoad = await queryService.loadCity({ city: state.city, district: state.township });
       setQueryMeta(cityLoad.meta);
+      setLoadProgress(0.72);
       state.sqliteCity = state.city;
       const query = el("#queryInput").value.trim();
       const txResult = await queryService.queryTransactions({
@@ -867,23 +939,32 @@ async function loadSelectedRegion() {
         offset: 0,
       });
       setQueryMeta(txResult.meta);
+      setLoadProgress(0.84);
       const txRows = txResult.rows || [];
       state.tableTotal = txResult.total || txRows.length;
       state.rows = txRows.map(rowFromSql);
       state.records = state.rows.map((row) => row.record);
       state.region = { region: { city_name: state.city, township: state.township }, records: state.records, source: "sqlite" };
-      setStatus(`已用 SQLite 載入 ${state.city}${state.township}，${numberFormat.format(state.rows.length)} / ${numberFormat.format(state.tableTotal)} 筆。`);
+      setStatus(`正在整理 ${state.city}${state.township} 畫面...`);
+      setLoadProgress(0.92);
       applyFilter({ commitSearch: true, skipClientFilter: true });
+      setLoadProgress(1);
+      setStatus(`已用 SQLite 載入 ${state.city}${state.township}，${numberFormat.format(state.rows.length)} / ${numberFormat.format(state.tableTotal)} 筆。`);
       return;
     }
     state.region = await loadJson(entry.shard);
+    setLoadProgress(0.76);
     state.records = state.region.records || [];
     state.rows = state.records.map(parseRecord);
     state.tableTotal = state.rows.length;
-    setStatus(`已載入 ${state.city}${state.township}，${numberFormat.format(state.records.length)} 筆。`);
+    setStatus(`正在整理 ${state.city}${state.township} 畫面...`);
+    setLoadProgress(0.92);
     applyFilter({ commitSearch: true });
+    setLoadProgress(1);
+    setStatus(`已載入 ${state.city}${state.township}，${numberFormat.format(state.records.length)} 筆。`);
   } finally {
     document.body.classList.remove("loading");
+    document.body.classList.remove("loading-sqlite");
     el("#loadButton").disabled = false;
   }
 }
@@ -1475,6 +1556,7 @@ function bindEvents() {
     state.city = event.target.value;
     populateTowns(state.city);
     state.township = el("#townSelect").value;
+    clearExplorationState();
     state.cityCommunities = [];
     el("#communityList").innerHTML = "";
     el("#communityStatus").textContent = "尚未載入";
@@ -1486,9 +1568,20 @@ function bindEvents() {
   });
   el("#townSelect").addEventListener("change", (event) => {
     state.township = event.target.value;
+    clearExplorationState();
     saveFilters();
   });
-  el("#loadButton").addEventListener("click", () => loadSelectedRegion());
+  el("#loadButton").addEventListener("click", async () => {
+    try {
+      await loadSelectedRegion();
+    } catch (error) {
+      console.error(error);
+      setStatus(`資料載入失敗：${error.message}`);
+      document.body.classList.remove("loading");
+      document.body.classList.remove("loading-sqlite");
+      el("#loadButton").disabled = false;
+    }
+  });
   el("#queryInput").addEventListener("input", () => {
     const inferred = inferCommunity(el("#queryInput").value);
     if (inferred && (state.city !== inferred.city || state.township !== inferred.township)) selectRegion(inferred.city, inferred.township);

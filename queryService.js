@@ -1,5 +1,5 @@
 const queryService = (() => {
-  const WORKER_VERSION = "20260601-load-feedback";
+  const WORKER_VERSION = "20260602-activity-timeout";
   const DEFAULT_TIMEOUT_MS = 15000;
   const latestByChannel = new Map();
   let worker;
@@ -17,6 +17,7 @@ const queryService = (() => {
     worker = new Worker(`sqlWorker.js?v=${WORKER_VERSION}`);
     worker.addEventListener("message", (event) => {
       if (event.data?.type === "status") {
+        refreshActiveTimeouts(event.data.status || {});
         window.dispatchEvent(new CustomEvent("sqlite-status", { detail: event.data.status || {} }));
         return;
       }
@@ -54,6 +55,37 @@ const queryService = (() => {
     }
   }
 
+  function armTimeout(id, request) {
+    clearTimeout(request.timer);
+    request.timer = setTimeout(() => {
+      pending.delete(id);
+      rejectRequest(request, new Error(`${request.type} timed out after ${request.timeoutMs}ms without progress`));
+    }, request.timeoutMs);
+  }
+
+  function rejectRequest(request, error) {
+    clearTimeout(request.timer);
+    request.signal?.removeEventListener("abort", request.abortHandler);
+    request.reject(error);
+  }
+
+  function statusMatchesRequest(status, request) {
+    if (!status?.phase) return false;
+    if (request.type === "init") return ["wasm", "metadata", "cache", "download", "decompress", "db"].some((prefix) => status.phase.startsWith(prefix));
+    if (request.type !== "loadCity") return false;
+    const requestCity = request.payload?.city || "";
+    if (!requestCity) return true;
+    const statusCity = String(status.city || "");
+    return statusCity === requestCity || statusCity.startsWith(`${requestCity}:`) || statusCity.startsWith(requestCity);
+  }
+
+  function refreshActiveTimeouts(status) {
+    for (const [id, request] of pending.entries()) {
+      if (!statusMatchesRequest(status, request)) continue;
+      armTimeout(id, request);
+    }
+  }
+
   function call(type, payload = {}, options = {}) {
     ensureWorker();
     const id = nextId;
@@ -70,15 +102,12 @@ const queryService = (() => {
       }
       const abortHandler = () => {
         pending.delete(id);
-        clearTimeout(timer);
-        reject(abortError());
+        rejectRequest(request, abortError());
       };
-      const timer = setTimeout(() => {
-        pending.delete(id);
-        reject(new Error(`${type} timed out after ${timeoutMs}ms`));
-      }, timeoutMs);
-      pending.set(id, { resolve, reject, timer, signal: options.signal, abortHandler, channel });
+      const request = { resolve, reject, timer: null, signal: options.signal, abortHandler, channel, type, payload, timeoutMs };
+      pending.set(id, request);
       options.signal?.addEventListener("abort", abortHandler, { once: true });
+      armTimeout(id, request);
       worker.postMessage({ id, type, payload });
     });
   }

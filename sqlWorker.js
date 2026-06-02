@@ -184,22 +184,22 @@ async function decompressGzip(bytes) {
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
-async function loadSqliteBytes(path, hash, kind, city = "") {
+async function loadSqliteBytes(path, hash, kind, city = "", progressDetail = {}) {
   const key = `${kind}:${city || "index"}:${path}`;
   const db = await openIdb();
-  status("cache-check", { kind, city, path });
+  status("cache-check", { kind, city, path, ...progressDetail });
   const cached = await idbGet(db, key);
   if (cached?.hash === hash && cached.bytes) {
-    status("cache-hit", { kind, city, path });
+    status("cache-hit", { kind, city, path, ...progressDetail });
     cached.lastUsed = Date.now();
     await idbPut(db, cached);
-    status("decompress-start", { kind, city, path });
+    status("decompress-start", { kind, city, path, ...progressDetail });
     const bytes = await decompressGzip(new Uint8Array(cached.bytes));
-    status("db-ready", { kind, city, path, cacheHit: true });
+    status("db-ready", { kind, city, path, cacheHit: true, ...progressDetail });
     return { bytes, cacheHit: true };
   }
-  const compressed = await fetchCompressedBytes(path, hash, { kind, city });
-  status("cache-store", { kind, city, path });
+  const compressed = await fetchCompressedBytes(path, hash, { kind, city, ...progressDetail });
+  status("cache-store", { kind, city, path, ...progressDetail });
   await idbPut(db, {
     key,
     kind,
@@ -210,9 +210,9 @@ async function loadSqliteBytes(path, hash, kind, city = "") {
     lastUsed: Date.now(),
   });
   if (kind === "city") await pruneCityCache(db);
-  status("decompress-start", { kind, city, path });
+  status("decompress-start", { kind, city, path, ...progressDetail });
   const bytes = await decompressGzip(compressed);
-  status("db-ready", { kind, city, path, cacheHit: false });
+  status("db-ready", { kind, city, path, cacheHit: false, ...progressDetail });
   return { bytes, cacheHit: false };
 }
 
@@ -399,7 +399,18 @@ async function loadCity(payload = {}) {
       shardIndex: index + 1,
       shardCount: shards.length,
     });
-    const loaded = await loadSqliteBytes(shard.gzip || shard.path, shard.hash, info.shardMode === "district" ? "shard" : "city", key);
+    const loaded = await loadSqliteBytes(
+      shard.gzip || shard.path,
+      shard.hash,
+      info.shardMode === "district" ? "shard" : "city",
+      key,
+      {
+        city,
+        district: shard.district || "",
+        shardIndex: index + 1,
+        shardCount: shards.length,
+      },
+    );
     cacheHit = cacheHit && loaded.cacheHit;
     shardDbs.set(key, new SQL.Database(loaded.bytes));
     status("shard-open-ready", {
