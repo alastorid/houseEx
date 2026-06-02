@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-02T17:36:21+00:00",
+  "generatedAt": "2026-06-02T20:10:16+00:00",
   "source": {
     "dataset": "財政部財政資訊中心「營業稅稅籍登記資料集」",
     "datasetUrl": "https://data.gov.tw/dataset/9400",
@@ -22,7 +22,7 @@
     ],
     "note": "Only records matched to auction addresses are included; the full dataset 9400 CSV is not shipped to the browser."
   },
-  "auctionCount": 3187,
+  "auctionCount": 3198,
   "businessCountScanned": 1706608,
   "matchedAuctionCount": 111,
   "matchedBusinessCount": 1169,
