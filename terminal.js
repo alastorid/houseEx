@@ -441,48 +441,63 @@ function closeJsonViewer() {
   el("#jsonDrawer").setAttribute("aria-hidden", "true");
 }
 
-function humanFilter(filter) {
-  const label = fieldDef(filter.field)[1];
-  let value = filter.value;
-  let value2 = filter.value2;
-  if (filter.field === "total_price" || filter.field === "parking_price") {
-    value = value ? `${Number(value) / 10000}萬` : value;
-    value2 = value2 ? `${Number(value2) / 10000}萬` : value2;
-  }
-  if (filter.field === "unit_price_ping") {
-    value = value ? `${Number(value) / 10000}萬/坪` : value;
-    value2 = value2 ? `${Number(value2) / 10000}萬/坪` : value2;
-  }
-  if (Array.isArray(value)) value = value.join(" OR ");
-  return `${label} ${filter.operator} ${filter.operator === "between" ? `${value}~${value2}` : value}`;
-}
-
 function filterInputValue(filter) {
   if (filter.field === "total_price" || filter.field === "parking_price" || filter.field === "unit_price_ping") {
     return filter.value === "" || filter.value == null ? "" : Number(filter.value) / 10000;
   }
+  if (Array.isArray(filter.value)) return filter.value.join(" ");
   return filter.value ?? "";
+}
+
+function filterInputValue2(filter) {
+  if (filter.field === "total_price" || filter.field === "parking_price" || filter.field === "unit_price_ping") {
+    return filter.value2 === "" || filter.value2 == null ? "" : Number(filter.value2) / 10000;
+  }
+  return filter.value2 ?? "";
+}
+
+function filterOperatorOptions(filter) {
+  const type = fieldDef(filter.field)[2];
+  return (operators[type] || operators.string)
+    .map((op) => `<option value="${op}" ${filter.operator === op ? "selected" : ""}>${op}</option>`)
+    .join("");
 }
 
 function renderFilters() {
   el("#activeFilters").innerHTML = state.filters.map((filter, index) => (
     `<div class="filter-line" data-index="${index}">
-      <small>${humanFilter(filter)}</small>
-      <input type="text" value="${filterInputValue(filter)}" data-edit-val="${index}" />
+      <span>${fieldDef(filter.field)[1]}</span>
+      <select data-edit-op="${index}">${filterOperatorOptions(filter)}</select>
+      <input type="text" value="${escapeHtml(filterInputValue(filter))}" data-edit-val="${index}" />
+      <input class="${filter.operator === "between" ? "" : "is-hidden"}" type="text" value="${escapeHtml(filterInputValue2(filter))}" data-edit-val2="${index}" />
       <button type="button" data-remove-filter="${index}">×</button>
     </div>`
   )).join("");
 }
 
-// Add event listener for inline filter editing
-el("#activeFilters").addEventListener("input", (e) => {
-  const target = e.target;
-  const index = target.dataset.editVal;
+function updateFilterFromControl(target) {
+  const valueIndex = target.dataset.editVal;
+  const value2Index = target.dataset.editVal2;
+  const opIndex = target.dataset.editOp;
+  const index = valueIndex ?? value2Index ?? opIndex;
   if (index === undefined) return;
-  state.filters[index].value = convertValue(state.filters[index].field, target.value);
+  const filter = state.filters[Number(index)];
+  if (!filter) return;
+  if (opIndex !== undefined) filter.operator = target.value;
+  if (valueIndex !== undefined) filter.value = convertValue(filter.field, target.value);
+  if (value2Index !== undefined) filter.value2 = convertValue(filter.field, target.value);
   state.offset = 0;
+  if (opIndex !== undefined) renderFilters();
   writeHashState();
   runQuery();
+}
+
+el("#activeFilters").addEventListener("input", (event) => {
+  if (event.target.matches("[data-edit-val], [data-edit-val2]")) updateFilterFromControl(event.target);
+});
+
+el("#activeFilters").addEventListener("change", (event) => {
+  if (event.target.matches("[data-edit-op]")) updateFilterFromControl(event.target);
 });
 
 function convertValue(field, value) {
