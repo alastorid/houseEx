@@ -19,7 +19,7 @@
           <span>some random data</span>
         </a>
         <div class="toolbar">
-          <button class="icon-button" id="themeToggle" type="button" title="切換深色模式">◐</button>
+          <button class="icon-button theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
           <a href="terminal.html">Terminal</a>
           <a href="#repeatSales">重複轉手</a>
           <a href="#records">交易明細</a>
@@ -228,8 +228,13 @@
       <div id="drawerBody"></div>
     </aside>
 
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite">
+      <span id="loadStatusText">Ready</span>
+      <span class="load-status-track"><span class="load-status-fill"></span></span>
+    </div>
+
     <script src="vendor/leaflet/leaflet.js?v=20260531-sqlite-hardening"></script>
-    <script src="queryService.js?v=20260601-load-feedback" defer></script>
-    <script src="script.js?v=20260601-load-feedback" defer></script>
+    <script src="queryService.js?v=20260601-bottom-progress" defer></script>
+    <script src="script.js?v=20260601-bottom-progress" defer></script>
   </body>
 </html>
