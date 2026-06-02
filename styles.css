@@ -161,6 +161,42 @@ button {
   color: var(--muted);
 }
 
+body.loading-sqlite #loadStatus::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 900ms ease-in-out infinite;
+}
+
+body.loading-sqlite .main-stage {
+  position: relative;
+}
+
+body.loading-sqlite .main-stage::before {
+  content: "";
+  position: sticky;
+  top: 58px;
+  z-index: 50;
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  animation: loading-sweep 1.2s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes loading-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

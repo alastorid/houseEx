@@ -103,6 +103,7 @@ const debounce = (fn, wait = 180) => {
     timer = setTimeout(() => fn(...args), wait);
   };
 };
+let sqliteStatusTimer;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -703,6 +704,45 @@ function applyUrlState() {
 
 function setStatus(message) {
   el("#loadStatus").textContent = message;
+}
+
+function shortPath(path = "") {
+  const text = String(path || "");
+  const parts = text.split("/");
+  return parts.slice(-3).join("/") || text;
+}
+
+function sqliteStatusText(status = {}) {
+  const place = [status.city, status.district].filter(Boolean).join(" ");
+  const shard = status.shardCount ? ` ${status.shardIndex || ""}/${status.shardCount}` : "";
+  if (status.phase === "wasm-start") return "載入 SQLite WASM...";
+  if (status.phase === "metadata-start") return "讀取資料版本...";
+  if (status.phase === "cache-check") return `檢查快取 ${shortPath(status.path)}`;
+  if (status.phase === "cache-hit") return `快取命中 ${shortPath(status.path)}`;
+  if (status.phase === "download-start") return `下載資料 ${place}${shard} ${shortPath(status.path)}`;
+  if (status.phase === "download-progress") return `下載資料 ${place}${shard} ${status.label || ""}`;
+  if (status.phase === "cache-store") return `寫入快取 ${shortPath(status.path)}`;
+  if (status.phase === "decompress-start") return `解壓縮 ${shortPath(status.path)}`;
+  if (status.phase === "shard-open-start") return `開啟資料 ${place}${shard}`;
+  if (status.phase === "shard-open-ready") return `${status.cacheHit ? "快取" : "下載"}完成 ${place}${shard}`;
+  if (status.phase === "city-load-start") return `載入 ${place || status.city} ${status.shardCount || 0} 個資料檔`;
+  if (status.phase === "city-load-ready") return `${place || status.city} 資料已就緒`;
+  return "";
+}
+
+function showSqliteStatus(status = {}) {
+  const text = sqliteStatusText(status);
+  if (!text) return;
+  setStatus(text);
+  document.body.classList.add("loading-sqlite");
+  const pill = el("#dataPill");
+  if (pill) pill.textContent = text;
+  clearTimeout(sqliteStatusTimer);
+  if (status.phase?.endsWith("ready")) {
+    sqliteStatusTimer = setTimeout(() => {
+      document.body.classList.remove("loading-sqlite");
+    }, 1200);
+  }
 }
 
 function setQueryMeta(meta) {
@@ -1569,6 +1609,7 @@ function bindEvents() {
     renderAll();
   });
   window.addEventListener("resize", debounce(() => renderAll(), 250));
+  window.addEventListener("sqlite-status", (event) => showSqliteStatus(event.detail));
 }
 
 function handleChartClick(canvas, event) {

@@ -44,7 +44,7 @@ button:hover {
 .terminal-top {
   height: 42px;
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
   padding: 0 12px;
@@ -60,6 +60,50 @@ button:hover {
 #perfBadge {
   justify-self: end;
   color: var(--warn);
+}
+
+.load-badge {
+  justify-self: end;
+  min-width: min(420px, 45vw);
+  overflow: hidden;
+  color: var(--accent);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.load-badge::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 900ms ease-in-out infinite;
+}
+
+body.loading-sqlite .grid-stage {
+  position: relative;
+}
+
+body.loading-sqlite .grid-stage::after {
+  content: "";
+  position: absolute;
+  inset: 36px 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: loading-sweep 1.2s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes loading-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 .terminal-shell {

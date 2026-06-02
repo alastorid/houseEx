@@ -67,6 +67,49 @@ const debounce = (fn, wait = 220) => {
   };
 };
 
+let sqliteStatusTimer;
+
+function shortPath(path = "") {
+  const text = String(path || "");
+  const parts = text.split("/");
+  return parts.slice(-3).join("/") || text;
+}
+
+function sqliteStatusText(status = {}) {
+  const place = [status.city, status.district].filter(Boolean).join(" ");
+  const shard = status.shardCount ? ` ${status.shardIndex || ""}/${status.shardCount}` : "";
+  if (status.phase === "wasm-start") return "載入 SQLite WASM...";
+  if (status.phase === "metadata-start") return "讀取資料版本...";
+  if (status.phase === "cache-check") return `檢查快取 ${shortPath(status.path)}`;
+  if (status.phase === "cache-hit") return `快取命中 ${shortPath(status.path)}`;
+  if (status.phase === "download-start") return `下載資料 ${place}${shard} ${shortPath(status.path)}`;
+  if (status.phase === "download-progress") return `下載資料 ${place}${shard} ${status.label || ""}`;
+  if (status.phase === "cache-store") return `寫入快取 ${shortPath(status.path)}`;
+  if (status.phase === "decompress-start") return `解壓縮 ${shortPath(status.path)}`;
+  if (status.phase === "shard-open-start") return `開啟資料 ${place}${shard}`;
+  if (status.phase === "shard-open-ready") return `${status.cacheHit ? "快取" : "下載"}完成 ${place}${shard}`;
+  if (status.phase === "city-load-start") return `載入 ${place || status.city} ${status.shardCount || 0} 個資料檔`;
+  if (status.phase === "city-load-ready") return `${place || status.city} 資料已就緒`;
+  return "";
+}
+
+function showSqliteStatus(status = {}) {
+  const badge = el("#loadBadge");
+  if (!badge) return;
+  const text = sqliteStatusText(status);
+  if (!text) return;
+  badge.hidden = false;
+  badge.textContent = text;
+  document.body.classList.add("loading-sqlite");
+  clearTimeout(sqliteStatusTimer);
+  if (status.phase?.endsWith("ready")) {
+    sqliteStatusTimer = setTimeout(() => {
+      badge.hidden = true;
+      document.body.classList.remove("loading-sqlite");
+    }, 1200);
+  }
+}
+
 function loadColumnPrefs() {
   try {
     const saved = JSON.parse(localStorage.getItem(COLUMN_KEY) || "{}");
@@ -191,7 +234,9 @@ async function reloadDistricts() {
 async function runQuery({ append = false } = {}) {
   if (state.loading) return;
   state.loading = true;
+  document.body.classList.add("loading-sqlite");
   try {
+    el("#resultMeta").textContent = append ? "載入更多資料..." : "載入資料...";
     await queryService.loadCity({ city: state.city, district: state.district });
     const result = await queryService.queryTransactions(filterPayload());
     setMeta(result.meta);
@@ -201,6 +246,7 @@ async function runQuery({ append = false } = {}) {
     if (!append) writeHashState();
   } finally {
     state.loading = false;
+    document.body.classList.remove("loading-sqlite");
   }
 }
 
@@ -567,6 +613,7 @@ function bind() {
 }
 
 bind();
+window.addEventListener("sqlite-status", (event) => showSqliteStatus(event.detail));
 init().catch((error) => {
   el("#resultMeta").textContent = error.message;
   console.error(error);
