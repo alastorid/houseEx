@@ -68,6 +68,19 @@ const debounce = (fn, wait = 220) => {
 };
 
 let sqliteStatusTimer;
+let monacoLoadPromise;
+let jsonEditor;
+let jsonEditorModel;
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[char]);
+}
 
 function shortPath(path = "") {
   const text = String(path || "");
@@ -94,17 +107,14 @@ function sqliteStatusText(status = {}) {
 }
 
 function showSqliteStatus(status = {}) {
-  const badge = el("#loadBadge");
-  if (!badge) return;
   const text = sqliteStatusText(status);
   if (!text) return;
-  badge.hidden = false;
-  badge.textContent = text;
+  const bottomText = el("#loadStatusText");
+  if (bottomText) bottomText.textContent = text;
   document.body.classList.add("loading-sqlite");
   clearTimeout(sqliteStatusTimer);
   if (status.phase?.endsWith("ready")) {
     sqliteStatusTimer = setTimeout(() => {
-      badge.hidden = true;
       document.body.classList.remove("loading-sqlite");
     }, 1200);
   }
@@ -143,6 +153,7 @@ function applyHashState() {
   if (Array.isArray(saved.filters)) state.filters = saved.filters;
   if (saved.sortBy && fieldDef(saved.sortBy)) state.sortBy = saved.sortBy;
   state.sortDir = saved.sortDir === "ASC" ? "ASC" : "DESC";
+  setTheme(saved.theme || "dark");
   if (Array.isArray(saved.visibleColumns)) {
     const valid = saved.visibleColumns.filter((key) => columns.some(([columnKey]) => columnKey === key));
     if (valid.length) state.visibleColumns = valid;
@@ -164,6 +175,7 @@ function writeHashState() {
     filters: state.filters,
     sortBy: state.sortBy,
     sortDir: state.sortDir,
+    theme: document.documentElement.classList.contains("dark") ? "dark" : "light",
     visibleColumns: state.visibleColumns,
     widths: state.widths,
   };
@@ -172,6 +184,20 @@ function writeHashState() {
   if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
     window.history.replaceState(null, "", next);
   }
+}
+
+function setTheme(scheme, { sync = false } = {}) {
+  const resolved = scheme === "light" ? "light" : "dark";
+  document.documentElement.classList.toggle("dark", resolved === "dark");
+  const button = el("#themeToggle");
+  if (button) {
+    button.textContent = resolved === "dark" ? "☀" : "☾";
+    button.title = resolved === "dark" ? "切換淺色模式" : "切換深色模式";
+  }
+  if (window.monaco?.editor) {
+    window.monaco.editor.setTheme(resolved === "dark" ? "houseex-dark" : "houseex-light");
+  }
+  if (sync) writeHashState();
 }
 
 function setMeta(meta) {
@@ -198,12 +224,15 @@ function displayValue(row, field) {
   return value || "";
 }
 
-function cellHtml(row, field) {
+function cellHtml(row, field, index) {
   const value = displayValue(row, field);
   const title = String(value).replace(/"/g, "&quot;");
   if (field === "full_address" && row.full_address) {
     const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
     return `<td ${widthStyle(field)}><button class="address-cell" type="button" data-map-address="${String(fullMapAddress).replace(/"/g, "&quot;")}">${value}</button></td>`;
+  }
+  if (field === "raw_json") {
+    return `<td ${widthStyle(field)}>${row.raw_json ? `<button class="raw-cell" type="button" data-raw-index="${index}">JSON</button>` : ""}</td>`;
   }
   return `<td ${widthStyle(field)} title="${title}">${value}</td>`;
 }
@@ -278,10 +307,138 @@ function renderRows() {
   renderHead();
   el("#resultMeta").textContent = `顯示 ${money.format(state.rows.length)} / ${money.format(state.total)} 筆`;
   const cols = visibleColumnDefs();
-  el("#gridRows").innerHTML = state.rows.map((row) => `
-    <tr>${cols.map(([key]) => cellHtml(row, key)).join("")}</tr>
+  el("#gridRows").innerHTML = state.rows.map((row, index) => `
+    <tr>${cols.map(([key]) => cellHtml(row, key, index)).join("")}</tr>
   `).join("");
   renderColumnsPopover();
+}
+
+function highlightedJson(value) {
+  return escapeHtml(value).replace(
+    /("(?:\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+    (token) => {
+      let type = "number";
+      if (token.startsWith('"')) type = token.endsWith(":") ? "key" : "string";
+      else if (token === "true" || token === "false") type = "boolean";
+      else if (token === "null") type = "null";
+      return `<span class="json-${type}">${token}</span>`;
+    },
+  );
+}
+
+function loadMonaco() {
+  if (window.monaco?.editor) return Promise.resolve(window.monaco);
+  if (monacoLoadPromise) return monacoLoadPromise;
+  monacoLoadPromise = new Promise((resolve, reject) => {
+    window.MonacoEnvironment = {
+      getWorkerUrl: () => "vendor/monaco/vs/base/worker/workerMain.js",
+    };
+    const script = document.createElement("script");
+    script.src = "vendor/monaco/vs/loader.js?v=20260601-monaco-json";
+    script.onload = () => {
+      window.require.config({ paths: { vs: "vendor/monaco/vs" } });
+      window.require(["vs/editor/editor.main"], () => {
+        window.monaco.editor.defineTheme("houseex-dark", {
+          base: "vs-dark",
+          inherit: true,
+          rules: [
+            { token: "string.key.json", foreground: "70c3b3" },
+            { token: "string.value.json", foreground: "d9b46a" },
+            { token: "number", foreground: "72acd0" },
+            { token: "keyword", foreground: "c58ad3" },
+          ],
+          colors: {
+            "editor.background": "#151b20",
+            "editor.foreground": "#e7edf2",
+            "editorLineNumber.foreground": "#5f6e7a",
+            "editorLineNumber.activeForeground": "#d9b46a",
+            "editor.selectionBackground": "#2e5d61",
+            "editorWidget.background": "#1c2329",
+          },
+        });
+        window.monaco.editor.defineTheme("houseex-light", {
+          base: "vs",
+          inherit: true,
+          rules: [
+            { token: "string.key.json", foreground: "176f72" },
+            { token: "string.value.json", foreground: "9b6424" },
+            { token: "number", foreground: "236b8e" },
+            { token: "keyword", foreground: "7b4a92" },
+          ],
+          colors: {
+            "editor.background": "#ffffff",
+            "editor.foreground": "#17212b",
+            "editorLineNumber.foreground": "#94a2ad",
+            "editorLineNumber.activeForeground": "#176f72",
+            "editor.selectionBackground": "#c8e3e0",
+            "editorWidget.background": "#f7fafb",
+          },
+        });
+        window.monaco.editor.setTheme(document.documentElement.classList.contains("dark") ? "houseex-dark" : "houseex-light");
+        resolve(window.monaco);
+      });
+    };
+    script.onerror = () => reject(new Error("Monaco local runtime failed to load"));
+    document.head.appendChild(script);
+  });
+  return monacoLoadPromise;
+}
+
+function showJsonFallback(pretty) {
+  const fallback = el("#jsonCode");
+  fallback.innerHTML = highlightedJson(pretty);
+  fallback.classList.add("open");
+  el("#jsonEditor").style.display = "none";
+}
+
+async function openJsonViewer(row) {
+  if (!row?.raw_json) return;
+  let parsed;
+  try {
+    parsed = JSON.parse(row.raw_json);
+  } catch {
+    parsed = row.raw_json;
+  }
+  const pretty = typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2);
+  el("#jsonTitle").textContent = row.full_address || row.community_name || row.id || "Raw JSON";
+  el("#jsonMeta").textContent = [row.city, row.district, row.transaction_date, row.source_batch].filter(Boolean).join(" · ");
+  el("#jsonDrawer").classList.add("open");
+  el("#jsonDrawer").setAttribute("aria-hidden", "false");
+  el("#jsonCode").classList.remove("open");
+  el("#jsonEditor").style.display = "block";
+  try {
+    const monaco = await loadMonaco();
+    if (!jsonEditorModel) {
+      jsonEditorModel = monaco.editor.createModel(pretty, "json");
+    } else {
+      jsonEditorModel.setValue(pretty);
+    }
+    if (!jsonEditor) {
+      jsonEditor = monaco.editor.create(el("#jsonEditor"), {
+        model: jsonEditorModel,
+        readOnly: true,
+        automaticLayout: true,
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        wordWrap: "on",
+        fontSize: 12,
+        lineNumbersMinChars: 4,
+        renderLineHighlight: "line",
+        theme: document.documentElement.classList.contains("dark") ? "houseex-dark" : "houseex-light",
+      });
+    } else {
+      jsonEditor.setModel(jsonEditorModel);
+      jsonEditor.layout();
+    }
+  } catch (error) {
+    console.warn(error);
+    showJsonFallback(pretty);
+  }
+}
+
+function closeJsonViewer() {
+  el("#jsonDrawer").classList.remove("open");
+  el("#jsonDrawer").setAttribute("aria-hidden", "true");
 }
 
 function humanFilter(filter) {
@@ -434,6 +591,7 @@ async function init() {
   await reloadDistricts();
   el("#keywordInput").value = state.keyword;
   el("#districtSelect").value = state.district;
+  setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
   renderFilters();
   renderColumnsPopover();
   await runQuery();
@@ -551,6 +709,11 @@ function bind() {
     runQuery({ append: true });
   });
   el("#gridRows").addEventListener("click", (event) => {
+    const rawButton = event.target.closest("[data-raw-index]");
+    if (rawButton) {
+      openJsonViewer(state.rows[Number(rawButton.dataset.rawIndex)]);
+      return;
+    }
     const button = event.target.closest("[data-map-address]");
     if (!button) return;
     window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(button.dataset.mapAddress)}`, "_blank", "noopener");
@@ -600,6 +763,16 @@ function bind() {
   });
   el("#exportCsv").addEventListener("click", exportCsv);
   el("#largeDetachedPreset").addEventListener("click", applyLargeDetachedPreset);
+  el("#themeToggle").addEventListener("click", () => {
+    setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
+  });
+  el("#closeJson").addEventListener("click", closeJsonViewer);
+  el("#jsonDrawer").addEventListener("click", (event) => {
+    if (event.target.id === "jsonDrawer") closeJsonViewer();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && el("#jsonDrawer").classList.contains("open")) closeJsonViewer();
+  });
   window.addEventListener("hashchange", async () => {
     applyHashState();
     el("#citySelect").value = state.city;

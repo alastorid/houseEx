@@ -112,6 +112,10 @@ button {
   font-weight: 850;
 }
 
+.theme-button {
+  font-size: 1rem;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: 360px minmax(0, 1fr);
@@ -161,40 +165,52 @@ button {
   color: var(--muted);
 }
 
-body.loading-sqlite #loadStatus::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 7px;
-  border-radius: 50%;
-  background: var(--teal);
-  animation: pulse 900ms ease-in-out infinite;
+.load-status-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: minmax(160px, 360px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 30px;
+  padding: 5px 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  box-shadow: 0 -10px 28px rgba(22, 32, 42, 0.09);
+  backdrop-filter: blur(12px);
+  transform: translateY(100%);
+  transition: transform 160ms ease;
 }
 
-body.loading-sqlite .main-stage {
+body.loading-sqlite .load-status-bar {
+  transform: translateY(0);
+}
+
+.load-status-track {
   position: relative;
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--soft);
 }
 
-body.loading-sqlite .main-stage::before {
-  content: "";
-  position: sticky;
-  top: 58px;
-  z-index: 50;
-  display: block;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent);
-  animation: loading-sweep 1.2s linear infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.35; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1); }
+.load-status-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 32%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--teal), var(--blue), transparent);
+  animation: loading-sweep 1.25s linear infinite;
 }
 
 @keyframes loading-sweep {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(100%); }
+  from { transform: translateX(-110%); }
+  to { transform: translateX(320%); }
 }
 
 .form-grid {

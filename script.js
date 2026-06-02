@@ -690,6 +690,7 @@ function syncUrl() {
   if (state.township) params.set("town", state.township);
   const query = el("#queryInput").value.trim();
   if (query) params.set("q", query);
+  params.set("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
   history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
 }
 
@@ -699,7 +700,22 @@ function applyUrlState() {
     city: params.get("city"),
     township: params.get("town"),
     query: params.get("q"),
+    theme: params.get("theme"),
   };
+}
+
+function setTheme(scheme, { sync = false } = {}) {
+  const resolved = scheme === "dark" ? "dark" : "light";
+  document.documentElement.classList.toggle("dark", resolved === "dark");
+  const button = el("#themeToggle");
+  if (button) {
+    button.textContent = resolved === "dark" ? "☀" : "☾";
+    button.title = resolved === "dark" ? "切換淺色模式" : "切換深色模式";
+  }
+  if (sync) {
+    saveFilters();
+    syncUrl();
+  }
 }
 
 function setStatus(message) {
@@ -734,6 +750,8 @@ function showSqliteStatus(status = {}) {
   const text = sqliteStatusText(status);
   if (!text) return;
   setStatus(text);
+  const bottomText = el("#loadStatusText");
+  if (bottomText) bottomText.textContent = text;
   document.body.classList.add("loading-sqlite");
   const pill = el("#dataPill");
   if (pill) pill.textContent = text;
@@ -780,7 +798,7 @@ async function loadIndex() {
   populateCities();
   const urlState = applyUrlState();
   const saved = readSavedFilters();
-  if (saved.dark) document.documentElement.classList.add("dark");
+  setTheme(urlState.theme || (saved.dark ? "dark" : "light"));
   const savedLimit = Number(saved.annotationLimit);
   state.annotationLimit = Number.isFinite(savedLimit) ? Math.max(1, Math.min(9999, Math.round(savedLimit))) : 13;
   el("#annotationLimit").value = String(state.annotationLimit);
@@ -1604,8 +1622,7 @@ function bindEvents() {
     }
   });
   el("#themeToggle").addEventListener("click", () => {
-    document.documentElement.classList.toggle("dark");
-    saveFilters();
+    setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
     renderAll();
   });
   window.addEventListener("resize", debounce(() => renderAll(), 250));

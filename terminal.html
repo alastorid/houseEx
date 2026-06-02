@@ -4,14 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>some random data terminal</title>
-    <link rel="stylesheet" href="terminal.css?v=20260531-terminal-hash" />
+    <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
+    <link rel="stylesheet" href="terminal.css?v=20260601-monaco-json" />
   </head>
   <body>
     <header class="terminal-top">
       <a href="index.html">some random data</a>
       <strong>Property Terminal</strong>
-      <span id="loadBadge" class="load-badge" hidden></span>
       <span id="perfBadge">SQLite</span>
+      <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
     </header>
 
     <main class="terminal-shell">
@@ -51,8 +52,26 @@
       </aside>
     </main>
     <div class="context-menu" id="contextMenu"></div>
+    <aside class="json-drawer" id="jsonDrawer" aria-hidden="true">
+      <section class="json-panel" role="dialog" aria-label="Raw JSON">
+        <header class="json-head">
+          <div>
+            <span>Raw JSON</span>
+            <strong id="jsonTitle">JSON</strong>
+            <small id="jsonMeta"></small>
+          </div>
+          <button id="closeJson" type="button">×</button>
+        </header>
+        <div class="json-editor" id="jsonEditor"></div>
+        <pre class="json-fallback" id="jsonCode"></pre>
+      </section>
+    </aside>
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite">
+      <span id="loadStatusText">Ready</span>
+      <span class="load-status-track"><span class="load-status-fill"></span></span>
+    </div>
 
-    <script src="queryService.js?v=20260601-load-feedback" defer></script>
-    <script src="terminal.js?v=20260601-load-feedback" defer></script>
+    <script src="queryService.js?v=20260601-monaco-json" defer></script>
+    <script src="terminal.js?v=20260601-monaco-json" defer></script>
   </body>
 </html>
