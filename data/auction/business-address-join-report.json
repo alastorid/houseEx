@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-06-02T17:11:12+00:00",
-  "auctionCount": 2319,
+  "generatedAt": "2026-06-02T17:36:21+00:00",
+  "auctionCount": 3187,
   "businessCountScanned": 1706608,
-  "matchedAuctionCount": 99,
-  "matchedBusinessCount": 1150,
+  "matchedAuctionCount": 111,
+  "matchedBusinessCount": 1169,
   "methodCounts": {
-    "address_prefix": 1150,
-    "normalized_address": 11
+    "address_prefix": 1169,
+    "normalized_address": 13
   },
-  "outputBytes": 2407053,
+  "outputBytes": 3530103,
   "source": {
     "dataset": "財政部財政資訊中心「營業稅稅籍登記資料集」",
     "datasetUrl": "https://data.gov.tw/dataset/9400",
