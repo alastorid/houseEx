@@ -643,6 +643,14 @@ function addCurrentPreset() {
   startPresetRename(preset.id);
 }
 
+function deleteSavedPreset(id) {
+  const next = state.presets.filter((preset) => preset.id !== id);
+  if (next.length === state.presets.length) return;
+  state.presets = next;
+  saveFilterPresets();
+  renderPresetButtons();
+}
+
 async function applySavedPreset(id) {
   const preset = state.presets.find((item) => item.id === id);
   if (!preset) return;
@@ -935,6 +943,12 @@ function bind() {
     if (!button) return;
     event.preventDefault();
     startPresetRename(button.dataset.presetId);
+  });
+  el("#savedPresets").addEventListener("contextmenu", (event) => {
+    const button = event.target.closest("[data-preset-id]");
+    if (!button) return;
+    event.preventDefault();
+    deleteSavedPreset(button.dataset.presetId);
   });
   el("#themeToggle").addEventListener("click", () => {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
