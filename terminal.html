@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>some random data terminal</title>
     <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
-    <link rel="stylesheet" href="terminal.css?v=20260602-license" />
+    <link rel="stylesheet" href="terminal.css?v=20260602-presets" />
   </head>
   <body>
     <header class="terminal-top">
@@ -26,6 +26,8 @@
         <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
         <div class="preset-bar">
           <button id="largeDetachedPreset" type="button">非暴躁鼠鼠</button>
+          <button id="addPreset" class="preset-add" type="button" title="新增目前篩選">+</button>
+          <span id="savedPresets"></span>
         </div>
 
         <div class="active-filters" id="activeFilters"></div>
@@ -78,6 +80,6 @@
     </div>
 
     <script src="queryService.js?v=20260602-activity-timeout" defer></script>
-    <script src="terminal.js?v=20260602-terminal-progress" defer></script>
+    <script src="terminal.js?v=20260602-presets" defer></script>
   </body>
 </html>
