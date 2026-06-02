@@ -210,7 +210,41 @@ tbody tr.active {
   gap: 6px 10px;
 }
 
+.detail-grid.small {
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 4px 8px;
+}
+
 .detail-grid span:nth-child(odd) {
+  color: var(--muted);
+}
+
+.business-matches {
+  margin-top: 12px;
+}
+
+.business-matches h3 {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+}
+
+.business-match {
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 8px;
+  background: var(--panel2);
+}
+
+.business-match > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.business-match > div:first-child span,
+.empty-note {
   color: var(--muted);
 }
 
@@ -273,4 +307,28 @@ body.loading .load-status-bar {
   border-radius: inherit;
   background: linear-gradient(90deg, var(--accent), var(--warn));
   transition: width 180ms ease;
+}
+
+@media (max-width: 900px) {
+  .terminal-top {
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .terminal-shell {
+    grid-template-columns: 240px minmax(360px, 1fr);
+    overflow-x: auto;
+  }
+
+  .filter-rail {
+    min-width: 240px;
+  }
+
+  .grid-stage {
+    min-width: 360px;
+  }
+
+  .detail-panel {
+    display: none;
+  }
 }

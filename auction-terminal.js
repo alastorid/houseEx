@@ -7,11 +7,15 @@ const DATA_SOURCES = [
   },
 ];
 
+const BUSINESS_MATCH_PATH = "data/auction/business-address-matches.json";
+
 const columns = [
   ["soldDate", "拍定日期", "date", 92],
   ["city", "縣市", "string", 82],
   ["district", "鄉鎮", "string", 86],
   ["address", "地址", "string", 260],
+  ["businessCount", "稅籍", "number", 58],
+  ["businessNames", "營業人", "string", 180],
   ["landNo", "地號", "string", 126],
   ["branch", "分署", "string", 86],
   ["caseNo", "執行案號", "string", 148],
@@ -30,6 +34,7 @@ const state = {
   source: DATA_SOURCES[0],
   rows: [],
   filtered: [],
+  businessJoin: null,
   city: "",
   district: "",
   type: "",
@@ -63,7 +68,7 @@ function normalizeText(value) {
     .normalize("NFKC")
     .replace(/臺/g, "台")
     .replace(/巿/g, "市")
-    .replace(/[－–—]/g, "-")
+    .replace(/[－–—─―]/g, "-")
     .replace(/\s+/g, "")
     .toLowerCase();
 }
@@ -124,6 +129,9 @@ function normalizeRow(row, index) {
     caseSerial: row["執行案號-流水號"] || "",
     caseNo: caseNoOf(row),
     url: row["網址"] || "",
+    businessMatches: [],
+    businessCount: 0,
+    businessNames: "",
     raw: row,
   };
   item.searchText = normalizeText([
@@ -141,11 +149,37 @@ function normalizeRow(row, index) {
     item.round,
     item.use,
     item.caseNo,
+    item.businessNames,
     item.soldPrice,
     Math.round(item.soldPrice / 10000),
     JSON.stringify(row),
   ].join(" "));
   return item;
+}
+
+function applyBusinessMatches(rows, join) {
+  const matches = join?.matchesByAuctionId || {};
+  return rows.map((row) => {
+    const businessMatches = matches[row.id] || [];
+    const names = [...new Set(businessMatches.map((item) => item.businessName).filter(Boolean))].slice(0, 3);
+    row.businessMatches = businessMatches;
+    row.businessCount = businessMatches.length;
+    row.businessNames = names.join("、");
+    row.searchText = normalizeText([
+      row.searchText,
+      row.businessNames,
+      businessMatches.map((item) => [
+        item.businessId,
+        item.businessName,
+        item.businessAddress,
+        item.industryCode,
+        item.industryName,
+        item.industryCode1,
+        item.industryName1,
+      ].join(" ")).join(" "),
+    ].join(" "));
+    return row;
+  });
 }
 
 function setLoadProgress(value, text = "") {
@@ -188,6 +222,15 @@ async function fetchJsonWithProgress(path) {
   return JSON.parse(new TextDecoder("utf-8").decode(bytes).replace(/^\uFEFF/, ""));
 }
 
+async function fetchOptionalJson(path) {
+  const response = await fetch(`${path}?v=20260602-business-join`);
+  if (!response.ok) {
+    if (response.status === 404) return null;
+    throw new Error(`HTTP ${response.status}: ${path}`);
+  }
+  return response.json();
+}
+
 function uniqueOptions(rows, key) {
   return [...new Set(rows.map((row) => row[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b, "zh-Hant", { numeric: true }));
 }
@@ -206,7 +249,11 @@ function renderOptions() {
   el("#typeSelect").value = state.type;
   el("#roundSelect").innerHTML = `<option value="">全部</option>${uniqueOptions(state.rows, "round").map((round) => `<option value="${escapeHtml(round)}">${escapeHtml(round)}</option>`).join("")}`;
   el("#roundSelect").value = state.round;
-  el("#sourceNote").innerHTML = `資料：${escapeHtml(state.source.label)}<br>官方：<a href="${escapeHtml(state.source.officialUrl)}" target="_blank" rel="noreferrer">JSON</a>`;
+  const businessSource = state.businessJoin?.source;
+  const businessLine = businessSource
+    ? `<br>稅籍：<a href="${escapeHtml(businessSource.datasetUrl)}" target="_blank" rel="noreferrer">${escapeHtml(businessSource.dataset)}</a><br>授權：<a href="${escapeHtml(businessSource.licenseUrl)}" target="_blank" rel="noreferrer">${escapeHtml(businessSource.license)}</a>`
+    : "";
+  el("#sourceNote").innerHTML = `資料：${escapeHtml(state.source.label)}<br>官方：<a href="${escapeHtml(state.source.officialUrl)}" target="_blank" rel="noreferrer">JSON</a>${businessLine}`;
 }
 
 function sortRows(rows) {
@@ -252,6 +299,25 @@ function formatCell(row, key, type) {
   return escapeHtml(value);
 }
 
+function formatBusinessMatches(matches) {
+  if (!matches?.length) return `<div class="empty-note">沒有稅籍登記地址匹配。</div>`;
+  return `<section class="business-matches">
+    <h3>稅籍登記匹配</h3>
+    ${matches.slice(0, 80).map((item) => `<article class="business-match">
+      <div><strong>${escapeHtml(item.businessName || item.businessId)}</strong><span>${escapeHtml(item.confidence)} · ${escapeHtml(item.matchMethod)}</span></div>
+      <div class="detail-grid small">
+        <span>統一編號</span><span>${escapeHtml(item.businessId)}</span>
+        <span>營業地址</span><span>${escapeHtml(item.businessAddress)}</span>
+        <span>資本額</span><span>${item.capital ? `${money.format(Number(item.capital))}元` : ""}</span>
+        <span>設立日期</span><span>${escapeHtml(item.setupDate)}</span>
+        <span>組織</span><span>${escapeHtml(item.organization)}</span>
+        <span>行業</span><span>${escapeHtml([item.industryName, item.industryName1].filter(Boolean).join("、"))}</span>
+      </div>
+    </article>`).join("")}
+    ${matches.length > 80 ? `<div class="empty-note">只顯示前 80 筆，共 ${money.format(matches.length)} 筆。</div>` : ""}
+  </section>`;
+}
+
 function renderTable() {
   el("#gridHead").innerHTML = `<tr>${columns.map(([key, label, , width]) => {
     const marker = state.sortBy === key ? (state.sortDir === "ASC" ? " ▲" : " ▼") : "";
@@ -293,7 +359,7 @@ function openDetail(id) {
     ["用途", row.use],
     ["網址", row.url ? `<a href="${escapeHtml(row.url)}" target="_blank" rel="noreferrer">open</a>` : ""],
   ];
-  el("#detailBody").innerHTML = `<div class="detail-grid">${fields.map(([label, value]) => `<span>${escapeHtml(label)}</span><span>${typeof value === "string" && value.startsWith("<a ") ? value : escapeHtml(value)}</span>`).join("")}</div><pre class="raw-box">${escapeHtml(JSON.stringify(row.raw, null, 2))}</pre>`;
+  el("#detailBody").innerHTML = `<div class="detail-grid">${fields.map(([label, value]) => `<span>${escapeHtml(label)}</span><span>${typeof value === "string" && value.startsWith("<a ") ? value : escapeHtml(value)}</span>`).join("")}</div>${formatBusinessMatches(row.businessMatches)}<pre class="raw-box">${escapeHtml(JSON.stringify({ auction: row.raw, businessMatches: row.businessMatches }, null, 2))}</pre>`;
   renderTable();
 }
 
@@ -378,14 +444,17 @@ async function loadSource() {
   const started = performance.now();
   try {
     const rawRows = await fetchJsonWithProgress(state.source.path);
-    state.rows = rawRows.map(normalizeRow);
+    setLoadProgress(0.84, "讀取稅籍地址匹配...");
+    state.businessJoin = await fetchOptionalJson(BUSINESS_MATCH_PATH);
+    setLoadProgress(0.9, "合併稅籍匹配...");
+    state.rows = applyBusinessMatches(rawRows.map(normalizeRow), state.businessJoin);
     state.city = "";
     state.district = "";
     state.type = "";
     state.round = "";
     renderOptions();
     applyFilters();
-    setLoadProgress(1, `完成 ${money.format(state.rows.length)} 筆`);
+    setLoadProgress(1, `完成 ${money.format(state.rows.length)} 筆 · 稅籍匹配 ${money.format(state.businessJoin?.matchedAuctionCount || 0)} 筆`);
     setTimeout(() => document.body.classList.remove("loading"), 900);
     el("#perfBadge").textContent = `${money.format(state.rows.length)} rows · ${Math.round(performance.now() - started)}ms`;
   } catch (error) {

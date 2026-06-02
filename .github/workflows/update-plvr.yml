@@ -114,6 +114,17 @@ jobs:
       - name: Smoke test SQLite assets
         run: python3 scripts/smoke-test-sqlite.py
 
+      - name: Cache business registration download
+        uses: actions/cache@v4
+        with:
+          path: downloads/business
+          key: business-registration-${{ github.run_id }}
+          restore-keys: |
+            business-registration-
+
+      - name: Build auction business address join
+        run: python3 scripts/build-auction-business-join.py
+
       - name: Prepare GitHub Pages site
         run: |
           rm -rf site
