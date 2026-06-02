@@ -192,7 +192,12 @@ label {
   margin: 8px 0;
 }
 
+.preset-bar {
+  align-items: center;
+}
+
 #savedPresets {
+  flex: 1 1 auto;
   margin: 0;
 }
 
@@ -204,6 +209,7 @@ label {
 
 .preset-bar .preset-add {
   min-width: 28px;
+  margin-left: auto;
   padding-inline: 0;
   color: var(--ink);
   border-color: var(--accent);
