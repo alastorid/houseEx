@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random data combined</title>
+    <link rel="stylesheet" href="auction-terminal.css?v=20260602-combined" />
+  </head>
+  <body>
+    <header class="terminal-top combined-top">
+      <a href="index.html">some random data</a>
+      <a href="terminal.html">Property Terminal</a>
+      <a href="auction-terminal.html">Auction Terminal</a>
+      <strong>Combined Terminal</strong>
+      <span id="perfBadge">Join</span>
+      <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
+    </header>
+
+    <main class="terminal-shell combined-shell">
+      <aside class="filter-rail">
+        <div class="filter-row">
+          <label>縣市<select id="citySelect"></select></label>
+          <label>鄉鎮<select id="districtSelect"></select></label>
+        </div>
+        <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="地址、拍賣案號、社區、路名" /></label>
+        <div class="filter-row">
+          <label>拍定金額 min<input id="priceMin" type="number" min="0" step="1" placeholder="萬" /></label>
+          <label>拍定金額 max<input id="priceMax" type="number" min="0" step="1" placeholder="萬" /></label>
+        </div>
+        <div class="filter-row">
+          <label>PLVR 總價 min<input id="plvrMin" type="number" min="0" step="1" placeholder="萬" /></label>
+          <label>PLVR 總價 max<input id="plvrMax" type="number" min="0" step="1" placeholder="萬" /></label>
+        </div>
+        <div class="source-note" id="sourceNote">--</div>
+      </aside>
+
+      <section class="grid-stage">
+        <div class="grid-toolbar">
+          <span id="resultMeta">--</span>
+          <div class="toolbar-actions">
+            <button id="exportCsv" type="button">CSV</button>
+          </div>
+        </div>
+        <div class="data-grid" id="gridWrap">
+          <table>
+            <thead id="gridHead"></thead>
+            <tbody id="gridRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="detail-panel">
+        <h2 id="detailTitle">Combined</h2>
+        <div id="detailBody">點一列看細節。</div>
+      </aside>
+    </main>
+
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span id="loadStatusText">Ready</span>
+      <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
+    </div>
+
+    <script src="combined-terminal.js?v=20260602-combined" defer></script>
+  </body>
+</html>

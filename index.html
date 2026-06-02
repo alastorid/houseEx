@@ -9,7 +9,7 @@
       content="一些公開資料的查詢頁。"
     />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=20260530-building-no" />
-    <link rel="stylesheet" href="styles.css?v=20260602-progress-line" />
+    <link rel="stylesheet" href="styles.css?v=20260602-license" />
   </head>
   <body>
     <header class="app-header">
@@ -20,6 +20,7 @@
         </a>
         <div class="toolbar">
           <button class="icon-button theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
+          <a href="combined-terminal.html">Combined</a>
           <a href="auction-terminal.html">Auction</a>
           <a href="terminal.html">Terminal</a>
           <a href="#repeatSales">重複轉手</a>
@@ -69,6 +70,10 @@
         <button class="button primary" id="loadButton" type="button">載入區域資料</button>
         <button class="button ghost-dark cache-button" id="clearCache" type="button">清除快取</button>
         <p class="status" id="loadStatus">正在讀取索引...</p>
+        <p class="license-notice">
+          資料來源：內政部不動產交易實價登錄 Open Data。授權：
+          <a href="https://data.gov.tw/licenses" target="_blank" rel="noreferrer">政府資料開放授權條款-第1版</a>。
+        </p>
       </aside>
 
       <section class="main-stage">

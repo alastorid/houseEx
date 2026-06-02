@@ -1,9 +1,9 @@
 const DATA_SOURCES = [
   {
     id: "moj-115q1",
-    label: "行政執行署 115 Q1",
-    path: "data/auction/moj-executive-auctions-115q1.json",
-    officialUrl: "https://www.tpk.moj.gov.tw/media/20729227/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+    label: "行政執行署 aggregated",
+    path: "data/auction/moj-executive-auctions.json",
+    officialUrl: "https://data.gov.tw/dataset/177351",
   },
 ];
 
@@ -98,6 +98,7 @@ function caseNoOf(row) {
 }
 
 function stableId(row, index) {
+  if (row["_auction_id"]) return row["_auction_id"];
   return normalizeText([row["分署別"], row["股別"], row["標別"], caseNoOf(row), row["地址"], row["地號"], row["拍定日期"], row["拍定金額"], index].join("|"));
 }
 
@@ -220,6 +221,12 @@ async function fetchJsonWithProgress(path) {
   }
   setLoadProgress(0.78, "解析法拍資料...");
   return JSON.parse(new TextDecoder("utf-8").decode(bytes).replace(/^\uFEFF/, ""));
+}
+
+function auctionRowsFromPayload(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.rows)) return payload.rows;
+  return [];
 }
 
 async function fetchOptionalJson(path) {
@@ -443,7 +450,8 @@ function bindEvents() {
 async function loadSource() {
   const started = performance.now();
   try {
-    const rawRows = await fetchJsonWithProgress(state.source.path);
+    const rawPayload = await fetchJsonWithProgress(state.source.path);
+    const rawRows = auctionRowsFromPayload(rawPayload);
     setLoadProgress(0.84, "讀取稅籍地址匹配...");
     state.businessJoin = await fetchOptionalJson(BUSINESS_MATCH_PATH);
     setLoadProgress(0.9, "合併稅籍匹配...");

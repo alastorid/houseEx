@@ -22,7 +22,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-AUCTION_PATH = ROOT / "data/auction/moj-executive-auctions-115q1.json"
+AUCTION_PATH = ROOT / "data/auction/moj-executive-auctions.json"
 DOWNLOAD_DIR = ROOT / "downloads/business"
 ZIP_PATH = DOWNLOAD_DIR / "BGMOPEN1.zip"
 OUTPUT_PATH = ROOT / "data/auction/business-address-matches.json"
@@ -71,6 +71,8 @@ def case_no_of(row: dict) -> str:
 
 
 def stable_id(row: dict, index: int) -> str:
+    if row.get("_auction_id"):
+        return str(row["_auction_id"])
     parts = [
         row.get("分署別", ""),
         row.get("股別", ""),
@@ -100,7 +102,8 @@ def ensure_download() -> None:
 
 def main() -> int:
     ensure_download()
-    auction_rows = read_json(AUCTION_PATH)
+    auction_payload = read_json(AUCTION_PATH)
+    auction_rows = auction_payload.get("rows", auction_payload) if isinstance(auction_payload, dict) else auction_payload
     auction_exact: dict[str, list[dict]] = defaultdict(list)
     auction_prefix: dict[str, list[dict]] = defaultdict(list)
 

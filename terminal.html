@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>some random data terminal</title>
     <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
-    <link rel="stylesheet" href="terminal.css?v=20260602-progress-line" />
+    <link rel="stylesheet" href="terminal.css?v=20260602-license" />
   </head>
   <body>
     <header class="terminal-top">
       <a href="index.html">some random data</a>
       <a href="auction-terminal.html">Auction Terminal</a>
+      <a href="combined-terminal.html">Combined Terminal</a>
       <strong>Property Terminal</strong>
       <span id="perfBadge">SQLite</span>
       <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
@@ -28,6 +29,10 @@
         </div>
 
         <div class="active-filters" id="activeFilters"></div>
+        <p class="license-notice">
+          資料來源：內政部不動產交易實價登錄 Open Data。授權：
+          <a href="https://data.gov.tw/licenses" target="_blank" rel="noreferrer">政府資料開放授權條款-第1版</a>。
+        </p>
       </aside>
 
       <section class="grid-stage">

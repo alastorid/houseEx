@@ -9,6 +9,7 @@ on:
       - "data/community-overrides.json"
       - "data/auction/**"
       - "auction-terminal.*"
+      - "combined-terminal.*"
   schedule:
     - cron: "23 20 * * *"
   workflow_dispatch:
@@ -114,6 +115,17 @@ jobs:
       - name: Smoke test SQLite assets
         run: python3 scripts/smoke-test-sqlite.py
 
+      - name: Cache auction downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads/auction
+          key: auction-json-${{ github.run_id }}
+          restore-keys: |
+            auction-json-
+
+      - name: Fetch auction open data
+        run: python3 scripts/fetch-auction-open-data.py
+
       - name: Cache business registration download
         uses: actions/cache@v4
         with:
@@ -125,11 +137,14 @@ jobs:
       - name: Build auction business address join
         run: python3 scripts/build-auction-business-join.py
 
+      - name: Build auction PLVR address join
+        run: python3 scripts/build-auction-plvr-join.py
+
       - name: Prepare GitHub Pages site
         run: |
           rm -rf site
           mkdir -p site/data/plvr site/data/db site/data/auction
-          cp index.html terminal.html auction-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css site/
+          cp index.html terminal.html auction-terminal.html combined-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css combined-terminal.js site/
           cp -R vendor site/vendor
           cp data/plvr/source-urls.json data/plvr/web-index.json data/plvr/community-index.json site/data/plvr/
           cp -R data/plvr/web data/plvr/communities site/data/plvr/

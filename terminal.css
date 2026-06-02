@@ -65,8 +65,7 @@ button:hover {
 
 .terminal-top {
   height: 42px;
-  display: grid;
-  grid-template-columns: auto auto auto minmax(0, 1fr) auto;
+  display: flex;
   gap: 16px;
   align-items: center;
   padding: 0 12px;
@@ -80,8 +79,21 @@ button:hover {
 }
 
 #perfBadge {
-  justify-self: end;
+  margin-left: auto;
   color: var(--warn);
+}
+
+.license-notice {
+  margin: 12px 0 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+  background: var(--panel2);
+}
+
+.license-notice a {
+  color: var(--accent);
 }
 
 .theme-button {

@@ -165,6 +165,20 @@ button {
   color: var(--muted);
 }
 
+.license-notice {
+  margin: 12px 0 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--soft);
+  font-size: 0.82rem;
+}
+
+.license-notice a {
+  color: var(--teal);
+}
+
 .load-status-bar {
   position: fixed;
   left: 0;
