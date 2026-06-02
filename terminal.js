@@ -295,11 +295,21 @@ function displayValue(row, field) {
   return value || "";
 }
 
+function joinedAddress(row) {
+  const address = String(row.full_address || "").trim();
+  const city = String(row.city || "").trim();
+  const district = String(row.district || "").trim();
+  if (!address) return [city, district].filter(Boolean).join("");
+  if (city && address.startsWith(city)) return address;
+  if (district && address.startsWith(district)) return `${city}${address}`;
+  return `${city}${district}${address}`;
+}
+
 function cellHtml(row, field, index) {
   const value = displayValue(row, field);
   const title = String(value).replace(/"/g, "&quot;");
   if (field === "full_address" && row.full_address) {
-    const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
+    const fullMapAddress = joinedAddress(row);
     return `<td ${widthStyle(field)}><button class="address-cell" type="button" data-map-address="${String(fullMapAddress).replace(/"/g, "&quot;")}">${value}</button></td>`;
   }
   if (field === "raw_json") {
@@ -912,12 +922,10 @@ function bind() {
       options.push(`<button type="button" data-filter="${field}" data-op=">=" data-val="${filterValue}">>= ${filterLabel}</button>`);
       options.push(`<button type="button" data-filter="${field}" data-op="<=" data-val="${filterValue}"><= ${filterLabel}</button>`);
     }
-    const googleKeyword = field === "full_address"
-      ? `${row.city || ""}${row.district || ""}${row.full_address}`
-      : filterLabel;
-    if (googleKeyword) options.push(`<button type="button" data-google-keyword="${encodeURIComponent(googleKeyword)}">Google: ${filterLabel}</button>`);
     if (field === "full_address") {
-      const fullMapAddress = `${row.city || ""}${row.district || ""}${row.full_address}`;
+      const fullMapAddress = joinedAddress(row);
+      options.push(`<button type="button" data-copy-address="${escapeHtml(fullMapAddress)}">Copy address</button>`);
+      options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
     }
     menu.innerHTML = options.join("");
@@ -929,8 +937,11 @@ function bind() {
     const filterBtn = event.target.closest("[data-filter]");
     const streetViewBtn = event.target.closest("[data-map-streetview]");
     const googleBtn = event.target.closest("[data-google-keyword]");
+    const copyAddressBtn = event.target.closest("[data-copy-address]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
+    } else if (copyAddressBtn) {
+      navigator.clipboard?.writeText(copyAddressBtn.dataset.copyAddress || "");
     } else if (googleBtn) {
       window.open(`https://www.google.com/search?q=${googleBtn.dataset.googleKeyword}`, "_blank", "noopener");
     } else if (streetViewBtn) {
