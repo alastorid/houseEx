@@ -1,0 +1,179 @@
+{
+  "generatedAt": "2026-06-02T17:34:38+00:00",
+  "source": {
+    "agency": "法務部行政執行署",
+    "license": "政府資料開放授權條款-第1版",
+    "licenseUrl": "https://data.gov.tw/licenses",
+    "attribution": "法務部行政執行署「已拍定不動產資料」"
+  },
+  "sourceCount": 15,
+  "rowCount": 3187,
+  "sources": [
+    {
+      "datasetTitle": "行政執行署111年至第三季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/158132#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20461041/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1209552,
+      "rowCount": 1597,
+      "addedRows": 1594
+    },
+    {
+      "datasetTitle": "行政執行署111年至第二季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/156095#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20442343/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1001100,
+      "rowCount": 1321,
+      "addedRows": 7
+    },
+    {
+      "datasetTitle": "行政執行署111年至第四季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/160446#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20485504/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1352183,
+      "rowCount": 1786,
+      "addedRows": 191
+    },
+    {
+      "datasetTitle": "行政執行署112年至第一季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/161572#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20503825/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1392925,
+      "rowCount": 1840,
+      "addedRows": 66
+    },
+    {
+      "datasetTitle": "行政執行署112年至第三季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/165951#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20545650/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1567888,
+      "rowCount": 2070,
+      "addedRows": 236
+    },
+    {
+      "datasetTitle": "行政執行署112年至第二季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/163713#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20525107/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1485699,
+      "rowCount": 1962,
+      "addedRows": 0
+    },
+    {
+      "datasetTitle": "行政執行署112年至第四季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/167258#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20566923/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1739611,
+      "rowCount": 2294,
+      "addedRows": 228
+    },
+    {
+      "datasetTitle": "行政執行署113年至第一季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/168121#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20584468/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1798453,
+      "rowCount": 2371,
+      "addedRows": 78
+    },
+    {
+      "datasetTitle": "行政執行署113年至第三季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/171005#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20621942/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1942637,
+      "rowCount": 2560,
+      "addedRows": 200
+    },
+    {
+      "datasetTitle": "行政執行署113年至第二季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/169175#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20603608/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1882402,
+      "rowCount": 2481,
+      "addedRows": 0
+    },
+    {
+      "datasetTitle": "行政執行署113年至第四季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/172383#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20641147/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1949173,
+      "rowCount": 2568,
+      "addedRows": 97
+    },
+    {
+      "datasetTitle": "行政執行署114年至第一季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/173341#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20660552/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1912861,
+      "rowCount": 2518,
+      "addedRows": 112
+    },
+    {
+      "datasetTitle": "行政執行署114年至第二季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/173967#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20676057/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1851998,
+      "rowCount": 2437,
+      "addedRows": 63
+    },
+    {
+      "datasetTitle": "行政執行署114年至第四季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/176422#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20713025/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1854226,
+      "rowCount": 2439,
+      "addedRows": 255
+    },
+    {
+      "datasetTitle": "行政執行署115年至第一季止所屬分署已拍定不動產資料下載(CSV、JSON及XML)",
+      "datasetUrl": "https://data.gov.tw/dataset/177351#ak-footer",
+      "resourceUrl": "https://www.tpk.moj.gov.tw/media/20729227/%E4%B8%8D%E5%8B%95%E7%94%A2%E5%B7%B2%E6%8B%8D%E5%AE%9A%E6%A8%99%E7%9A%84%E8%B3%87%E6%96%99.json?mediaDL=true",
+      "label": "JSON",
+      "license": "政府資料開放授權條款-第1版",
+      "licenseUrl": "https://data.gov.tw/licenses",
+      "downloadBytes": 1763608,
+      "rowCount": 2319,
+      "addedRows": 60
+    }
+  ],
+  "rows": []
+}
