@@ -10,6 +10,10 @@ const DB_CACHE_VERSION = 1;
 const DB_STORE = "blobs";
 const M2_PER_PING = 3.305785;
 
+function status(phase, detail = {}) {
+  self.postMessage({ type: "status", status: { phase, at: Date.now(), ...detail } });
+}
+
 function normalizeText(value) {
   return String(value || "")
     .normalize("NFKC")
@@ -125,11 +129,53 @@ async function clearCache() {
   return withMeta("clearCache", "cache", started, [], false, { cleared: rows.length });
 }
 
-async function fetchCompressedBytes(path, hash = "") {
+function formatBytes(bytes) {
+  const value = Number(bytes) || 0;
+  if (value >= 1024 * 1024) return `${(value / 1024 / 1024).toFixed(1)} MB`;
+  if (value >= 1024) return `${(value / 1024).toFixed(1)} KB`;
+  return `${value} B`;
+}
+
+async function fetchCompressedBytes(path, hash = "", detail = {}) {
   const url = hash ? `${path}?h=${encodeURIComponent(hash)}` : path;
+  status("download-start", { path, url, ...detail });
   const response = await fetch(url, { cache: "force-cache" });
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${path}`);
-  return new Uint8Array(await response.arrayBuffer());
+  const total = Number(response.headers.get("content-length")) || 0;
+  if (!response.body?.getReader) {
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    status("download-progress", { path, loaded: bytes.byteLength, total, label: total ? `${formatBytes(bytes.byteLength)} / ${formatBytes(total)}` : formatBytes(bytes.byteLength), ...detail });
+    return bytes;
+  }
+  const reader = response.body.getReader();
+  const chunks = [];
+  let loaded = 0;
+  let lastNotice = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    loaded += value.byteLength;
+    const nowMs = now();
+    if (nowMs - lastNotice > 250) {
+      lastNotice = nowMs;
+      status("download-progress", {
+        path,
+        loaded,
+        total,
+        label: total ? `${formatBytes(loaded)} / ${formatBytes(total)}` : formatBytes(loaded),
+        ...detail,
+      });
+    }
+  }
+  const bytes = new Uint8Array(loaded);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  status("download-progress", { path, loaded, total, label: total ? `${formatBytes(loaded)} / ${formatBytes(total)}` : formatBytes(loaded), ...detail });
+  return bytes;
 }
 
 async function decompressGzip(bytes) {
@@ -141,13 +187,19 @@ async function decompressGzip(bytes) {
 async function loadSqliteBytes(path, hash, kind, city = "") {
   const key = `${kind}:${city || "index"}:${path}`;
   const db = await openIdb();
+  status("cache-check", { kind, city, path });
   const cached = await idbGet(db, key);
   if (cached?.hash === hash && cached.bytes) {
+    status("cache-hit", { kind, city, path });
     cached.lastUsed = Date.now();
     await idbPut(db, cached);
-    return { bytes: await decompressGzip(new Uint8Array(cached.bytes)), cacheHit: true };
+    status("decompress-start", { kind, city, path });
+    const bytes = await decompressGzip(new Uint8Array(cached.bytes));
+    status("db-ready", { kind, city, path, cacheHit: true });
+    return { bytes, cacheHit: true };
   }
-  const compressed = await fetchCompressedBytes(path, hash);
+  const compressed = await fetchCompressedBytes(path, hash, { kind, city });
+  status("cache-store", { kind, city, path });
   await idbPut(db, {
     key,
     kind,
@@ -158,22 +210,29 @@ async function loadSqliteBytes(path, hash, kind, city = "") {
     lastUsed: Date.now(),
   });
   if (kind === "city") await pruneCityCache(db);
-  return { bytes: await decompressGzip(compressed), cacheHit: false };
+  status("decompress-start", { kind, city, path });
+  const bytes = await decompressGzip(compressed);
+  status("db-ready", { kind, city, path, cacheHit: false });
+  return { bytes, cacheHit: false };
 }
 
 async function ensureSql() {
   if (SQL) return SQL;
+  status("wasm-start", { path: "vendor/sqljs/sql-wasm.wasm" });
   importScripts("vendor/sqljs/sql-wasm.js?v=20260531-sqlite-hardening");
   SQL = await initSqlJs({ locateFile: (file) => `vendor/sqljs/${file}` });
+  status("wasm-ready", { path: "vendor/sqljs/sql-wasm.wasm" });
   return SQL;
 }
 
 async function init() {
   const started = now();
   await ensureSql();
+  status("metadata-start", { path: "data/db/metadata.json" });
   const metadataResponse = await fetch("data/db/metadata.json", { cache: "no-cache" });
   if (!metadataResponse.ok) throw new Error("SQLite metadata not found");
   metadata = await metadataResponse.json();
+  status("metadata-ready", { path: "data/db/metadata.json" });
   const indexInfo = metadata.index || {};
   const loaded = await loadSqliteBytes(indexInfo.gzip || indexInfo.path, indexInfo.hash, "index");
   indexDb = new SQL.Database(loaded.bytes);
@@ -329,13 +388,30 @@ async function loadCity(payload = {}) {
   if (!info) throw new Error(`SQLite city DB unavailable: ${city}`);
   const shards = shardInfos(city, payload.district);
   let cacheHit = true;
-  for (const shard of shards) {
+  status("city-load-start", { city, district: payload.district || "", shardCount: shards.length });
+  for (const [index, shard] of shards.entries()) {
     const key = shardKey(city, shard.district || "");
     if (shardDbs.has(key)) continue;
+    status("shard-open-start", {
+      city,
+      district: shard.district || "",
+      path: shard.gzip || shard.path,
+      shardIndex: index + 1,
+      shardCount: shards.length,
+    });
     const loaded = await loadSqliteBytes(shard.gzip || shard.path, shard.hash, info.shardMode === "district" ? "shard" : "city", key);
     cacheHit = cacheHit && loaded.cacheHit;
     shardDbs.set(key, new SQL.Database(loaded.bytes));
+    status("shard-open-ready", {
+      city,
+      district: shard.district || "",
+      path: shard.gzip || shard.path,
+      shardIndex: index + 1,
+      shardCount: shards.length,
+      cacheHit: loaded.cacheHit,
+    });
   }
+  status("city-load-ready", { city, district: payload.district || "", shardCount: shards.length, cacheHit });
   return { city, cached: cacheHit, info, shardCount: shards.length, meta: meta("loadCity", city, shards.length, now() - started, cacheHit) };
 }
 

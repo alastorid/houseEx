@@ -1,5 +1,5 @@
 const queryService = (() => {
-  const WORKER_VERSION = "20260531-district-shards";
+  const WORKER_VERSION = "20260601-load-feedback";
   const DEFAULT_TIMEOUT_MS = 15000;
   const latestByChannel = new Map();
   let worker;
@@ -16,6 +16,10 @@ const queryService = (() => {
     if (worker) return worker;
     worker = new Worker(`sqlWorker.js?v=${WORKER_VERSION}`);
     worker.addEventListener("message", (event) => {
+      if (event.data?.type === "status") {
+        window.dispatchEvent(new CustomEvent("sqlite-status", { detail: event.data.status || {} }));
+        return;
+      }
       const { id, ok, result, error } = event.data || {};
       const request = pending.get(id);
       if (!request) return;
