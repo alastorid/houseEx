@@ -643,6 +643,14 @@ function addCurrentPreset() {
   startPresetRename(preset.id);
 }
 
+function deleteSavedPreset(id) {
+  const next = state.presets.filter((preset) => preset.id !== id);
+  if (next.length === state.presets.length) return;
+  state.presets = next;
+  saveFilterPresets();
+  renderPresetButtons();
+}
+
 async function applySavedPreset(id) {
   const preset = state.presets.find((item) => item.id === id);
   if (!preset) return;
@@ -669,6 +677,14 @@ function startPresetRename(id) {
   if (!preset || !button) return;
   const input = document.createElement("input");
   input.className = "preset-name-input";
+  input.name = "preset-label";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.autocapitalize = "off";
+  input.spellcheck = false;
+  input.setAttribute("autocorrect", "off");
+  input.setAttribute("data-lpignore", "true");
+  input.setAttribute("data-1p-ignore", "true");
   input.value = preset.name;
   input.setAttribute("aria-label", "preset name");
   button.replaceWith(input);
@@ -935,6 +951,12 @@ function bind() {
     if (!button) return;
     event.preventDefault();
     startPresetRename(button.dataset.presetId);
+  });
+  el("#savedPresets").addEventListener("contextmenu", (event) => {
+    const button = event.target.closest("[data-preset-id]");
+    if (!button) return;
+    event.preventDefault();
+    deleteSavedPreset(button.dataset.presetId);
   });
   el("#themeToggle").addEventListener("click", () => {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
