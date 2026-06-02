@@ -7,6 +7,8 @@ on:
       - ".github/workflows/update-plvr.yml"
       - "scripts/**"
       - "data/community-overrides.json"
+      - "data/auction/**"
+      - "auction-terminal.*"
   schedule:
     - cron: "23 20 * * *"
   workflow_dispatch:
@@ -115,11 +117,12 @@ jobs:
       - name: Prepare GitHub Pages site
         run: |
           rm -rf site
-          mkdir -p site/data/plvr site/data/db
-          cp index.html terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css site/
+          mkdir -p site/data/plvr site/data/db site/data/auction
+          cp index.html terminal.html auction-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css site/
           cp -R vendor site/vendor
           cp data/plvr/source-urls.json data/plvr/web-index.json data/plvr/community-index.json site/data/plvr/
           cp -R data/plvr/web data/plvr/communities site/data/plvr/
+          cp -R data/auction/. site/data/auction/
           cp data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz site/data/db/
           cp -R data/db/district site/data/db/
 

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random data auction</title>
+    <link rel="stylesheet" href="auction-terminal.css?v=20260602-auction-terminal" />
+  </head>
+  <body>
+    <header class="terminal-top">
+      <a href="index.html">some random data</a>
+      <a href="terminal.html">Property Terminal</a>
+      <strong>Auction Terminal</strong>
+      <span id="perfBadge">Auction</span>
+      <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
+    </header>
+
+    <main class="terminal-shell">
+      <aside class="filter-rail">
+        <label>資料來源<select id="sourceSelect"></select></label>
+        <div class="filter-row">
+          <label>縣市<select id="citySelect"></select></label>
+          <label>鄉鎮<select id="districtSelect"></select></label>
+        </div>
+        <div class="filter-row">
+          <label>拍賣類別<select id="typeSelect"></select></label>
+          <label>拍次<select id="roundSelect"></select></label>
+        </div>
+        <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="地址、地號、案號、分署、拍定日期" /></label>
+        <div class="filter-row">
+          <label>拍定金額 min<input id="priceMin" type="number" min="0" step="1" placeholder="萬" /></label>
+          <label>拍定金額 max<input id="priceMax" type="number" min="0" step="1" placeholder="萬" /></label>
+        </div>
+        <div class="filter-row">
+          <label>面積 min<input id="areaMin" type="number" min="0" step="1" placeholder="坪" /></label>
+          <label>面積 max<input id="areaMax" type="number" min="0" step="1" placeholder="坪" /></label>
+        </div>
+        <div class="source-note" id="sourceNote">--</div>
+      </aside>
+
+      <section class="grid-stage">
+        <div class="grid-toolbar">
+          <span id="resultMeta">--</span>
+          <div class="toolbar-actions">
+            <button id="exportCsv" type="button">CSV</button>
+          </div>
+        </div>
+        <div class="data-grid" id="gridWrap">
+          <table>
+            <thead id="gridHead"></thead>
+            <tbody id="gridRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="detail-panel">
+        <h2 id="detailTitle">Auction</h2>
+        <div id="detailBody">點一列看細節。</div>
+      </aside>
+    </main>
+
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span id="loadStatusText">Ready</span>
+      <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
+    </div>
+
+    <script src="auction-terminal.js?v=20260602-auction-terminal" defer></script>
+  </body>
+</html>
