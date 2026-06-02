@@ -192,10 +192,32 @@ label {
   margin: 8px 0;
 }
 
+#savedPresets {
+  margin: 0;
+}
+
 .segmented button,
 .preset-bar button,
 .column-popover button {
   color: var(--muted);
+}
+
+.preset-bar .preset-add {
+  min-width: 28px;
+  padding-inline: 0;
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.preset-name-input {
+  width: 112px;
+  min-height: 28px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--ink);
+  background: var(--panel2);
+  font: inherit;
 }
 
 .segmented button.active,
