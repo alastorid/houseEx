@@ -677,6 +677,14 @@ function startPresetRename(id) {
   if (!preset || !button) return;
   const input = document.createElement("input");
   input.className = "preset-name-input";
+  input.name = "preset-label";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.autocapitalize = "off";
+  input.spellcheck = false;
+  input.setAttribute("autocorrect", "off");
+  input.setAttribute("data-lpignore", "true");
+  input.setAttribute("data-1p-ignore", "true");
   input.value = preset.name;
   input.setAttribute("aria-label", "preset name");
   button.replaceWith(input);

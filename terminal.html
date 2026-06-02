@@ -23,7 +23,7 @@
           <label>縣市<select id="citySelect"></select></label>
           <label>鄉鎮<select id="districtSelect"></select></label>
         </div>
-        <label>全欄位搜尋<input id="keywordInput" type="search" placeholder="社區、地址、棟及號、115S1" /></label>
+        <label>全欄位搜尋<input id="keywordInput" name="terminal-keyword" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="社區、地址、棟及號、115S1" /></label>
         <div class="preset-bar">
           <button id="largeDetachedPreset" type="button">非暴躁鼠鼠</button>
           <span id="savedPresets"></span>
@@ -80,6 +80,6 @@
     </div>
 
     <script src="queryService.js?v=20260602-activity-timeout" defer></script>
-    <script src="terminal.js?v=20260602-preset-delete" defer></script>
+    <script src="terminal.js?v=20260602-preset-edit" defer></script>
   </body>
 </html>
