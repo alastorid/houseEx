@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-06-02T17:11:12+00:00",
+  "auctionCount": 2319,
+  "businessCountScanned": 1706608,
+  "matchedAuctionCount": 99,
+  "matchedBusinessCount": 1150,
+  "methodCounts": {
+    "address_prefix": 1150,
+    "normalized_address": 11
+  },
+  "outputBytes": 2407053,
+  "source": {
+    "dataset": "財政部財政資訊中心「營業稅稅籍登記資料集」",
+    "datasetUrl": "https://data.gov.tw/dataset/9400",
+    "downloadUrl": "https://eip.fia.gov.tw/data/BGMOPEN1.zip",
+    "license": "政府資料開放授權條款-第1版",
+    "licenseUrl": "https://data.gov.tw/licenses",
+    "attribution": "財政部財政資訊中心「營業稅稅籍登記資料集」",
+    "zipSha256": "5239a08752a09ffa9d66d65f31be3a929329dab0edaf07fa92f32ee8ea0e4d6b"
+  }
+}
