@@ -106,11 +106,50 @@ function sqliteStatusText(status = {}) {
   return "";
 }
 
+function setLoadProgress(value) {
+  const fill = el("#loadStatusFill");
+  const bar = el("#loadStatusBar");
+  if (!fill) return;
+  const progress = Math.max(0, Math.min(1, Number(value) || 0));
+  fill.style.width = `${Math.round(progress * 100)}%`;
+  if (bar) bar.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
+}
+
+function sqliteStatusProgress(status = {}) {
+  const phase = status.phase || "";
+  const count = Math.max(1, Number(status.shardCount) || 1);
+  const index = Math.max(1, Number(status.shardIndex) || 1);
+  const loaded = Number(status.loaded) || 0;
+  const total = Number(status.total) || 0;
+  const downloadRatio = total ? Math.max(0, Math.min(1, loaded / total)) : 0.35;
+  const shardBase = 0.18 + ((index - 1) / count) * 0.66;
+  const shardSpan = 0.66 / count;
+  if (phase === "wasm-start") return 0.04;
+  if (phase === "wasm-ready") return 0.1;
+  if (phase === "metadata-start") return 0.12;
+  if (phase === "metadata-ready") return 0.16;
+  if (phase === "city-load-start") return 0.18;
+  if (phase === "cache-check") return status.shardCount ? shardBase + shardSpan * 0.08 : 0.2;
+  if (phase === "cache-hit") return status.shardCount ? shardBase + shardSpan * 0.5 : 0.45;
+  if (phase === "download-start") return status.shardCount ? shardBase + shardSpan * 0.12 : 0.25;
+  if (phase === "download-progress") return status.shardCount ? shardBase + shardSpan * (0.12 + downloadRatio * 0.56) : 0.25 + downloadRatio * 0.45;
+  if (phase === "cache-store") return status.shardCount ? shardBase + shardSpan * 0.76 : 0.72;
+  if (phase === "decompress-start") return status.shardCount ? shardBase + shardSpan * 0.86 : 0.82;
+  if (phase === "db-ready") return status.shardCount ? shardBase + shardSpan * 0.92 : 0.88;
+  if (phase === "shard-open-start") return shardBase;
+  if (phase === "shard-open-ready") return Math.min(0.9, 0.18 + (index / count) * 0.66);
+  if (phase === "city-load-ready") return 0.92;
+  if (phase.endsWith("ready")) return 0.96;
+  return null;
+}
+
 function showSqliteStatus(status = {}) {
   const text = sqliteStatusText(status);
   if (!text) return;
   const bottomText = el("#loadStatusText");
   if (bottomText) bottomText.textContent = text;
+  const progress = sqliteStatusProgress(status);
+  if (progress != null) setLoadProgress(progress);
   document.body.classList.add("loading-sqlite");
   clearTimeout(sqliteStatusTimer);
   if (status.phase?.endsWith("ready")) {
@@ -264,14 +303,18 @@ async function runQuery({ append = false } = {}) {
   if (state.loading) return;
   state.loading = true;
   document.body.classList.add("loading-sqlite");
+  setLoadProgress(0.03);
   try {
     el("#resultMeta").textContent = append ? "載入更多資料..." : "載入資料...";
     await queryService.loadCity({ city: state.city, district: state.district });
+    setLoadProgress(0.72);
     const result = await queryService.queryTransactions(filterPayload());
+    setLoadProgress(0.88);
     setMeta(result.meta);
     state.total = result.total || 0;
     state.rows = append ? [...state.rows, ...(result.rows || [])] : result.rows || [];
     renderRows();
+    setLoadProgress(1);
     if (!append) writeHashState();
   } finally {
     state.loading = false;

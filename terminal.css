@@ -345,9 +345,9 @@ tbody tr:hover {
   display: grid;
   grid-template-columns: minmax(160px, 360px) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  min-height: 28px;
-  padding: 4px 10px;
+  gap: 10px;
+  height: 22px;
+  padding: 0 10px;
   border-top: 1px solid var(--line);
   color: var(--muted);
   background: color-mix(in srgb, var(--panel) 94%, transparent);
@@ -356,13 +356,21 @@ tbody tr:hover {
   transition: transform 160ms ease;
 }
 
+.load-status-bar span:first-child {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
 body.loading-sqlite .load-status-bar {
   transform: translateY(0);
 }
 
 .load-status-track {
   position: relative;
-  height: 7px;
+  height: 5px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -372,15 +380,10 @@ body.loading-sqlite .load-status-bar {
 .load-status-fill {
   position: absolute;
   inset: 0 auto 0 0;
-  width: 30%;
+  width: 0%;
   border-radius: inherit;
-  background: linear-gradient(90deg, transparent, var(--accent), var(--warn), transparent);
-  animation: loading-sweep 1.25s linear infinite;
-}
-
-@keyframes loading-sweep {
-  from { transform: translateX(-110%); }
-  to { transform: translateX(330%); }
+  background: linear-gradient(90deg, var(--accent), var(--warn));
+  transition: width 180ms ease;
 }
 
 .json-drawer {

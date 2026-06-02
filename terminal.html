@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>some random data terminal</title>
     <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
-    <link rel="stylesheet" href="terminal.css?v=20260602-filter-controls" />
+    <link rel="stylesheet" href="terminal.css?v=20260602-progress-line" />
   </head>
   <body>
     <header class="terminal-top">
@@ -66,12 +66,12 @@
         <pre class="json-fallback" id="jsonCode"></pre>
       </section>
     </aside>
-    <div class="load-status-bar" id="loadStatusBar" aria-live="polite">
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span id="loadStatusText">Ready</span>
-      <span class="load-status-track"><span class="load-status-fill"></span></span>
+      <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
     </div>
 
-    <script src="queryService.js?v=20260601-monaco-json" defer></script>
-    <script src="terminal.js?v=20260602-filter-controls" defer></script>
+    <script src="queryService.js?v=20260602-activity-timeout" defer></script>
+    <script src="terminal.js?v=20260602-terminal-progress" defer></script>
   </body>
 </html>
