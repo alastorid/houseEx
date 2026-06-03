@@ -1,0 +1,68 @@
+.buildlic-shell {
+  grid-template-columns: 340px minmax(0, 1fr) 300px;
+}
+
+.query-pairs {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.query-pair {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 2px 6px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px;
+  background: var(--panel2);
+}
+
+.query-pair button {
+  grid-row: span 2;
+  min-height: 22px;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+}
+
+.query-pair span,
+.query-pair strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.query-pair span {
+  color: var(--muted);
+}
+
+.pivot-cell {
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pivot-cell:hover {
+  color: var(--accent);
+}
+
+.analytics-panel button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 980px) {
+  .buildlic-shell {
+    grid-template-columns: 1fr;
+  }
+}
