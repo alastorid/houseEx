@@ -476,17 +476,12 @@ function showJsonFallback(pretty) {
   el("#jsonEditor").style.display = "none";
 }
 
-async function openJsonViewer(row) {
-  if (!row?.raw_json) return;
-  let parsed;
-  try {
-    parsed = JSON.parse(row.raw_json);
-  } catch {
-    parsed = row.raw_json;
-  }
-  const pretty = typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2);
-  el("#jsonTitle").textContent = row.full_address || row.community_name || row.id || "Raw JSON";
-  el("#jsonMeta").textContent = [row.city, row.district, row.transaction_date, row.source_batch].filter(Boolean).join(" · ");
+async function openJsonPayload({ title = "JSON", meta = "", payload, actionsHtml = "" }) {
+  const pretty = typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
+  el("#jsonTitle").textContent = title;
+  el("#jsonMeta").textContent = meta;
+  const actions = el("#jsonActions");
+  if (actions) actions.innerHTML = actionsHtml;
   el("#jsonDrawer").classList.add("open");
   el("#jsonDrawer").setAttribute("aria-hidden", "false");
   el("#jsonCode").classList.remove("open");
@@ -519,6 +514,21 @@ async function openJsonViewer(row) {
     console.warn(error);
     showJsonFallback(pretty);
   }
+}
+
+async function openJsonViewer(row) {
+  if (!row?.raw_json) return;
+  let parsed;
+  try {
+    parsed = JSON.parse(row.raw_json);
+  } catch {
+    parsed = row.raw_json;
+  }
+  await openJsonPayload({
+    title: row.full_address || row.community_name || row.id || "Raw JSON",
+    meta: [row.city, row.district, row.transaction_date, row.source_batch].filter(Boolean).join(" · "),
+    payload: parsed,
+  });
 }
 
 function closeJsonViewer() {
@@ -765,6 +775,58 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
+function buildlicPlaygroundUrl(params) {
+  const search = new URLSearchParams();
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== "" && value != null) search.set(key, value);
+  });
+  return `buildlic-terminal.html?${search.toString()}`;
+}
+
+async function lookupBuildLicenseForAddress(address) {
+  if (!window.cpamiOpenData) return;
+  const { params, parsed } = window.cpamiOpenData.paramsFromAddress(address);
+  const queryUrl = window.cpamiOpenData.queryUrl(params);
+  const actionsHtml = `
+    <button type="button" data-open-buildlic="${escapeHtml(buildlicPlaygroundUrl(params))}">Open query</button>
+    <a href="${escapeHtml(queryUrl)}" target="_blank" rel="noreferrer">API</a>
+  `;
+  el("#jsonDrawer").classList.add("open");
+  el("#jsonDrawer").setAttribute("aria-hidden", "false");
+  el("#jsonTitle").textContent = address || "Build License";
+  el("#jsonMeta").textContent = "查詢建照 OpenData...";
+  const actions = el("#jsonActions");
+  if (actions) actions.innerHTML = actionsHtml;
+  showJsonFallback(JSON.stringify({ query: params, parsedAddress: parsed, url: queryUrl, loading: true }, null, 2));
+  try {
+    const result = await window.cpamiOpenData.fetchJson(params);
+    await openJsonPayload({
+      title: address || "Build License",
+      meta: `BUILDLIC · ${result.data?.data?.length || 0} rows · ${result.meta.source}`,
+      payload: {
+        query: params,
+        parsedAddress: parsed,
+        url: result.meta.url,
+        source: result.meta.source,
+        data: result.data,
+      },
+      actionsHtml,
+    });
+  } catch (error) {
+    await openJsonPayload({
+      title: address || "Build License",
+      meta: "BUILDLIC · query failed",
+      payload: {
+        error: error.message,
+        query: params,
+        parsedAddress: parsed,
+        url: error.url || queryUrl,
+      },
+      actionsHtml,
+    });
+  }
+}
+
 async function init() {
   loadColumnPrefs();
   loadFilterPresets();
@@ -927,6 +989,7 @@ function bind() {
       options.push(`<button type="button" data-copy-address="${escapeHtml(fullMapAddress)}">Copy address</button>`);
       options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
+      options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Build license OpenData</button>`);
     }
     menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
@@ -938,10 +1001,13 @@ function bind() {
     const streetViewBtn = event.target.closest("[data-map-streetview]");
     const googleBtn = event.target.closest("[data-google-keyword]");
     const copyAddressBtn = event.target.closest("[data-copy-address]");
+    const buildlicBtn = event.target.closest("[data-buildlic-address]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
     } else if (copyAddressBtn) {
       navigator.clipboard?.writeText(copyAddressBtn.dataset.copyAddress || "");
+    } else if (buildlicBtn) {
+      lookupBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
     } else if (googleBtn) {
       window.open(`https://www.google.com/search?q=${googleBtn.dataset.googleKeyword}`, "_blank", "noopener");
     } else if (streetViewBtn) {
@@ -973,6 +1039,11 @@ function bind() {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
   });
   el("#closeJson").addEventListener("click", closeJsonViewer);
+  el("#jsonActions").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-open-buildlic]");
+    if (!button) return;
+    window.open(button.dataset.openBuildlic, "_blank", "noopener");
+  });
   el("#jsonDrawer").addEventListener("click", (event) => {
     if (event.target.id === "jsonDrawer") closeJsonViewer();
   });

@@ -3,37 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>some random data terminal</title>
+    <title>some random build data</title>
     <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
-    <link rel="stylesheet" href="terminal.css?v=20260602-license-bottom" />
+    <link rel="stylesheet" href="terminal.css?v=20260602-buildlic" />
+    <link rel="stylesheet" href="buildlic-terminal.css?v=20260602-buildlic" />
   </head>
   <body>
     <header class="terminal-top">
       <a href="index.html">some random data</a>
+      <a href="terminal.html">Property Terminal</a>
       <a href="auction-terminal.html">Auction Terminal</a>
       <a href="combined-terminal.html">Combined Terminal</a>
-      <a href="buildlic-terminal.html">Build License</a>
-      <strong>Property Terminal</strong>
-      <span id="perfBadge">SQLite</span>
+      <strong>Build License</strong>
+      <span id="perfBadge">BUILDLIC</span>
       <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
     </header>
 
-    <main class="terminal-shell">
+    <main class="terminal-shell buildlic-shell">
       <aside class="filter-rail">
+        <label>Query string<input id="queryInput" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" /></label>
         <div class="filter-row">
-          <label>縣市<select id="citySelect"></select></label>
-          <label>鄉鎮<select id="districtSelect"></select></label>
+          <button id="runQuery" type="button">Run</button>
+          <button id="resetQuery" type="button">Reset</button>
         </div>
-        <label>全欄位搜尋<input id="keywordInput" name="terminal-keyword" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="社區、地址、棟及號、115S1" /></label>
-        <div class="preset-bar">
-          <button id="largeDetachedPreset" type="button">非暴躁鼠鼠</button>
-          <span id="savedPresets"></span>
-          <button id="addPreset" class="preset-add" type="button" title="新增目前篩選">+</button>
-        </div>
-
-        <div class="active-filters" id="activeFilters"></div>
+        <div class="query-pairs" id="queryPairs"></div>
         <p class="license-notice">
-          資料來源：內政部不動產交易實價登錄 Open Data。授權：
+          資料來源：彰化縣建築執照 OpenData。授權：
           <a href="https://data.gov.tw/licenses" target="_blank" rel="noreferrer">政府資料開放授權條款-第1版</a>。
         </p>
       </aside>
@@ -42,11 +37,11 @@
         <div class="grid-toolbar">
           <span id="resultMeta">--</span>
           <div class="toolbar-actions">
-            <button id="columnButton" type="button">欄位</button>
+            <button id="openApi" type="button">API</button>
+            <button id="copyUrl" type="button">Copy URL</button>
             <button id="exportCsv" type="button">CSV</button>
           </div>
         </div>
-        <div class="column-popover" id="columnPopover"></div>
         <div class="data-grid" id="gridWrap">
           <table>
             <thead id="gridHead"></thead>
@@ -56,16 +51,16 @@
       </section>
 
       <aside class="analytics-panel">
-        <h2 id="analyticsTitle">Column</h2>
-        <div id="analyticsBody">點欄位看分布。</div>
+        <h2 id="detailTitle">OpenData</h2>
+        <div id="detailBody">點欄位值會用該欄位重新查詢。</div>
       </aside>
     </main>
-    <div class="context-menu" id="contextMenu"></div>
+
     <aside class="json-drawer" id="jsonDrawer" aria-hidden="true">
-      <section class="json-panel" role="dialog" aria-label="Raw JSON">
+      <section class="json-panel" role="dialog" aria-label="JSON">
         <header class="json-head">
           <div>
-            <span>Raw JSON</span>
+            <span>JSON</span>
             <strong id="jsonTitle">JSON</strong>
             <small id="jsonMeta"></small>
           </div>
@@ -76,13 +71,13 @@
         <pre class="json-fallback" id="jsonCode"></pre>
       </section>
     </aside>
+
     <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span id="loadStatusText">Ready</span>
       <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
     </div>
 
-    <script src="queryService.js?v=20260602-activity-timeout" defer></script>
     <script src="cpamiOpenData.js?v=20260602-buildlic" defer></script>
-    <script src="terminal.js?v=20260602-buildlic-context" defer></script>
+    <script src="buildlic-terminal.js?v=20260602-buildlic" defer></script>
   </body>
 </html>

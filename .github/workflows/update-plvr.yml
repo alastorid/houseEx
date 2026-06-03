@@ -144,7 +144,7 @@ jobs:
         run: |
           rm -rf site
           mkdir -p site/data/plvr site/data/db site/data/auction
-          cp index.html terminal.html auction-terminal.html combined-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css combined-terminal.js site/
+          cp index.html terminal.html auction-terminal.html combined-terminal.html buildlic-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css combined-terminal.js buildlic-terminal.js buildlic-terminal.css cpamiOpenData.js site/
           cp -R vendor site/vendor
           cp data/plvr/source-urls.json data/plvr/web-index.json data/plvr/community-index.json site/data/plvr/
           cp -R data/plvr/web data/plvr/communities site/data/plvr/
