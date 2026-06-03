@@ -1,5 +1,6 @@
 const BASE_PARAMS = { d: "OPENDATA", c: "BUILDLIC", Start: "1" };
 const DEFAULT_PARAMS = { ...BASE_PARAMS, "門牌.行政區": "彰化縣" };
+const HIDDEN_QUERY_KEYS = new Set(["d", "Start"]);
 const COLUMN_ORDER = [
   "資料區塊",
   "完整地址",
@@ -169,9 +170,14 @@ function queryString(params) {
   return search.toString();
 }
 
+function visibleQueryParams(params) {
+  return Object.fromEntries(Object.entries(params || {}).filter(([key]) => !HIDDEN_QUERY_KEYS.has(key)));
+}
+
 function syncQueryInput() {
-  el("#queryInput").value = queryString(state.params);
-  el("#queryPairs").innerHTML = Object.entries(state.params).map(([key, value]) => `
+  const visibleParams = visibleQueryParams(state.params);
+  el("#queryInput").value = queryString(visibleParams);
+  el("#queryPairs").innerHTML = Object.entries(visibleParams).map(([key, value]) => `
     <div class="query-pair">
       <button type="button" data-remove-param="${escapeHtml(key)}">×</button>
       <span>${escapeHtml(key)}</span>
@@ -188,7 +194,7 @@ function applyQueryString(text) {
   });
   state.params = { ...BASE_PARAMS, ...next };
   const url = new URL(window.location.href);
-  url.search = queryString({ ...state.params, theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
+  url.search = queryString({ ...visibleQueryParams(state.params), theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
   window.history.replaceState(null, "", url);
   syncQueryInput();
 }
@@ -351,7 +357,7 @@ function pivotQuery(field, value) {
   const next = { ...BASE_PARAMS, [field]: value };
   state.params = next;
   const url = new URL(window.location.href);
-  url.search = queryString({ ...next, theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
+  url.search = queryString({ ...visibleQueryParams(next), theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
   window.history.replaceState(null, "", url);
   runQuery();
 }
