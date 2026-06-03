@@ -1,6 +1,7 @@
 const BASE_PARAMS = { d: "OPENDATA", c: "BUILDLIC", Start: "1" };
 const DEFAULT_PARAMS = { ...BASE_PARAMS, "門牌.行政區": "彰化縣" };
 const HIDDEN_QUERY_KEYS = new Set(["d", "Start"]);
+const THEME_KEY = "houseEx.buildlicTheme";
 const COLUMN_ORDER = [
   "資料區塊",
   "完整地址",
@@ -52,15 +53,14 @@ function escapeHtml(value) {
 }
 
 function setTheme(scheme, { sync = false } = {}) {
-  const resolved = scheme === "light" ? "light" : "dark";
+  const resolved = scheme === "dark" ? "dark" : "light";
   document.documentElement.classList.toggle("dark", resolved === "dark");
   const button = el("#themeToggle");
   if (button) button.textContent = resolved === "dark" ? "☀" : "☾";
   if (window.monaco?.editor) window.monaco.editor.setTheme(resolved === "dark" ? "houseex-dark" : "houseex-light");
   if (sync) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("theme", resolved);
-    window.history.replaceState(null, "", url);
+    localStorage.setItem(THEME_KEY, resolved);
+    writeLocationState();
   }
 }
 
@@ -153,8 +153,24 @@ function closeJson() {
   el("#jsonDrawer").setAttribute("aria-hidden", "true");
 }
 
+function paramsFromHash() {
+  const raw = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : window.location.hash;
+  return new URLSearchParams(raw);
+}
+
+function paramsFromSearch() {
+  return new URLSearchParams(window.location.search);
+}
+
+function themeFromLocation() {
+  const hashTheme = paramsFromHash().get("theme");
+  const searchTheme = paramsFromSearch().get("theme");
+  return hashTheme || searchTheme || localStorage.getItem(THEME_KEY) || "light";
+}
+
 function parseParamsFromLocation() {
-  const params = new URLSearchParams(window.location.search);
+  const hashParams = paramsFromHash();
+  const params = [...hashParams.keys()].length ? hashParams : paramsFromSearch();
   const out = {};
   params.forEach((value, key) => {
     if (key !== "theme") out[key] = value;
@@ -174,6 +190,15 @@ function visibleQueryParams(params) {
   return Object.fromEntries(Object.entries(params || {}).filter(([key]) => !HIDDEN_QUERY_KEYS.has(key)));
 }
 
+function writeLocationState() {
+  const theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+  const hash = queryString({ ...visibleQueryParams(state.params), theme });
+  const next = `${window.location.pathname}${hash ? `#${hash}` : ""}`;
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
+    window.history.replaceState(null, "", next);
+  }
+}
+
 function syncQueryInput() {
   const visibleParams = visibleQueryParams(state.params);
   el("#queryInput").value = queryString(visibleParams);
@@ -187,15 +212,22 @@ function syncQueryInput() {
 }
 
 function applyQueryString(text) {
-  const params = new URLSearchParams(text.startsWith("?") ? text.slice(1) : text);
+  let raw = String(text || "").trim();
+  if (/^https?:\/\//i.test(raw)) {
+    try {
+      const url = new URL(raw);
+      raw = url.hash ? url.hash.slice(1) : url.search.slice(1);
+    } catch {}
+  } else if (raw.startsWith("?") || raw.startsWith("#")) {
+    raw = raw.slice(1);
+  }
+  const params = new URLSearchParams(raw);
   const next = {};
   params.forEach((value, key) => {
     if (key !== "theme") next[key] = value;
   });
   state.params = { ...BASE_PARAMS, ...next };
-  const url = new URL(window.location.href);
-  url.search = queryString({ ...visibleQueryParams(state.params), theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
-  window.history.replaceState(null, "", url);
+  writeLocationState();
   syncQueryInput();
 }
 
@@ -356,9 +388,7 @@ function pivotQuery(field, value) {
   if (!field || !value) return;
   const next = { ...BASE_PARAMS, [field]: value };
   state.params = next;
-  const url = new URL(window.location.href);
-  url.search = queryString({ ...visibleQueryParams(next), theme: document.documentElement.classList.contains("dark") ? "dark" : "light" });
-  window.history.replaceState(null, "", url);
+  writeLocationState();
   runQuery();
 }
 
@@ -386,12 +416,14 @@ function bind() {
   });
   el("#resetQuery").addEventListener("click", () => {
     state.params = { ...DEFAULT_PARAMS };
+    writeLocationState();
     runQuery();
   });
   el("#queryPairs").addEventListener("click", (event) => {
     const button = event.target.closest("[data-remove-param]");
     if (!button) return;
     delete state.params[button.dataset.removeParam];
+    writeLocationState();
     runQuery();
   });
   el("#gridHead").addEventListener("click", (event) => {
@@ -448,9 +480,9 @@ function bind() {
 }
 
 function init() {
-  const params = new URLSearchParams(window.location.search);
-  setTheme(params.get("theme") || "dark");
+  setTheme(themeFromLocation());
   state.params = parseParamsFromLocation();
+  writeLocationState();
   bind();
   runQuery();
 }
