@@ -778,9 +778,11 @@ function exportCsv() {
 function buildlicPlaygroundUrl(params) {
   const search = new URLSearchParams();
   Object.entries(params || {}).forEach(([key, value]) => {
+    if (key === "d" || key === "Start") return;
     if (value !== "" && value != null) search.set(key, value);
   });
-  return `buildlic-terminal.html?${search.toString()}`;
+  search.set("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+  return `buildlic-terminal.html#${search.toString()}`;
 }
 
 async function lookupBuildLicenseForAddress(address) {
