@@ -466,7 +466,7 @@ body.loading-sqlite .load-status-bar {
   background: var(--top);
 }
 
-.json-head div {
+.json-head > div:first-child {
   min-width: 0;
   display: grid;
   gap: 2px;
@@ -484,10 +484,31 @@ body.loading-sqlite .load-status-bar {
   white-space: nowrap;
 }
 
-.json-head button {
+.json-head > button {
   width: 30px;
   padding: 0;
   font-size: 1.1rem;
+}
+
+.json-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.json-actions button,
+.json-actions a {
+  width: auto;
+  min-height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--accent);
+  background: var(--panel2);
+  font: inherit;
+  text-decoration: none;
 }
 
 .json-editor {
