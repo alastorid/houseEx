@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>some random build data</title>
+    <link rel="stylesheet" href="vendor/monaco/vs/editor/editor.main.css?v=20260601-monaco-json" />
+    <link rel="stylesheet" href="terminal.css?v=20260602-buildlic" />
+    <link rel="stylesheet" href="buildlic-terminal.css?v=20260602-buildlic" />
+  </head>
+  <body>
+    <header class="terminal-top">
+      <a href="index.html">some random data</a>
+      <a href="terminal.html">Property Terminal</a>
+      <a href="auction-terminal.html">Auction Terminal</a>
+      <a href="combined-terminal.html">Combined Terminal</a>
+      <strong>Build License</strong>
+      <span id="perfBadge">BUILDLIC</span>
+      <button class="theme-button" id="themeToggle" type="button" title="切換明暗模式">☾</button>
+    </header>
+
+    <main class="terminal-shell buildlic-shell">
+      <aside class="filter-rail">
+        <label>Query string<input id="queryInput" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" /></label>
+        <div class="filter-row">
+          <button id="runQuery" type="button">Run</button>
+          <button id="resetQuery" type="button">Reset</button>
+        </div>
+        <div class="query-pairs" id="queryPairs"></div>
+        <p class="license-notice">
+          資料來源：彰化縣建築執照 OpenData。授權：
+          <a href="https://data.gov.tw/licenses" target="_blank" rel="noreferrer">政府資料開放授權條款-第1版</a>。
+        </p>
+      </aside>
+
+      <section class="grid-stage">
+        <div class="grid-toolbar">
+          <span id="resultMeta">--</span>
+          <div class="toolbar-actions">
+            <button id="openApi" type="button">API</button>
+            <button id="copyUrl" type="button">Copy URL</button>
+            <button id="exportCsv" type="button">CSV</button>
+          </div>
+        </div>
+        <div class="data-grid" id="gridWrap">
+          <table>
+            <thead id="gridHead"></thead>
+            <tbody id="gridRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="analytics-panel">
+        <h2 id="detailTitle">OpenData</h2>
+        <div id="detailBody">點欄位值會用該欄位重新查詢。</div>
+      </aside>
+    </main>
+
+    <aside class="json-drawer" id="jsonDrawer" aria-hidden="true">
+      <section class="json-panel" role="dialog" aria-label="JSON">
+        <header class="json-head">
+          <div>
+            <span>JSON</span>
+            <strong id="jsonTitle">JSON</strong>
+            <small id="jsonMeta"></small>
+          </div>
+          <div class="json-actions" id="jsonActions"></div>
+          <button id="closeJson" type="button">×</button>
+        </header>
+        <div class="json-editor" id="jsonEditor"></div>
+        <pre class="json-fallback" id="jsonCode"></pre>
+      </section>
+    </aside>
+
+    <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <span id="loadStatusText">Ready</span>
+      <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
+    </div>
+
+    <script src="cpamiOpenData.js?v=20260602-buildlic" defer></script>
+    <script src="buildlic-terminal.js?v=20260602-buildlic" defer></script>
+  </body>
+</html>
