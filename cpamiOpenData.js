@@ -143,7 +143,8 @@
       .then((manifest) => {
         const entry = manifest.districts?.[district];
         if (!entry) return { district, data: [] };
-        return readGzipJson(entry.path);
+        const separator = entry.path.includes("?") ? "&" : "?";
+        return readGzipJson(`${entry.path}${separator}h=${encodeURIComponent(entry.hash || manifest.version || "")}`);
       });
     shardCache.set(district, promise);
     return promise;
