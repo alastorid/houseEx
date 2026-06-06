@@ -154,6 +154,10 @@
     const exactTarget = normalizeAddress(target);
     const exactCandidate = normalizeAddress(candidate);
     if (!exactTarget || !exactCandidate) return 0;
+    const targetParts = parseAddress(target);
+    const candidateParts = parseAddress(candidate);
+    if (targetParts.number && !candidateParts.number) return 0;
+    if (targetParts.road && !candidateParts.road) return 0;
     if (exactTarget === exactCandidate) return 100;
     const looseTarget = comparableAddress(target);
     const looseCandidate = comparableAddress(candidate);
