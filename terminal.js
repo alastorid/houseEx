@@ -305,15 +305,6 @@ function joinedAddress(row) {
   return `${city}${district}${address}`;
 }
 
-function nlscMapUrl(row) {
-  const lat = Number(row?.lat);
-  const lon = Number(row?.lng);
-  if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < 20 || lat > 27 || lon < 118 || lon > 123) {
-    return "";
-  }
-  return `https://maps.nlsc.gov.tw/T09/mapshow.action?language=ZH&lat=${lat.toFixed(6)}&lon=${lon.toFixed(6)}&zoom=18#`;
-}
-
 function cellHtml(row, field, index) {
   const value = displayValue(row, field);
   const title = String(value).replace(/"/g, "&quot;");
@@ -783,58 +774,10 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
-function buildlicPlaygroundUrl(params) {
-  const search = new URLSearchParams();
-  Object.entries(params || {}).forEach(([key, value]) => {
-    if (key === "d" || key === "Start") return;
-    if (value !== "" && value != null) search.set(key, value);
-  });
-  search.set("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
-  return `buildlic-terminal.html#${search.toString()}`;
-}
-
-async function lookupBuildLicenseForAddress(address) {
+function openBuildLicenseForAddress(address) {
   if (!window.cpamiOpenData) return;
-  const { params, parsed } = window.cpamiOpenData.paramsFromAddress(address);
-  const queryUrl = window.cpamiOpenData.queryUrl(params);
-  const actionsHtml = `
-    <button type="button" data-open-buildlic="${escapeHtml(buildlicPlaygroundUrl(params))}">Open query</button>
-    <a href="${escapeHtml(queryUrl)}" target="_blank" rel="noreferrer">API</a>
-  `;
-  el("#jsonDrawer").classList.add("open");
-  el("#jsonDrawer").setAttribute("aria-hidden", "false");
-  el("#jsonTitle").textContent = address || "Build License";
-  el("#jsonMeta").textContent = "查詢建照 OpenData...";
-  const actions = el("#jsonActions");
-  if (actions) actions.innerHTML = actionsHtml;
-  showJsonFallback(JSON.stringify({ query: params, parsedAddress: parsed, url: queryUrl, loading: true }, null, 2));
-  try {
-    const result = await window.cpamiOpenData.fetchJson(params);
-    await openJsonPayload({
-      title: address || "Build License",
-      meta: `BUILDLIC · ${result.data?.data?.length || 0} rows · ${result.meta.source}`,
-      payload: {
-        query: params,
-        parsedAddress: parsed,
-        url: result.meta.url,
-        source: result.meta.source,
-        data: result.data,
-      },
-      actionsHtml,
-    });
-  } catch (error) {
-    await openJsonPayload({
-      title: address || "Build License",
-      meta: "BUILDLIC · query failed",
-      payload: {
-        error: error.message,
-        query: params,
-        parsedAddress: parsed,
-        url: error.url || queryUrl,
-      },
-      actionsHtml,
-    });
-  }
+  const { params } = window.cpamiOpenData.paramsFromAddress(address);
+  window.open(window.cpamiOpenData.queryUrl(params), "_blank", "noopener");
 }
 
 function navigateBupicWindow(popup, detailUrl) {
@@ -856,28 +799,13 @@ function navigateBupicWindow(popup, detailUrl) {
 
 async function openBupicForAddress(address) {
   if (!window.cpamiOpenData) return;
+  const knownKey = window.cpamiOpenData.knownBupicIndexKey(address);
+  if (!knownKey) {
+    window.open(window.cpamiOpenData.BUPIC_PRELOGIN_URL, "_blank", "noopener");
+    return;
+  }
   const popup = window.open("about:blank", "_blank");
-  if (popup) {
-    popup.document.title = "BUPIC";
-    popup.document.body.textContent = "Opening BUPIC...";
-  }
-  try {
-    const details = await window.cpamiOpenData.resolveBupicDetails(address);
-    if (!details.length) throw new Error("No BUPIC detail key found for this address");
-    navigateBupicWindow(popup, details[0].detailUrl);
-  } catch (error) {
-    if (popup && !popup.closed) popup.close();
-    await openJsonPayload({
-      title: address || "BUPIC",
-      meta: "BUPIC detail lookup failed",
-      payload: {
-        error: error.message,
-        address,
-        preLoginUrl: window.cpamiOpenData.BUPIC_PRELOGIN_URL,
-      },
-      actionsHtml: `<a href="${escapeHtml(window.cpamiOpenData.BUPIC_PRELOGIN_URL)}" target="_blank" rel="noreferrer">Open BUPIC search</a>`,
-    });
-  }
+  navigateBupicWindow(popup, window.cpamiOpenData.bupicDetailUrl(knownKey));
 }
 
 async function init() {
@@ -1035,15 +963,12 @@ function bind() {
     }
     if (field === "full_address") {
       const fullMapAddress = joinedAddress(row);
-      const nlscUrl = nlscMapUrl(row);
       options.push(`<button type="button" data-google-map="${encodeURIComponent(fullMapAddress)}">Open Google Maps</button>`);
-      if (nlscUrl) {
-        options.push(`<button type="button" data-nlsc-map="${escapeHtml(nlscUrl)}">Open NLSC Map</button>`);
-      }
       options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
-      options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Build license OpenData</button>`);
-      options.push(`<button type="button" data-bupic-address="${escapeHtml(fullMapAddress)}">BUPIC permit detail</button>`);
+      options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Open build license data</button>`);
+      const hasBupicDetail = Boolean(window.cpamiOpenData?.knownBupicIndexKey(fullMapAddress));
+      options.push(`<button type="button" data-bupic-address="${escapeHtml(fullMapAddress)}">${hasBupicDetail ? "Open BUPIC detail" : "Open BUPIC search"}</button>`);
     }
     menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
@@ -1055,19 +980,16 @@ function bind() {
     const streetViewBtn = event.target.closest("[data-map-streetview]");
     const googleBtn = event.target.closest("[data-google-keyword]");
     const googleMapBtn = event.target.closest("[data-google-map]");
-    const nlscMapBtn = event.target.closest("[data-nlsc-map]");
     const buildlicBtn = event.target.closest("[data-buildlic-address]");
     const bupicBtn = event.target.closest("[data-bupic-address]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
-    } else if (nlscMapBtn) {
-      window.open(nlscMapBtn.dataset.nlscMap, "_blank", "noopener");
     } else if (googleMapBtn) {
       window.open(`https://www.google.com/maps/search/?api=1&query=${googleMapBtn.dataset.googleMap}`, "_blank", "noopener");
     } else if (bupicBtn) {
       openBupicForAddress(bupicBtn.dataset.bupicAddress || "");
     } else if (buildlicBtn) {
-      lookupBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
+      openBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
     } else if (googleBtn) {
       window.open(`https://www.google.com/search?q=${googleBtn.dataset.googleKeyword}`, "_blank", "noopener");
     } else if (streetViewBtn) {
