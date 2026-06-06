@@ -20,23 +20,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { part: "00", start: 1, end: 50101 }
-          - { part: "01", start: 50101, end: 100101 }
-          - { part: "02", start: 100101, end: 150101 }
-          - { part: "03", start: 150101, end: 200101 }
-          - { part: "04", start: 200101, end: 250101 }
-          - { part: "05", start: 250101, end: 300101 }
-          - { part: "06", start: 300101, end: 350101 }
-          - { part: "07", start: 350101, end: 400101 }
+          - { part: "00", year_start: 0, year_end: 15 }
+          - { part: "01", year_start: 15, year_end: 30 }
+          - { part: "02", year_start: 30, year_end: 45 }
+          - { part: "03", year_start: 45, year_end: 60 }
+          - { part: "04", year_start: 60, year_end: 75 }
+          - { part: "05", year_start: 75, year_end: 90 }
+          - { part: "06", year_start: 90, year_end: 105 }
+          - { part: "07", year_start: 105, year_end: 121 }
     steps:
       - uses: actions/checkout@v4
 
       - name: Fetch building license range
         run: >-
           python3 scripts/fetch-buildlic-open-data.py
-          --start ${{ matrix.start }}
-          --end ${{ matrix.end }}
-          --workers 4
+          --year-start ${{ matrix.year_start }}
+          --year-end ${{ matrix.year_end }}
           --fetch-only
 
       - uses: actions/upload-artifact@v4

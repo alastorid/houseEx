@@ -15,11 +15,11 @@ ENDPOINT = "https://cpami.chcg.gov.tw/opendata/OpenDataSearchUrl.do"
 PAGE_SIZE = 100
 
 
-def fetch_page(start, cache_dir, refresh=False):
-    path = cache_dir / f"{start:07d}.json"
+def fetch_page(start, cache_dir, refresh=False, filters=None, cache_prefix=""):
+    path = cache_dir / f"{cache_prefix}{start:07d}.json"
     if path.exists() and not refresh:
         return json.loads(path.read_text())
-    query = urllib.parse.urlencode({"d": "OPENDATA", "c": "BUILDLIC", "Start": start})
+    query = urllib.parse.urlencode({"d": "OPENDATA", "c": "BUILDLIC", "Start": start, **(filters or {})})
     url = f"{ENDPOINT}?{query}"
     for attempt in range(5):
         try:
@@ -59,6 +59,31 @@ def find_end(cache_dir):
         else:
             high = middle
     return high
+
+
+def fetch_qtime_range(year_start, year_end, cache_dir, refresh=False):
+    records = []
+    pages = 0
+    for year in range(year_start, year_end):
+        for month in range(1, 13):
+            qtime = f"{year:03d}{month:02d}"
+            start = 1
+            while True:
+                payload = fetch_page(
+                    start,
+                    cache_dir,
+                    refresh,
+                    filters={"qtime": qtime},
+                    cache_prefix=f"qtime-{qtime}-",
+                )
+                rows = payload.get("data") or []
+                records.extend(rows)
+                pages += 1
+                if len(rows) < PAGE_SIZE:
+                    break
+                start += PAGE_SIZE
+        print(f"Fetched BUILDLIC year {year:03d}", flush=True)
+    return records, pages
 
 
 def district_from_door(door):
@@ -119,12 +144,22 @@ def main():
     parser.add_argument("--end", type=int)
     parser.add_argument("--fetch-only", action="store_true")
     parser.add_argument("--build-only", action="store_true")
+    parser.add_argument("--year-start", type=int)
+    parser.add_argument("--year-end", type=int)
     args = parser.parse_args()
     cache_dir = Path(args.cache_dir)
     end = args.end or (args.start if args.build_only else find_end(cache_dir))
     starts = list(range(args.start, end, PAGE_SIZE))
     records = []
-    if not args.build_only:
+    pages = len(starts)
+    if not args.build_only and args.year_start is not None and args.year_end is not None:
+        records, pages = fetch_qtime_range(
+            args.year_start,
+            args.year_end,
+            cache_dir,
+            args.refresh,
+        )
+    elif not args.build_only:
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
             futures = {
                 pool.submit(fetch_page, start, cache_dir, args.refresh): start
@@ -140,7 +175,7 @@ def main():
         for path in sorted(cache_dir.glob("*.json")):
             records.extend(json.loads(path.read_text()).get("data") or [])
     manifest = write_assets(records, Path(args.output_dir))
-    print(json.dumps({"pages": len(starts), **manifest}, ensure_ascii=False, indent=2))
+    print(json.dumps({"pages": pages, **manifest}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
