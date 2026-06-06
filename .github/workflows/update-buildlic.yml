@@ -1,0 +1,99 @@
+name: Update Building License Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 19 1,11,21 * *"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: buildlic-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { part: "00", start: 1, end: 50101 }
+          - { part: "01", start: 50101, end: 100101 }
+          - { part: "02", start: 100101, end: 150101 }
+          - { part: "03", start: 150101, end: 200101 }
+          - { part: "04", start: 200101, end: 250101 }
+          - { part: "05", start: 250101, end: 300101 }
+          - { part: "06", start: 300101, end: 350101 }
+          - { part: "07", start: 350101, end: 400101 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch building license range
+        run: >-
+          python3 scripts/fetch-buildlic-open-data.py
+          --start ${{ matrix.start }}
+          --end ${{ matrix.end }}
+          --workers 4
+          --fetch-only
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: buildlic-${{ matrix.part }}
+          path: downloads/buildlic/*.json
+          retention-days: 1
+
+  build:
+    needs: fetch
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: buildlic-*
+          path: downloads/buildlic
+          merge-multiple: true
+
+      - name: Build district shards
+        run: python3 scripts/fetch-buildlic-open-data.py --build-only
+
+      - name: Upload built data
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildlic-site
+          path: data/buildlic
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: source
+
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: publish
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: buildlic-site
+          path: publish/data/buildlic
+
+      - name: Copy frontend
+        run: |
+          cp source/terminal.html source/terminal.js source/cpamiOpenData.js publish/
+
+      - name: Publish
+        working-directory: publish
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add terminal.html terminal.js cpamiOpenData.js data/buildlic
+          git commit -m "Update building license data" || exit 0
+          git push origin gh-pages

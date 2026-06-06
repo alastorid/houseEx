@@ -140,15 +140,34 @@ jobs:
       - name: Build auction PLVR address join
         run: python3 scripts/build-auction-plvr-join.py
 
+      - name: Preserve published building license shards
+        run: |
+          mkdir -p data/buildlic
+          curl -fsSL https://alastorid.github.io/houseEx/data/buildlic/manifest.json -o data/buildlic/manifest.json || true
+          if [ -s data/buildlic/manifest.json ]; then
+            python3 - <<'PY'
+          import json, pathlib, subprocess
+          manifest = json.loads(pathlib.Path("data/buildlic/manifest.json").read_text())
+          for entry in manifest.get("districts", {}).values():
+              name = pathlib.Path(entry["path"]).name
+              subprocess.run([
+                  "curl", "-fsSL",
+                  f"https://alastorid.github.io/houseEx/data/buildlic/{name}",
+                  "-o", f"data/buildlic/{name}",
+              ], check=True)
+          PY
+          fi
+
       - name: Prepare GitHub Pages site
         run: |
           rm -rf site
-          mkdir -p site/data/plvr site/data/db site/data/auction
+          mkdir -p site/data/plvr site/data/db site/data/auction site/data/buildlic
           cp index.html terminal.html auction-terminal.html combined-terminal.html buildlic-terminal.html script.js styles.css queryService.js sqlWorker.js terminal.js terminal.css auction-terminal.js auction-terminal.css combined-terminal.js buildlic-terminal.js buildlic-terminal.css cpamiOpenData.js site/
           cp -R vendor site/vendor
           cp data/plvr/source-urls.json data/plvr/web-index.json data/plvr/community-index.json site/data/plvr/
           cp -R data/plvr/web data/plvr/communities site/data/plvr/
           cp -R data/auction/. site/data/auction/
+          cp -R data/buildlic/. site/data/buildlic/
           cp data/db/metadata.json data/db/qa-report.json data/db/size-report.json data/db/community-gap-report.json data/db/index.sqlite.gz site/data/db/
           cp -R data/db/district site/data/db/
 
