@@ -18,6 +18,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         include:
           - { part: "00", year_start: 0, year_end: 15 }

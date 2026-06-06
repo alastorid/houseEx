@@ -1,0 +1,174 @@
+{
+  "version": "2026-06-06",
+  "totalRecords": 97012,
+  "districts": {
+    "unknown": {
+      "path": "data/buildlic/50d8b4a941.json.gz",
+      "recordCount": 29272,
+      "compressedBytes": 875254,
+      "hash": "68c0a2fcfe257dda79e98f749c6c023aeef8aac31f5735c0f9e2aeb1600c4cef"
+    },
+    "二林鎮": {
+      "path": "data/buildlic/23ae7512de.json.gz",
+      "recordCount": 1804,
+      "compressedBytes": 185985,
+      "hash": "cb4e7d0b33936d0a4053483e69fca481ec7c528094c43daea7343361befbfc7a"
+    },
+    "二水鄉": {
+      "path": "data/buildlic/a5acf05e74.json.gz",
+      "recordCount": 417,
+      "compressedBytes": 44920,
+      "hash": "bb565b33f0e264edfdd582f43606181c6cec5ec2eb63e8a01f017034745025b3"
+    },
+    "伸港鄉": {
+      "path": "data/buildlic/caeaeb2a76.json.gz",
+      "recordCount": 2013,
+      "compressedBytes": 191089,
+      "hash": "1de1a29d9225d01f60357bd093086dca17d9fb2a01727e7354d760d50490c2b9"
+    },
+    "北斗鎮": {
+      "path": "data/buildlic/c156be544b.json.gz",
+      "recordCount": 2682,
+      "compressedBytes": 235675,
+      "hash": "125272c0a2eeb01b21e7bf54027ab9b0007fcf78d170b23186c61673e1a946ae"
+    },
+    "和美鎮": {
+      "path": "data/buildlic/eeab7430c3.json.gz",
+      "recordCount": 4441,
+      "compressedBytes": 427688,
+      "hash": "468573dce8722eadc98721e2555893b80e1af2c7a4b31bbf1a734528c2fdf4a0"
+    },
+    "員林市": {
+      "path": "data/buildlic/678ab59a84.json.gz",
+      "recordCount": 426,
+      "compressedBytes": 116465,
+      "hash": "6241627848c3b0df88ec761729a2ece2289ac1392b781c961229bf5b5a0c9421"
+    },
+    "員林鎮": {
+      "path": "data/buildlic/412f0266be.json.gz",
+      "recordCount": 5644,
+      "compressedBytes": 633652,
+      "hash": "26729b826387ce0dc044f7e53c4b5eb23c62663eb0e9369fbbbfe8219ba24495"
+    },
+    "埔心鄉": {
+      "path": "data/buildlic/4e42fa3e5c.json.gz",
+      "recordCount": 1456,
+      "compressedBytes": 147785,
+      "hash": "7774c82c0bffe67bbc5589894091c62e4185e60553731ecc2ecf2aff765de61a"
+    },
+    "埔鹽鄉": {
+      "path": "data/buildlic/5f43a68219.json.gz",
+      "recordCount": 628,
+      "compressedBytes": 66814,
+      "hash": "4835e3ef5e528bf48f3ff656163291e05e7c6571042e1b61a33bb1d7077839bc"
+    },
+    "埤頭鄉": {
+      "path": "data/buildlic/dc5fba8898.json.gz",
+      "recordCount": 690,
+      "compressedBytes": 62478,
+      "hash": "c89e5f4a516dfc31d17e0bde09d2c29af89cec7c864c6d2e694bd655c8f6c64e"
+    },
+    "大城鄉": {
+      "path": "data/buildlic/5a5d8d4cbb.json.gz",
+      "recordCount": 226,
+      "compressedBytes": 26290,
+      "hash": "8ca208eaba42003b652ffcda9d3126357eab20acaf5027621ddcce44faa531da"
+    },
+    "大村鄉": {
+      "path": "data/buildlic/db4d1c20b6.json.gz",
+      "recordCount": 773,
+      "compressedBytes": 91799,
+      "hash": "8e6f72911e327d25c12623010734010ab70a544b212948db2a5e9e262b38cc04"
+    },
+    "彰化市": {
+      "path": "data/buildlic/e2d64d2483.json.gz",
+      "recordCount": 19733,
+      "compressedBytes": 1792627,
+      "hash": "6b921e19a797a2a326ada68d6f1367b5cef17a8b0be06991e6ba03eb38f551d2"
+    },
+    "永靖鄉": {
+      "path": "data/buildlic/313a41deb5.json.gz",
+      "recordCount": 957,
+      "compressedBytes": 92522,
+      "hash": "98f667395f8fc62aa83486da2b79f8cbdf54071c2d83978089040f73cf9be972"
+    },
+    "溪州鄉": {
+      "path": "data/buildlic/35abb26f2e.json.gz",
+      "recordCount": 765,
+      "compressedBytes": 77989,
+      "hash": "b53c8757926190aea0738b988ccbd9c9b1273bb2eeda9328d1b50fd0353c0b69"
+    },
+    "溪湖鎮": {
+      "path": "data/buildlic/240a37da0a.json.gz",
+      "recordCount": 3982,
+      "compressedBytes": 335586,
+      "hash": "dfd6076a2fe39dc82a68c75e2639f3af50650c73f93527d6b234fa2eadbca002"
+    },
+    "田中鎮": {
+      "path": "data/buildlic/2c2fd9a1f6.json.gz",
+      "recordCount": 2587,
+      "compressedBytes": 246676,
+      "hash": "db7ef3e4d57c6f05642f8338afd208c4b8bf4f5c6f5ac6619d65927c9afbefdc"
+    },
+    "田尾鄉": {
+      "path": "data/buildlic/8d968c3878.json.gz",
+      "recordCount": 828,
+      "compressedBytes": 78700,
+      "hash": "43a4143c211bb1fc1555f93ebbff66db32c801c806dd984b5ac15aa7762b720b"
+    },
+    "社頭鄉": {
+      "path": "data/buildlic/f52fa3c8b2.json.gz",
+      "recordCount": 2196,
+      "compressedBytes": 208095,
+      "hash": "76af9962feaef8cc6ffed414593eeba4f2e748108bddd6e5303f825607d491cb"
+    },
+    "福興鄉": {
+      "path": "data/buildlic/be1d41997c.json.gz",
+      "recordCount": 5043,
+      "compressedBytes": 403468,
+      "hash": "7d6196631a0e0fb96ed847ecddeec72bb9112537ba054daa552d98a0a9c1978a"
+    },
+    "秀水鄉": {
+      "path": "data/buildlic/c192809108.json.gz",
+      "recordCount": 2235,
+      "compressedBytes": 197589,
+      "hash": "51fc712e3c0344a3572380f192da909f73530def655e725d9ca08e78c3d43cb1"
+    },
+    "竹塘鄉": {
+      "path": "data/buildlic/1d91ef888f.json.gz",
+      "recordCount": 424,
+      "compressedBytes": 37739,
+      "hash": "ed6e212d8e043119edc23a65a2ca635407034b38f6fd0088d74abae9da3712c4"
+    },
+    "線西鄉": {
+      "path": "data/buildlic/63945cc338.json.gz",
+      "recordCount": 913,
+      "compressedBytes": 80924,
+      "hash": "ec746388cf48d37cf6578ff6a78c2ebee4379adc03975a0e08a7332ce36e9116"
+    },
+    "芬園鄉": {
+      "path": "data/buildlic/4d3ea5b3aa.json.gz",
+      "recordCount": 676,
+      "compressedBytes": 66904,
+      "hash": "4c7f7b88e0f093ae966c70da4cdbdaca92fd2d41f5c7938fe0556eb22959a404"
+    },
+    "花壇鄉": {
+      "path": "data/buildlic/5bf373d35e.json.gz",
+      "recordCount": 2198,
+      "compressedBytes": 227696,
+      "hash": "0f136f9bb1c6752ef232f9d9a3229bc02b919208caf46843ea9d950e6db81b0c"
+    },
+    "芳苑鄉": {
+      "path": "data/buildlic/ed99d3e495.json.gz",
+      "recordCount": 564,
+      "compressedBytes": 71557,
+      "hash": "67083819b3271734955395770795d79abe96575c984e1a864fc273bfff55c245"
+    },
+    "鹿港鎮": {
+      "path": "data/buildlic/b8408ca928.json.gz",
+      "recordCount": 4037,
+      "compressedBytes": 362754,
+      "hash": "877e7ff8f76a8c88d810467981699d89a6403f998ad2846ee17bcb2d895235a6"
+    }
+  }
+}

@@ -66,15 +66,15 @@ def fetch_qtime_range(year_start, year_end, cache_dir, refresh=False):
     pages = 0
     for year in range(year_start, year_end):
         for month in range(1, 13):
-            qtime = f"{year:03d}{month:02d}"
+            issue_month = f"{year:03d}年{month:02d}月"
             start = 1
             while True:
                 payload = fetch_page(
                     start,
                     cache_dir,
                     refresh,
-                    filters={"qtime": qtime},
-                    cache_prefix=f"qtime-{qtime}-",
+                    filters={"發照日期": issue_month},
+                    cache_prefix=f"issue-month-{year:03d}-{month:02d}-",
                 )
                 rows = payload.get("data") or []
                 records.extend(rows)
