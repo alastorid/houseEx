@@ -351,37 +351,16 @@ function hideLoadProgress() {
   setTimeout(() => document.body.classList.remove("loading-sqlite"), 1200);
 }
 
-async function runQuery() {
+function runQuery({ openOfficial = true } = {}) {
   syncQueryInput();
-  setLoadProgress(0.12, "查詢彰化建照 OpenData...");
-  try {
-    const started = performance.now();
-    const result = await window.cpamiOpenData.fetchJson(state.params);
-    setLoadProgress(0.72, "轉成 1NF table...");
-    state.raw = { query: state.params, meta: result.meta, data: result.data };
-    state.rows = normalizePayload(result.data);
-    if (!state.rows.some((row) => row[state.sortBy] != null)) state.sortBy = "資料區塊";
-    renderRows();
-    const elapsed = Math.round(performance.now() - started);
-    el("#perfBadge").textContent = `BUILDLIC · ${result.data?.data?.length || 0} objects · ${state.rows.length} 1NF rows · ${elapsed}ms`;
-    el("#detailTitle").textContent = "Query";
-    el("#detailBody").innerHTML = `
-      <div class="stat-line"><span>API objects</span><strong>${money.format(result.data?.data?.length || 0)}</strong></div>
-      <div class="stat-line"><span>1NF rows</span><strong>${money.format(state.rows.length)}</strong></div>
-      <div class="stat-line"><span>Fetch</span><strong>${escapeHtml(result.meta.source)}</strong></div>
-      <button type="button" id="showRawPayload">Raw JSON</button>
-    `;
-    setLoadProgress(1, "Data ready");
-  } catch (error) {
-    state.raw = { query: state.params, url: window.cpamiOpenData.queryUrl(state.params), error: error.message };
-    state.rows = [];
-    renderRows();
-    el("#detailTitle").textContent = "Query failed";
-    el("#detailBody").innerHTML = `<p>${escapeHtml(error.message)}</p><a href="${escapeHtml(state.raw.url)}" target="_blank" rel="noreferrer">Open API URL</a>`;
-    setLoadProgress(1, "Query failed");
-  } finally {
-    hideLoadProgress();
-  }
+  const url = window.cpamiOpenData.queryUrl(state.params);
+  state.raw = { query: state.params, url };
+  state.rows = [];
+  renderRows();
+  el("#perfBadge").textContent = "BUILDLIC · official data";
+  el("#detailTitle").textContent = "Query";
+  el("#detailBody").innerHTML = `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">Open official result</a>`;
+  if (openOfficial) window.open(url, "_blank", "noopener");
 }
 
 function pivotQuery(field, value) {
@@ -389,7 +368,7 @@ function pivotQuery(field, value) {
   const next = { ...BASE_PARAMS, [field]: value };
   state.params = next;
   writeLocationState();
-  runQuery();
+  runQuery({ openOfficial: false });
 }
 
 function exportCsv() {
@@ -417,14 +396,14 @@ function bind() {
   el("#resetQuery").addEventListener("click", () => {
     state.params = { ...DEFAULT_PARAMS };
     writeLocationState();
-    runQuery();
+    runQuery({ openOfficial: false });
   });
   el("#queryPairs").addEventListener("click", (event) => {
     const button = event.target.closest("[data-remove-param]");
     if (!button) return;
     delete state.params[button.dataset.removeParam];
     writeLocationState();
-    runQuery();
+    runQuery({ openOfficial: false });
   });
   el("#gridHead").addEventListener("click", (event) => {
     const button = event.target.closest("[data-sort]");
@@ -484,7 +463,7 @@ function init() {
   state.params = parseParamsFromLocation();
   writeLocationState();
   bind();
-  runQuery();
+  runQuery({ openOfficial: false });
 }
 
 document.addEventListener("DOMContentLoaded", init);
