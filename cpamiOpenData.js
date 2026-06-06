@@ -4,16 +4,6 @@
   const BUPIC_DETAIL_URL = "https://cpami.chcg.gov.tw/bupic/pages/queryInfoAction.do";
   const DEFAULT_QUERY = { d: "OPENDATA", c: "BUILDLIC", Start: "1" };
   const COUNTY_RE = /^(?<city>[^縣市]+[縣市])(?<district>[^鄉鎮市區]+[鄉鎮市區])?/;
-  const LICENSE_TYPE_CODES = {
-    建造執照: "1",
-    雜項建造執照: "2",
-    使用執照: "3",
-    拆除執照: "4",
-    雜項使用執照: "5",
-    變更使用執照: "6",
-    臨時建築物許可證: "7",
-    臨時建築物使用許可證: "8",
-  };
   const KNOWN_BUPIC_KEYS = new Map([
     ["彰化縣鹿港鎮頂番里8鄰鹿和路四段186巷11號", "1093000728800IA5"],
     ["彰化縣鹿港鎮鹿和路四段186巷11號", "1093000728800IA5"],
@@ -82,29 +72,6 @@
     return `${CPAMI_ENDPOINT}?${search.toString()}`;
   }
 
-  function recordAddress(record) {
-    const door = Array.isArray(record?.["門牌"]) ? record["門牌"].find(Boolean) : null;
-    if (!door) return "";
-    return [
-      door["行政區"],
-      door["村里鄰"],
-      door["路街段巷弄"],
-      door["號"],
-      door["樓"],
-    ].filter(Boolean).join("");
-  }
-
-  function bupicIndexKey(record) {
-    const license = normalizeText(record?.["核發執照字號"]);
-    const match = license.match(/^\((\d{2,3})\).+?字第(\d{1,7})號$/);
-    const typeCode = LICENSE_TYPE_CODES[normalizeText(record?.["執照類別"])];
-    if (!match || !typeCode) return "";
-    const year = match[1].padStart(3, "0");
-    const number = match[2].padStart(7, "0");
-    const revision = String(record?.["變更設計次數"] || "00").replace(/\D/g, "").padStart(2, "0").slice(-2);
-    return `${year}${typeCode}${number}${revision}IA5`;
-  }
-
   function bupicDetailUrl(indexKey) {
     return `${BUPIC_DETAIL_URL}?INDEX_KEY=${encodeURIComponent(indexKey)}`;
   }
@@ -113,67 +80,6 @@
     const normalized = normalizeAddress(address);
     const comparable = comparableAddress(address);
     return KNOWN_BUPIC_KEYS.get(normalized) || KNOWN_BUPIC_KEYS.get(comparable) || "";
-  }
-
-  async function resolveBupicDetails(address) {
-    const knownKey = knownBupicIndexKey(address);
-    if (knownKey) {
-      return [{
-        indexKey: knownKey,
-        detailUrl: bupicDetailUrl(knownKey),
-        address: normalizeAddress(address),
-        source: "confirmed-address",
-      }];
-    }
-
-    const { params } = paramsFromAddress(address);
-    const result = await fetchJson(params);
-    const target = comparableAddress(address);
-    const records = Array.isArray(result.data?.data) ? result.data.data : [];
-    return records
-      .map((record) => {
-        const indexKey = bupicIndexKey(record);
-        const foundAddress = recordAddress(record);
-        return {
-          indexKey,
-          detailUrl: indexKey ? bupicDetailUrl(indexKey) : "",
-          address: foundAddress,
-          license: record["核發執照字號"] || "",
-          type: record["執照類別"] || "",
-          source: "buildlic-opendata",
-          record,
-          matchesAddress: comparableAddress(foundAddress) === target,
-        };
-      })
-      .filter((item) => item.indexKey && item.matchesAddress);
-  }
-
-  async function fetchTextWithTimeout(url, timeoutMs = 12000) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const response = await fetch(url, {
-        mode: "cors",
-        credentials: "omit",
-        headers: { Accept: "application/json,text/plain,*/*" },
-        signal: controller.signal,
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return await response.text();
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-
-  async function fetchJson(params) {
-    const url = queryUrl(params);
-    try {
-      const text = await fetchTextWithTimeout(url);
-      const data = JSON.parse(text.replace(/^\uFEFF/, ""));
-      return { data, meta: { source: "cpami.chcg.gov.tw", url, fetchedAt: new Date().toISOString() } };
-    } catch (error) {
-      throw Object.assign(new Error(`OpenData query failed: ${error?.message || "unknown"}`), { url });
-    }
   }
 
   function valuesAtPath(value, path) {
@@ -223,11 +129,8 @@
     parseAddress,
     paramsFromAddress,
     queryUrl,
-    fetchJson,
-    bupicIndexKey,
     bupicDetailUrl,
     knownBupicIndexKey,
-    resolveBupicDetails,
     valuesAtPath,
     flattenPaths,
     compactValue,
