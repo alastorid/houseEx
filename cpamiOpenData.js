@@ -53,19 +53,13 @@
     return `${CPAMI_ENDPOINT}?${search.toString()}`;
   }
 
-  function proxyUrl(url) {
-    return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-  }
-
-  function codeTabsProxyUrl(url) {
-    return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
-  }
-
   async function fetchTextWithTimeout(url, timeoutMs = 12000) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(url, {
+        mode: "cors",
+        credentials: "omit",
         headers: { Accept: "application/json,text/plain,*/*" },
         signal: controller.signal,
       });
@@ -78,22 +72,13 @@
 
   async function fetchJson(params) {
     const url = queryUrl(params);
-    const attempts = [
-      { source: "direct", url },
-      { source: "codetabs", url: codeTabsProxyUrl(url) },
-      { source: "allorigins", url: proxyUrl(url) },
-    ];
-    let lastError;
-    for (const attempt of attempts) {
-      try {
-        const text = await fetchTextWithTimeout(attempt.url);
-        const data = JSON.parse(text.replace(/^\uFEFF/, ""));
-        return { data, meta: { source: attempt.source, url, fetchedAt: new Date().toISOString() } };
-      } catch (error) {
-        lastError = error;
-      }
+    try {
+      const text = await fetchTextWithTimeout(url);
+      const data = JSON.parse(text.replace(/^\uFEFF/, ""));
+      return { data, meta: { source: "cpami.chcg.gov.tw", url, fetchedAt: new Date().toISOString() } };
+    } catch (error) {
+      throw Object.assign(new Error(`OpenData query failed: ${error?.message || "unknown"}`), { url });
     }
-    throw Object.assign(new Error(`OpenData query failed: ${lastError?.message || "unknown"}`), { url });
   }
 
   function valuesAtPath(value, path) {
