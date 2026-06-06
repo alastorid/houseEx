@@ -119,8 +119,12 @@
   async function readGzipJson(path) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`BUILDLIC HTTP ${response.status}`);
-    const stream = response.body.pipeThrough(new DecompressionStream("gzip"));
-    return JSON.parse(await new Response(stream).text());
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
+      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+      return JSON.parse(await new Response(stream).text());
+    }
+    return JSON.parse(new TextDecoder().decode(bytes));
   }
 
   function loadManifest() {
