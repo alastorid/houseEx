@@ -829,6 +829,49 @@ async function lookupBuildLicenseForAddress(address) {
   }
 }
 
+function navigateBupicWindow(popup, detailUrl) {
+  if (!popup) return;
+  try {
+    popup.opener = null;
+    popup.location.href = window.cpamiOpenData.BUPIC_PRELOGIN_URL;
+    window.setTimeout(() => {
+      try {
+        popup.location.href = detailUrl;
+      } catch {
+        window.open(detailUrl, "_blank", "noopener");
+      }
+    }, 1800);
+  } catch {
+    window.open(detailUrl, "_blank", "noopener");
+  }
+}
+
+async function openBupicForAddress(address) {
+  if (!window.cpamiOpenData) return;
+  const popup = window.open("about:blank", "_blank");
+  if (popup) {
+    popup.document.title = "BUPIC";
+    popup.document.body.textContent = "Opening BUPIC...";
+  }
+  try {
+    const details = await window.cpamiOpenData.resolveBupicDetails(address);
+    if (!details.length) throw new Error("No BUPIC detail key found for this address");
+    navigateBupicWindow(popup, details[0].detailUrl);
+  } catch (error) {
+    if (popup && !popup.closed) popup.close();
+    await openJsonPayload({
+      title: address || "BUPIC",
+      meta: "BUPIC detail lookup failed",
+      payload: {
+        error: error.message,
+        address,
+        preLoginUrl: window.cpamiOpenData.BUPIC_PRELOGIN_URL,
+      },
+      actionsHtml: `<a href="${escapeHtml(window.cpamiOpenData.BUPIC_PRELOGIN_URL)}" target="_blank" rel="noreferrer">Open BUPIC search</a>`,
+    });
+  }
+}
+
 async function init() {
   loadColumnPrefs();
   loadFilterPresets();
@@ -992,6 +1035,7 @@ function bind() {
       options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
       options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Build license OpenData</button>`);
+      options.push(`<button type="button" data-bupic-address="${escapeHtml(fullMapAddress)}">BUPIC permit detail</button>`);
     }
     menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
@@ -1004,10 +1048,13 @@ function bind() {
     const googleBtn = event.target.closest("[data-google-keyword]");
     const copyAddressBtn = event.target.closest("[data-copy-address]");
     const buildlicBtn = event.target.closest("[data-buildlic-address]");
+    const bupicBtn = event.target.closest("[data-bupic-address]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
     } else if (copyAddressBtn) {
       navigator.clipboard?.writeText(copyAddressBtn.dataset.copyAddress || "");
+    } else if (bupicBtn) {
+      openBupicForAddress(bupicBtn.dataset.bupicAddress || "");
     } else if (buildlicBtn) {
       lookupBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
     } else if (googleBtn) {
