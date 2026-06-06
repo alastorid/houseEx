@@ -148,11 +148,12 @@ def main():
     parser.add_argument("--year-end", type=int)
     args = parser.parse_args()
     cache_dir = Path(args.cache_dir)
-    end = args.end or (args.start if args.build_only else find_end(cache_dir))
+    use_qtime = args.year_start is not None and args.year_end is not None
+    end = args.end or (args.start if args.build_only or use_qtime else find_end(cache_dir))
     starts = list(range(args.start, end, PAGE_SIZE))
     records = []
     pages = len(starts)
-    if not args.build_only and args.year_start is not None and args.year_end is not None:
+    if not args.build_only and use_qtime:
         records, pages = fetch_qtime_range(
             args.year_start,
             args.year_end,
