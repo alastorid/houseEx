@@ -774,10 +774,30 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
-function openBuildLicenseForAddress(address) {
+async function queryBuildLicenseForAddress(address) {
   if (!window.cpamiOpenData) return;
-  const { params } = window.cpamiOpenData.paramsFromAddress(address);
-  window.open(window.cpamiOpenData.queryUrl(params), "_blank", "noopener");
+  await openJsonPayload({
+    title: address || "Build License",
+    meta: "BUILDLIC · loading",
+    payload: { address, loading: true },
+  });
+  try {
+    const matches = await window.cpamiOpenData.queryLocalByAddress(address);
+    await openJsonPayload({
+      title: address || "Build License",
+      meta: `BUILDLIC · ${matches.length} possible hits`,
+      payload: {
+        address,
+        matches: matches.map(({ score, matchedAddress, record }) => ({ score, matchedAddress, ...record })),
+      },
+    });
+  } catch (error) {
+    await openJsonPayload({
+      title: address || "Build License",
+      meta: "BUILDLIC · unavailable",
+      payload: { address, error: error.message },
+    });
+  }
 }
 
 function navigateBupicWindow(popup, detailUrl) {
@@ -799,13 +819,30 @@ function navigateBupicWindow(popup, detailUrl) {
 
 async function openBupicForAddress(address) {
   if (!window.cpamiOpenData) return;
-  const knownKey = window.cpamiOpenData.knownBupicIndexKey(address);
-  if (!knownKey) {
-    window.open(window.cpamiOpenData.BUPIC_PRELOGIN_URL, "_blank", "noopener");
-    return;
+  await openJsonPayload({
+    title: address || "BUPIC",
+    meta: "BUPIC qtype 3 · loading",
+    payload: { qtype: 3, address, loading: true },
+  });
+  try {
+    const matches = await window.cpamiOpenData.queryLocalByAddress(address);
+    const rows = matches.map(window.cpamiOpenData.toBupicCandidate).filter((row) => row.index_key);
+    const links = rows.map((row, index) => (
+      `<a href="${escapeHtml(row.detail_url)}" target="_blank" rel="noreferrer">Open ${escapeHtml(row.license_desc || `result ${index + 1}`)}</a>`
+    )).join("");
+    await openJsonPayload({
+      title: address || "BUPIC",
+      meta: `BUPIC qtype 3 · ${rows.length} possible hits`,
+      payload: { qtype: 3, address, rows },
+      actionsHtml: links,
+    });
+  } catch (error) {
+    await openJsonPayload({
+      title: address || "BUPIC",
+      meta: "BUPIC · unavailable",
+      payload: { qtype: 3, address, error: error.message },
+    });
   }
-  const popup = window.open("about:blank", "_blank");
-  navigateBupicWindow(popup, window.cpamiOpenData.bupicDetailUrl(knownKey));
 }
 
 async function init() {
@@ -963,12 +1000,10 @@ function bind() {
     }
     if (field === "full_address") {
       const fullMapAddress = joinedAddress(row);
-      options.push(`<button type="button" data-google-map="${encodeURIComponent(fullMapAddress)}">Open Google Maps</button>`);
       options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
-      options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
-      options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Open build license data</button>`);
-      const hasBupicDetail = Boolean(window.cpamiOpenData?.knownBupicIndexKey(fullMapAddress));
-      options.push(`<button type="button" data-bupic-address="${escapeHtml(fullMapAddress)}">${hasBupicDetail ? "Open BUPIC detail" : "Open BUPIC search"}</button>`);
+      options.push(`<button type="button" data-google-map="${encodeURIComponent(fullMapAddress)}">Open Google Maps</button>`);
+      options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Query build license data</button>`);
+      options.push(`<button type="button" data-bupic-address="${escapeHtml(fullMapAddress)}">View BUPIC data</button>`);
     }
     menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
@@ -977,7 +1012,6 @@ function bind() {
   });
   el("#contextMenu").addEventListener("click", (event) => {
     const filterBtn = event.target.closest("[data-filter]");
-    const streetViewBtn = event.target.closest("[data-map-streetview]");
     const googleBtn = event.target.closest("[data-google-keyword]");
     const googleMapBtn = event.target.closest("[data-google-map]");
     const buildlicBtn = event.target.closest("[data-buildlic-address]");
@@ -989,11 +1023,9 @@ function bind() {
     } else if (bupicBtn) {
       openBupicForAddress(bupicBtn.dataset.bupicAddress || "");
     } else if (buildlicBtn) {
-      openBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
+      queryBuildLicenseForAddress(buildlicBtn.dataset.buildlicAddress || "");
     } else if (googleBtn) {
       window.open(`https://www.google.com/search?q=${googleBtn.dataset.googleKeyword}`, "_blank", "noopener");
-    } else if (streetViewBtn) {
-      window.open(`https://www.google.com/maps?layer=c&cbll=&cbp=1,0,,0,0&q=${streetViewBtn.dataset.mapStreetview}`, "_blank", "noopener");
     }
     el("#contextMenu").classList.remove("open");
   });
