@@ -305,12 +305,20 @@ function joinedAddress(row) {
   return `${city}${district}${address}`;
 }
 
+function nlscMapUrl(row) {
+  const lat = Number(row?.lat);
+  const lon = Number(row?.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < 20 || lat > 27 || lon < 118 || lon > 123) {
+    return "";
+  }
+  return `https://maps.nlsc.gov.tw/T09/mapshow.action?language=ZH&lat=${lat.toFixed(6)}&lon=${lon.toFixed(6)}&zoom=18#`;
+}
+
 function cellHtml(row, field, index) {
   const value = displayValue(row, field);
   const title = String(value).replace(/"/g, "&quot;");
   if (field === "full_address" && row.full_address) {
-    const fullMapAddress = joinedAddress(row);
-    return `<td ${widthStyle(field)}><button class="address-cell" type="button" data-map-address="${String(fullMapAddress).replace(/"/g, "&quot;")}">${value}</button></td>`;
+    return `<td ${widthStyle(field)} title="${title}">${value}</td>`;
   }
   if (field === "raw_json") {
     return `<td ${widthStyle(field)}>${row.raw_json ? `<button class="raw-cell" type="button" data-raw-index="${index}">JSON</button>` : ""}</td>`;
@@ -1006,11 +1014,7 @@ function bind() {
     const rawButton = event.target.closest("[data-raw-index]");
     if (rawButton) {
       openJsonViewer(state.rows[Number(rawButton.dataset.rawIndex)]);
-      return;
     }
-    const button = event.target.closest("[data-map-address]");
-    if (!button) return;
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(button.dataset.mapAddress)}`, "_blank", "noopener");
   });
   el("#gridRows").addEventListener("contextmenu", (event) => {
     const td = event.target.closest("td");
@@ -1031,7 +1035,11 @@ function bind() {
     }
     if (field === "full_address") {
       const fullMapAddress = joinedAddress(row);
-      options.push(`<button type="button" data-copy-address="${escapeHtml(fullMapAddress)}">Copy address</button>`);
+      const nlscUrl = nlscMapUrl(row);
+      options.push(`<button type="button" data-google-map="${encodeURIComponent(fullMapAddress)}">Open Google Maps</button>`);
+      if (nlscUrl) {
+        options.push(`<button type="button" data-nlsc-map="${escapeHtml(nlscUrl)}">Open NLSC Map</button>`);
+      }
       options.push(`<button type="button" data-google-keyword="${encodeURIComponent(fullMapAddress)}">Google: ${escapeHtml(fullMapAddress)}</button>`);
       options.push(`<button type="button" data-map-streetview="${encodeURIComponent(fullMapAddress)}">Street View</button>`);
       options.push(`<button type="button" data-buildlic-address="${escapeHtml(fullMapAddress)}">Build license OpenData</button>`);
@@ -1046,13 +1054,16 @@ function bind() {
     const filterBtn = event.target.closest("[data-filter]");
     const streetViewBtn = event.target.closest("[data-map-streetview]");
     const googleBtn = event.target.closest("[data-google-keyword]");
-    const copyAddressBtn = event.target.closest("[data-copy-address]");
+    const googleMapBtn = event.target.closest("[data-google-map]");
+    const nlscMapBtn = event.target.closest("[data-nlsc-map]");
     const buildlicBtn = event.target.closest("[data-buildlic-address]");
     const bupicBtn = event.target.closest("[data-bupic-address]");
     if (filterBtn) {
       addFilter(filterBtn.dataset.filter, filterBtn.dataset.op, filterBtn.dataset.val);
-    } else if (copyAddressBtn) {
-      navigator.clipboard?.writeText(copyAddressBtn.dataset.copyAddress || "");
+    } else if (nlscMapBtn) {
+      window.open(nlscMapBtn.dataset.nlscMap, "_blank", "noopener");
+    } else if (googleMapBtn) {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${googleMapBtn.dataset.googleMap}`, "_blank", "noopener");
     } else if (bupicBtn) {
       openBupicForAddress(bupicBtn.dataset.bupicAddress || "");
     } else if (buildlicBtn) {
