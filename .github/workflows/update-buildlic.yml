@@ -20,28 +20,45 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        include:
-          - { part: "00", year_start: 0, year_end: 15 }
-          - { part: "01", year_start: 15, year_end: 30 }
-          - { part: "02", year_start: 30, year_end: 45 }
-          - { part: "03", year_start: 45, year_end: 60 }
-          - { part: "04", year_start: 60, year_end: 75 }
-          - { part: "05", year_start: 75, year_end: 90 }
-          - { part: "06", year_start: 90, year_end: 105 }
-          - { part: "07", year_start: 105, year_end: 121 }
+        district:
+          - 彰化市
+          - 芬園鄉
+          - 花壇鄉
+          - 秀水鄉
+          - 鹿港鎮
+          - 福興鄉
+          - 線西鄉
+          - 和美鎮
+          - 伸港鄉
+          - 員林市
+          - 社頭鄉
+          - 永靖鄉
+          - 埔心鄉
+          - 溪湖鎮
+          - 大村鄉
+          - 埔鹽鄉
+          - 田中鎮
+          - 北斗鎮
+          - 田尾鄉
+          - 埤頭鄉
+          - 溪州鄉
+          - 竹塘鄉
+          - 二林鎮
+          - 大城鄉
+          - 芳苑鄉
+          - 二水鄉
     steps:
       - uses: actions/checkout@v4
 
       - name: Fetch building license range
         run: >-
           python3 scripts/fetch-buildlic-open-data.py
-          --year-start ${{ matrix.year_start }}
-          --year-end ${{ matrix.year_end }}
+          --district ${{ matrix.district }}
           --fetch-only
 
       - uses: actions/upload-artifact@v4
         with:
-          name: buildlic-${{ matrix.part }}
+          name: buildlic-${{ strategy.job-index }}
           path: downloads/buildlic/*.json
           retention-days: 1
 
@@ -58,7 +75,10 @@ jobs:
           merge-multiple: true
 
       - name: Build district shards
-        run: python3 scripts/fetch-buildlic-open-data.py --build-only
+        run: >-
+          python3 scripts/fetch-buildlic-open-data.py
+          --build-only
+          --require-address 彰化縣埤頭鄉稻香路468號
 
       - name: Upload built data
         uses: actions/upload-artifact@v4

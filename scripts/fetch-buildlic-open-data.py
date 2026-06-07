@@ -13,6 +13,12 @@ from pathlib import Path
 
 ENDPOINT = "https://cpami.chcg.gov.tw/opendata/OpenDataSearchUrl.do"
 PAGE_SIZE = 100
+DISTRICTS = [
+    "彰化市", "芬園鄉", "花壇鄉", "秀水鄉", "鹿港鎮", "福興鄉", "線西鄉",
+    "和美鎮", "伸港鄉", "員林市", "社頭鄉", "永靖鄉", "埔心鄉", "溪湖鎮",
+    "大村鄉", "埔鹽鄉", "田中鎮", "北斗鎮", "田尾鄉", "埤頭鄉", "溪州鄉",
+    "竹塘鄉", "二林鎮", "大城鄉", "芳苑鄉", "二水鄉",
+]
 
 
 def fetch_page(start, cache_dir, refresh=False, filters=None, cache_prefix=""):
@@ -86,6 +92,39 @@ def fetch_qtime_range(year_start, year_end, cache_dir, refresh=False):
     return records, pages
 
 
+def fetch_filtered_pages(filters, cache_dir, cache_prefix, refresh=False):
+    records = []
+    pages = 0
+    start = 1
+    while True:
+        payload = fetch_page(
+            start,
+            cache_dir,
+            refresh,
+            filters=filters,
+            cache_prefix=cache_prefix,
+        )
+        rows = payload.get("data") or []
+        records.extend(rows)
+        pages += 1
+        if len(rows) < PAGE_SIZE:
+            break
+        start += PAGE_SIZE
+    return records, pages
+
+
+def fetch_district(district, cache_dir, refresh=False):
+    if district not in DISTRICTS:
+        raise ValueError(f"Unknown BUILDLIC district: {district}")
+    slug = hashlib.sha1(district.encode()).hexdigest()[:10]
+    return fetch_filtered_pages(
+        {"門牌.行政區": f"彰化縣{district}"},
+        cache_dir,
+        f"district-{slug}-",
+        refresh,
+    )
+
+
 def district_from_door(door):
     area = str(door.get("行政區") or "")
     match = re.search(r"彰化縣(.+?[鄉鎮市])", area)
@@ -134,6 +173,18 @@ def write_assets(records, output_dir):
     return manifest
 
 
+def record_has_address(record, expected):
+    normalized = re.sub(r"\s+", "", expected).replace("臺", "台").replace("－", "-")
+    for door in record.get("門牌") or []:
+        address = "".join(str(door.get(key) or "") for key in ("行政區", "村里鄰", "路街段巷弄", "號", "樓"))
+        comparable = re.sub(r"\s+", "", address).replace("臺", "台").replace("－", "-")
+        comparable = re.sub(r"([^鄉鎮市區]{1,8}[村里])(?:\d+鄰)?", "", comparable)
+        normalized_without_village = re.sub(r"([^鄉鎮市區]{1,8}[村里])(?:\d+鄰)?", "", normalized)
+        if comparable == normalized_without_village:
+            return True
+    return False
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--cache-dir", default="downloads/buildlic")
@@ -146,14 +197,19 @@ def main():
     parser.add_argument("--build-only", action="store_true")
     parser.add_argument("--year-start", type=int)
     parser.add_argument("--year-end", type=int)
+    parser.add_argument("--district")
+    parser.add_argument("--require-address", action="append", default=[])
     args = parser.parse_args()
     cache_dir = Path(args.cache_dir)
     use_qtime = args.year_start is not None and args.year_end is not None
-    end = args.end or (args.start if args.build_only or use_qtime else find_end(cache_dir))
+    end = args.end or (args.start if args.build_only or use_qtime or args.district else find_end(cache_dir))
     starts = list(range(args.start, end, PAGE_SIZE))
     records = []
     pages = len(starts)
-    if not args.build_only and use_qtime:
+    if not args.build_only and args.district:
+        records, pages = fetch_district(args.district, cache_dir, args.refresh)
+        print(f"Fetched BUILDLIC {args.district}: {len(records)} records in {pages} pages", flush=True)
+    elif not args.build_only and use_qtime:
         records, pages = fetch_qtime_range(
             args.year_start,
             args.year_end,
@@ -175,6 +231,12 @@ def main():
     if args.build_only:
         for path in sorted(cache_dir.glob("*.json")):
             records.extend(json.loads(path.read_text()).get("data") or [])
+    missing_addresses = [
+        address for address in args.require_address
+        if not any(record_has_address(record, address) for record in records)
+    ]
+    if missing_addresses:
+        raise RuntimeError(f"BUILDLIC snapshot is incomplete; missing required addresses: {', '.join(missing_addresses)}")
     manifest = write_assets(records, Path(args.output_dir))
     print(json.dumps({"pages": pages, **manifest}, ensure_ascii=False, indent=2))
 
