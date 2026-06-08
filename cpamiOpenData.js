@@ -1,6 +1,7 @@
 (function () {
   const CPAMI_ENDPOINT = "https://cpami.chcg.gov.tw/opendata/OpenDataSearchUrl.do";
   const BUPIC_PRELOGIN_URL = "https://cpami.chcg.gov.tw/bupic/preLoginFormAction.do";
+  const BUPIC_SEARCH_URL = "https://cpami.chcg.gov.tw/bupic/pages/api/getLicdata";
   const BUPIC_DETAIL_URL = "https://cpami.chcg.gov.tw/bupic/pages/queryInfoAction.do";
   const DEFAULT_QUERY = { d: "OPENDATA", c: "BUILDLIC", Start: "1" };
   const COUNTY_RE = /^(?<city>[^縣市]+[縣市])(?<district>[^鄉鎮市區]+[鄉鎮市區])?/;
@@ -13,6 +14,34 @@
     變更使用執照: "6",
     臨時建築物許可證: "7",
     臨時建築物使用許可證: "8",
+  };
+  const BUPIC_DISTRICT_CODES = {
+    彰化市: "500",
+    芬園鄉: "502",
+    花壇鄉: "503",
+    秀水鄉: "504",
+    鹿港鎮: "505",
+    福興鄉: "506",
+    線西鄉: "507",
+    和美鎮: "508",
+    伸港鄉: "509",
+    員林市: "510",
+    社頭鄉: "511",
+    永靖鄉: "512",
+    埔心鄉: "513",
+    溪湖鎮: "514",
+    大村鄉: "515",
+    埔鹽鄉: "516",
+    田中鎮: "520",
+    北斗鎮: "521",
+    田尾鄉: "522",
+    埤頭鄉: "523",
+    溪州鄉: "524",
+    竹塘鄉: "525",
+    二林鎮: "526",
+    大城鄉: "527",
+    芳苑鄉: "528",
+    二水鄉: "530",
   };
   const shardCache = new Map();
   let manifestPromise;
@@ -74,6 +103,92 @@
     if (parsed.road) params["門牌.路街段巷弄"] = parsed.road;
     if (parsed.number) params["門牌.號"] = parsed.number;
     return { params, parsed };
+  }
+
+  function splitBupicRoad(value) {
+    let text = normalizeText(value);
+    let alley = "";
+    let lane = "";
+    const alleyMatch = text.match(/(.+?)(\d+)弄$/);
+    if (alleyMatch) {
+      text = alleyMatch[1];
+      alley = alleyMatch[2];
+    }
+    const laneMatch = text.match(/(.+?)(\d+)巷$/);
+    if (laneMatch) {
+      text = laneMatch[1];
+      lane = laneMatch[2];
+    }
+    return { road: text, lane, alley };
+  }
+
+  function bupicParamsFromAddress(address) {
+    const parsed = parseAddress(address);
+    const roadParts = splitBupicRoad(parsed.road);
+    const number = String(parsed.number || "").replace(/號.*$/, "").replace(/之/g, "-");
+    const params = {
+      _search: "false",
+      nd: String(Date.now()),
+      rows: "200",
+      page: "1",
+      sidx: "",
+      sord: "asc",
+      qtype: "3",
+      addradr: BUPIC_DISTRICT_CODES[parsed.district] || "",
+      addrad2: roadParts.road,
+      addrad3: roadParts.lane,
+      addrad4: roadParts.alley,
+      addrad5: number,
+    };
+    return { params, parsed };
+  }
+
+  function bupicRequest(address) {
+    const callback = `jQuery${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+    const { params, parsed } = bupicParamsFromAddress(address);
+    const body = new URLSearchParams(params);
+    return {
+      callback,
+      parsed,
+      params,
+      url: `${BUPIC_SEARCH_URL}?callback=${encodeURIComponent(callback)}`,
+      body: body.toString(),
+      curl: `curl -X POST '${BUPIC_SEARCH_URL}?callback=${encodeURIComponent(callback)}' -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' --data '${body.toString().replace(/'/g, "'\\''")}'`,
+    };
+  }
+
+  function parseJsonp(text) {
+    const source = String(text || "").trim();
+    const start = source.indexOf("(");
+    const end = source.lastIndexOf(")");
+    if (start < 0 || end <= start) throw new Error("BUPIC response is not JSONP");
+    return JSON.parse(source.slice(start + 1, end));
+  }
+
+  async function queryBupicByAddress(address) {
+    const request = bupicRequest(address);
+    const response = await fetch(request.url, {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      referrer: BUPIC_PRELOGIN_URL,
+      headers: {
+        Accept: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      body: request.body,
+    });
+    if (!response.ok) throw new Error(`BUPIC HTTP ${response.status}`);
+    const payload = parseJsonp(await response.text());
+    const rows = Array.isArray(payload.rows) ? payload.rows : [];
+    return {
+      request,
+      payload,
+      rows: rows.map((row) => ({
+        ...row,
+        detail_url: row.index_key ? bupicDetailUrl(row.index_key) : "",
+      })),
+    };
   }
 
   function queryUrl(params) {
@@ -244,8 +359,12 @@
   window.cpamiOpenData = {
     DEFAULT_QUERY,
     BUPIC_PRELOGIN_URL,
+    BUPIC_SEARCH_URL,
     parseAddress,
     paramsFromAddress,
+    bupicParamsFromAddress,
+    bupicRequest,
+    queryBupicByAddress,
     queryUrl,
     queryLocalByAddress,
     recordAddresses,
