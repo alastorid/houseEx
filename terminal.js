@@ -72,6 +72,7 @@ let sqliteStatusTimer;
 let monacoLoadPromise;
 let jsonEditor;
 let jsonEditorModel;
+let selectedAddressBrowserValue = "";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -759,6 +760,68 @@ async function showAnalytics(field) {
   `).join("");
 }
 
+function closeAddressBrowser() {
+  const browser = el("#addressBrowser");
+  browser.classList.remove("open");
+  browser.setAttribute("aria-hidden", "true");
+  el("#addressMapFrame").removeAttribute("src");
+  selectedAddressBrowserValue = "";
+}
+
+function showAddressOnMap(address) {
+  const value = String(address || "").trim();
+  if (!value) return;
+  selectedAddressBrowserValue = value;
+  el("#addressMapLabel").textContent = value;
+  el("#addressMapFrame").src = `https://www.google.com/maps?q=${encodeURIComponent(value)}&output=embed`;
+  el("#addressBrowserList").querySelectorAll("[data-browse-address]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.browseAddress === value);
+  });
+}
+
+async function openAddressBrowser() {
+  const browser = el("#addressBrowser");
+  browser.classList.add("open");
+  browser.setAttribute("aria-hidden", "false");
+  el("#addressBrowserTitle").textContent = "Browse addresses";
+  el("#addressBrowserMeta").textContent = "Loading address counts...";
+  el("#addressBrowserList").innerHTML = `<div class="address-browser-empty">Loading...</div>`;
+  el("#addressMapLabel").textContent = "Select an address";
+  el("#addressMapFrame").removeAttribute("src");
+  selectedAddressBrowserValue = "";
+  try {
+    await queryService.loadCity({ city: state.city, district: state.district });
+    const result = await queryService.queryColumnAnalytics({
+      ...filterPayload(),
+      field: "full_address",
+      limit: 200,
+    });
+    setMeta(result.meta);
+    const rows = (result.rows || []).filter((row) => String(row.value || "").trim());
+    el("#addressBrowserMeta").textContent = `${money.format(rows.length)} addresses · ordered by transaction count`;
+    el("#addressBrowserList").innerHTML = rows.length
+      ? rows.map((row) => {
+        const address = joinedAddress({
+          city: state.city,
+          district: state.district,
+          full_address: row.value,
+        });
+        return `
+          <button class="address-browser-item" type="button" data-browse-address="${escapeHtml(address)}">
+            <span title="${escapeHtml(address)}">${escapeHtml(address)}</span>
+            <strong>${money.format(row.count || 0)}</strong>
+          </button>
+        `;
+      }).join("")
+      : `<div class="address-browser-empty">No addresses for the current filters.</div>`;
+    const first = el("#addressBrowserList").querySelector("[data-browse-address]");
+    if (first) showAddressOnMap(first.dataset.browseAddress);
+  } catch (error) {
+    el("#addressBrowserMeta").textContent = "Unable to load addresses";
+    el("#addressBrowserList").innerHTML = `<div class="address-browser-empty">${escapeHtml(error.message)}</div>`;
+  }
+}
+
 function exportCsv() {
   const cols = visibleColumnDefs();
   const lines = [
@@ -935,7 +998,12 @@ function bind() {
     event.preventDefault();
     const field = th.dataset.field;
     const menu = el("#contextMenu");
-    menu.innerHTML = `<button type="button" data-hide-column="${field}">隱藏 ${fieldDef(field)[1]}</button>`;
+    const options = [];
+    if (field === "full_address") {
+      options.push(`<button type="button" data-browse-addresses>Browse addresses</button>`);
+    }
+    options.push(`<button type="button" data-hide-column="${field}">隱藏 ${fieldDef(field)[1]}</button>`);
+    menu.innerHTML = options.join("");
     menu.style.left = `${event.clientX}px`;
     menu.style.top = `${event.clientY}px`;
     menu.classList.add("open");
@@ -944,6 +1012,12 @@ function bind() {
     if (!event.target.closest("#contextMenu")) el("#contextMenu").classList.remove("open");
   });
   el("#contextMenu").addEventListener("click", (event) => {
+    const browseButton = event.target.closest("[data-browse-addresses]");
+    if (browseButton) {
+      openAddressBrowser();
+      el("#contextMenu").classList.remove("open");
+      return;
+    }
     const button = event.target.closest("[data-hide-column]");
     if (!button) return;
     hideColumn(button.dataset.hideColumn);
@@ -1070,6 +1144,14 @@ function bind() {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark", { sync: true });
   });
   el("#closeJson").addEventListener("click", closeJsonViewer);
+  el("#closeAddressBrowser").addEventListener("click", closeAddressBrowser);
+  el("#addressBrowserList").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-browse-address]");
+    if (button) showAddressOnMap(button.dataset.browseAddress);
+  });
+  el("#addressBrowser").addEventListener("click", (event) => {
+    if (event.target.id === "addressBrowser") closeAddressBrowser();
+  });
   el("#jsonActions").addEventListener("click", (event) => {
     const button = event.target.closest("[data-open-buildlic]");
     if (!button) return;
@@ -1079,7 +1161,9 @@ function bind() {
     if (event.target.id === "jsonDrawer") closeJsonViewer();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && el("#jsonDrawer").classList.contains("open")) closeJsonViewer();
+    if (event.key !== "Escape") return;
+    if (el("#addressBrowser").classList.contains("open")) closeAddressBrowser();
+    else if (el("#jsonDrawer").classList.contains("open")) closeJsonViewer();
   });
   window.addEventListener("hashchange", async () => {
     applyHashState();
