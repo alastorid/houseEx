@@ -891,37 +891,80 @@ function navigateBupicWindow(popup, detailUrl) {
 
 async function openBupicForAddress(address) {
   if (!window.cpamiOpenData) return;
+  const request = window.cpamiOpenData.bupicRequest(address);
   await openJsonPayload({
     title: address || "BUPIC",
     meta: "BUPIC qtype 3 · loading",
-    payload: { qtype: 3, address, loading: true },
+    payload: { qtype: 3, address, request: request.params, loading: true },
   });
   try {
-    const matches = await window.cpamiOpenData.queryLocalByAddress(address);
-    const rows = matches.map(window.cpamiOpenData.toBupicCandidate).filter((row) => row.index_key);
+    const direct = await window.cpamiOpenData.queryBupicByAddress(address);
+    const rows = direct.rows || [];
     const links = rows.map((row, index) => (
-      `<a href="${escapeHtml(row.detail_url)}" target="_blank" rel="noreferrer">Open ${escapeHtml(row.license_desc || `result ${index + 1}`)}</a>`
-    )).join("");
+      row.detail_url
+        ? `<a href="${escapeHtml(row.detail_url)}" target="_blank" rel="noreferrer">Open ${escapeHtml(row.license_desc || `result ${index + 1}`)}</a>`
+        : ""
+    )).filter(Boolean).join("");
     await openJsonPayload({
       title: address || "BUPIC",
-      meta: rows.length
-        ? `BUPIC qtype 3 · ${rows.length} possible hits`
-        : "BUPIC · no indexed permit key for this address",
-      payload: {
-        qtype: 3,
-        address,
-        indexed_buildlic_matches: matches.length,
-        note: rows.length ? "" : "BUPIC detail links require a matching permit from the local BUILDLIC snapshot.",
-        rows,
+      meta: `BUPIC qtype 3 · ${rows.length} direct hits`,
+    payload: {
+      qtype: 3,
+      address,
+      request: {
+        url: direct.request.url,
+        body: direct.request.body,
+        params: direct.request.params,
       },
+      rows,
+      raw: direct.payload,
+    },
       actionsHtml: links,
     });
-  } catch (error) {
-    await openJsonPayload({
-      title: address || "BUPIC",
-      meta: "BUPIC · unavailable",
-      payload: { qtype: 3, address, error: error.message },
-    });
+  } catch (directError) {
+    try {
+      const matches = await window.cpamiOpenData.queryLocalByAddress(address);
+      const rows = matches.map(window.cpamiOpenData.toBupicCandidate).filter((row) => row.index_key);
+      const links = rows.map((row, index) => (
+        `<a href="${escapeHtml(row.detail_url)}" target="_blank" rel="noreferrer">Open ${escapeHtml(row.license_desc || `result ${index + 1}`)}</a>`
+      )).join("");
+      await openJsonPayload({
+        title: address || "BUPIC",
+        meta: rows.length
+          ? `BUPIC qtype 3 · ${rows.length} possible hits`
+          : "BUPIC · no indexed permit key for this address",
+        payload: {
+          qtype: 3,
+          address,
+          request: {
+            url: request.url,
+            body: request.body,
+            params: request.params,
+          },
+          direct_error: directError.message,
+          indexed_buildlic_matches: matches.length,
+          note: rows.length ? "Direct BUPIC query failed; showing local BUILDLIC-derived permit links." : "Direct BUPIC query failed and no local permit key is available.",
+          rows,
+        },
+        actionsHtml: links,
+      });
+    } catch (fallbackError) {
+      await openJsonPayload({
+        title: address || "BUPIC",
+        meta: "BUPIC · unavailable",
+        payload: {
+          qtype: 3,
+          address,
+          request: {
+            url: request.url,
+            body: request.body,
+            params: request.params,
+          },
+          direct_error: directError.message,
+          fallback_error: fallbackError.message,
+        },
+      });
+    }
   }
 }
 
