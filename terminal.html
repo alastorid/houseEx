@@ -76,6 +76,31 @@
         <pre class="json-fallback" id="jsonCode"></pre>
       </section>
     </aside>
+    <aside class="address-browser" id="addressBrowser" aria-hidden="true">
+      <section class="address-browser-panel" role="dialog" aria-label="Browse addresses">
+        <header class="address-browser-head">
+          <div>
+            <span>Address Browser</span>
+            <strong id="addressBrowserTitle">Browse addresses</strong>
+            <small id="addressBrowserMeta"></small>
+          </div>
+          <button id="closeAddressBrowser" type="button" aria-label="Close">×</button>
+        </header>
+        <div class="address-browser-body">
+          <div class="address-browser-list" id="addressBrowserList"></div>
+          <div class="address-map-stage">
+            <div class="address-map-label" id="addressMapLabel">Select an address</div>
+            <iframe
+              id="addressMapFrame"
+              title="Google Map"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    </aside>
     <div class="load-status-bar" id="loadStatusBar" aria-live="polite" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span id="loadStatusText">Ready</span>
       <span class="load-status-track"><span class="load-status-fill" id="loadStatusFill"></span></span>
@@ -83,6 +108,6 @@
 
     <script src="queryService.js?v=20260602-activity-timeout" defer></script>
     <script src="cpamiOpenData.js?v=20260606-address-match" defer></script>
-    <script src="terminal.js?v=20260607-buildlic-status" defer></script>
+    <script src="terminal.js?v=20260607-address-browser" defer></script>
   </body>
 </html>
