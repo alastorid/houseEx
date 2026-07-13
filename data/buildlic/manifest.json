@@ -1,174 +1,174 @@
 {
-  "version": "2026-07-12",
+  "version": "2026-07-13",
   "totalRecords": 117259,
   "districts": {
     "unknown": {
       "path": "data/buildlic/50d8b4a941.json.gz",
       "recordCount": 596,
       "compressedBytes": 145660,
-      "hash": "5ee52845c12ec181a17831e32f516c32bbfad5102a6e1942200d7155a0497871"
+      "hash": "e99a64aa63da2c41fbde078f99f9034d7d168b46e4864f2a40865e6f59009012"
     },
     "二林鎮": {
       "path": "data/buildlic/23ae7512de.json.gz",
       "recordCount": 4087,
       "compressedBytes": 438469,
-      "hash": "26d21291a23f30c80628d978e2d751bde25049f98b78ec93144e3ca6747cc690"
+      "hash": "f63a074bde596b8f125bd125ce57b63c82f00b7a881cb633468abdd4f63265ed"
     },
     "二水鄉": {
       "path": "data/buildlic/a5acf05e74.json.gz",
       "recordCount": 767,
       "compressedBytes": 86832,
-      "hash": "c4dff3a46eb1254c3ecffd119c7d2efaf7baad5766ade51bd810df2390f4ef5a"
+      "hash": "832ce48c249df49f3089fc3c1ba178e4dca76a0243a6dfef1b73a1f852ee478d"
     },
     "伸港鄉": {
       "path": "data/buildlic/caeaeb2a76.json.gz",
       "recordCount": 4737,
       "compressedBytes": 495703,
-      "hash": "fcfbeeabebdf3a7d290c8b2ea93b5c43929f33308186b6ef7d812ff51ad3456c"
+      "hash": "1b3c6382ff89eecca07c6a3b2a8dfd99523d2606e4982e607c7b1e440831ad88"
     },
     "北斗鎮": {
       "path": "data/buildlic/c156be544b.json.gz",
       "recordCount": 4874,
       "compressedBytes": 476714,
-      "hash": "a626bafd374d873a1cb92c34663cc42bf44723de26caced0f00f7edc08f6ef7f"
+      "hash": "2088d834a18f84947ad0ddcedeed7b9693332b2fc08aa4d96a6445a0f53f28ab"
     },
     "和美鎮": {
       "path": "data/buildlic/eeab7430c3.json.gz",
       "recordCount": 9099,
       "compressedBytes": 1007065,
-      "hash": "aa75ed035a31012cf97a92f3e31610bff501d381ef016d6fc7736baab35f802d"
+      "hash": "0963813d89a2a8301fdd9195ae0854e55e845c4c9ef510d1d126e10356cb9055"
     },
     "員林市": {
       "path": "data/buildlic/678ab59a84.json.gz",
       "recordCount": 3996,
       "compressedBytes": 658007,
-      "hash": "eee79434640150ce7e9ae942ed500f6b3cb4feecb3819bc60a9ca7767e4df8f8"
+      "hash": "c36cca309ef2541a59d05c083e173a353c5f6851dccb741be25123a0282d16e1"
     },
     "員林鎮": {
       "path": "data/buildlic/412f0266be.json.gz",
       "recordCount": 193,
       "compressedBytes": 77584,
-      "hash": "1b7b31108d6a82adf46b2cf0c16d8345242f58c5fff6b802125c1371444d94b3"
+      "hash": "ccf5e19f005168a854af5cf782ead574b20b082770ad20f39bfa4b205a4ca18c"
     },
     "埔心鄉": {
       "path": "data/buildlic/4e42fa3e5c.json.gz",
       "recordCount": 2798,
       "compressedBytes": 318065,
-      "hash": "86f82e33613398dcd49babfb079f2e2b1d92f3fea54b1774903af29743b96665"
+      "hash": "72da5fd8ef36d2436c1aa5f9183cf6562c8050abc1ca5bd2485e4dc29233e21f"
     },
     "埔鹽鄉": {
       "path": "data/buildlic/5f43a68219.json.gz",
       "recordCount": 1754,
       "compressedBytes": 199158,
-      "hash": "46a58fc1625604da465a37bb3710de6b227d47be25c224109729b4669e470043"
+      "hash": "b378e6b22f59c107c16de2ce741794425ac3abef12a7d4aca588f27678820748"
     },
     "埤頭鄉": {
       "path": "data/buildlic/dc5fba8898.json.gz",
       "recordCount": 2208,
       "compressedBytes": 229326,
-      "hash": "2c78040d452f475326adfb4a9be1b19e363df7fc68898a0cd303e93042d1afaa"
+      "hash": "e4fd7dd548b57ae8486ddefcf309640077db70f0a1a761c14050e73cfba38e4d"
     },
     "大城鄉": {
       "path": "data/buildlic/5a5d8d4cbb.json.gz",
       "recordCount": 616,
       "compressedBytes": 73953,
-      "hash": "9c2c7a73daa266d5143b190b02f7ba6e5f6491c73cec53fd9c67f1214215b97c"
+      "hash": "54d5b54e7075efd2b26f3627a761a722188bdcbde5dfebc9b1d85ad8995533b1"
     },
     "大村鄉": {
       "path": "data/buildlic/db4d1c20b6.json.gz",
       "recordCount": 2233,
       "compressedBytes": 284969,
-      "hash": "c17b4edd5e307030c09498d7d0828a3f7b5f92b892e813b7c2ff9fcc390bc0b5"
+      "hash": "aec4ab1035dfc1d2c986f8303dbd32f5a8aa757776d9648dbd81138f3ac1ecc3"
     },
     "彰化市": {
       "path": "data/buildlic/e2d64d2483.json.gz",
       "recordCount": 27998,
       "compressedBytes": 2898959,
-      "hash": "4016105518696d8330cb6f331155d4b24e54bb4d6dfe0d6575148f729a7d44e4"
+      "hash": "e393cfee672d3eecf2e001ad27de491c22285bdd9851f5ed92260e05bf2857ad"
     },
     "永靖鄉": {
       "path": "data/buildlic/313a41deb5.json.gz",
       "recordCount": 2048,
       "compressedBytes": 221207,
-      "hash": "7b0b95726de17b6022c125b8ac70add7e08172ac5219e70d0c34d155fa65588f"
+      "hash": "3878ffc3ead768b2c61faf04ff272312b7b5ee5e9f31fd8e9b3666cb6fdeaf17"
     },
     "溪州鄉": {
       "path": "data/buildlic/35abb26f2e.json.gz",
       "recordCount": 2132,
       "compressedBytes": 227710,
-      "hash": "f174eeb275f46f7f56feda7418c4ee50d349fb4b1bd51a8583ba194030aa09c2"
+      "hash": "d10adeba61f213ecdd85254e0bcfbda6975a7ebf426550ababa43d8d2bef99ac"
     },
     "溪湖鎮": {
       "path": "data/buildlic/240a37da0a.json.gz",
       "recordCount": 6938,
       "compressedBytes": 675522,
-      "hash": "5853717156b76886b4a64829183972570771f862cb78c59b6ace668a31f10bc1"
+      "hash": "e377cf2436462e81fd3eabada6b870cf5eb4e626f8b5ceb971a6d8e7a9f5f0aa"
     },
     "田中鎮": {
       "path": "data/buildlic/2c2fd9a1f6.json.gz",
       "recordCount": 4271,
       "compressedBytes": 453709,
-      "hash": "b63e1e0c45aa56d8968a2ae2ac1fe42f320e1089019154c5517a18fe9e23efdf"
+      "hash": "0cc2affb8f18138133a6f60c9331818c8b561201f501e875153b11eb9d99f88d"
     },
     "田尾鄉": {
       "path": "data/buildlic/8d968c3878.json.gz",
       "recordCount": 2003,
       "compressedBytes": 208530,
-      "hash": "84012da3e81c24067089dd106adaa638bb4655e84771a6905c8dd3199e8aa6a8"
+      "hash": "9129c521f30643d28392b2a1a3b7d40bf6a0868dac86cb56c44cc67d75382a1a"
     },
     "社頭鄉": {
       "path": "data/buildlic/f52fa3c8b2.json.gz",
       "recordCount": 3874,
       "compressedBytes": 405080,
-      "hash": "3c44aabe572bf038812bd50400f408829cd2401dc49e4a092a9cb6a105ba428a"
+      "hash": "352ee7f9a9e72327e7be2f6f1ee3e7e34ae5045239c04aebc507993567cdeeec"
     },
     "福興鄉": {
       "path": "data/buildlic/be1d41997c.json.gz",
       "recordCount": 7332,
       "compressedBytes": 681546,
-      "hash": "8c8603c922f18a45b16b92da0b4099d9cbc58645fd5d177785a5aca84f2d216c"
+      "hash": "3e9692c260f3ef80b54e0382d17f197bf93a56609cf589bec7bfa05499a90f25"
     },
     "秀水鄉": {
       "path": "data/buildlic/c192809108.json.gz",
       "recordCount": 4521,
       "compressedBytes": 452491,
-      "hash": "ae3aebbbc2631e7a53bb527c911b8129cdf8be34ba1a7ab3787d1d36e0c7422a"
+      "hash": "3b7b5f2990184c271feae8b609251caa94b597ee64515977c3b4ca20be8dc679"
     },
     "竹塘鄉": {
       "path": "data/buildlic/1d91ef888f.json.gz",
       "recordCount": 780,
       "compressedBytes": 74071,
-      "hash": "91e54d653a510862b4ee69c1c2c5dd55745bcfc28e4c2fe18282aa1d4aa8f364"
+      "hash": "23920f19a8c40a96d6b02ae15e7062772aa9a4e8e3feebd62c448c5823b78b42"
     },
     "線西鄉": {
       "path": "data/buildlic/63945cc338.json.gz",
       "recordCount": 2398,
       "compressedBytes": 295220,
-      "hash": "84f5e65419cc901a1822c56f22e7a9251ff9f9f9bd9caa8d117a34ba73f2ab54"
+      "hash": "7015ffb050cfa1aa7992b43b4bc72138aef273d68b734770c17e8b3118a2c226"
     },
     "芬園鄉": {
       "path": "data/buildlic/4d3ea5b3aa.json.gz",
       "recordCount": 1762,
       "compressedBytes": 182941,
-      "hash": "4026791e50088bc4546698c99a538c36ba38ce0845fe8909a7becf37c22ee63b"
+      "hash": "5e1877d6ad56259c6340a3a5d601278923645c9fda72a8637c1e4d60aee851c3"
     },
     "花壇鄉": {
       "path": "data/buildlic/5bf373d35e.json.gz",
       "recordCount": 3703,
       "compressedBytes": 427784,
-      "hash": "7bb9372d3476cda25d3dbf7c1932ef78ca3e92786da725c0696482d4acbcb0ef"
+      "hash": "d536e7c217b47b2b8c807b5da3aa976f4b7f677c0675b357cf83fa70c6a95e53"
     },
     "芳苑鄉": {
       "path": "data/buildlic/ed99d3e495.json.gz",
       "recordCount": 1566,
       "compressedBytes": 222850,
-      "hash": "fafabe3efb9baccf8292b6c73fc3a400a6f1e4d53e987320f817c90054b7d504"
+      "hash": "92288edc4729bf88bce1c37d29577fb8b7ea1381694acaa5113437010515d784"
     },
     "鹿港鎮": {
       "path": "data/buildlic/b8408ca928.json.gz",
       "recordCount": 8814,
       "compressedBytes": 1019021,
-      "hash": "1cac9d0d7ba6a1d2208863929c2b2e33475e6b498b39a9fd3d3d9cb63bc81c14"
+      "hash": "19bea59120000757a22e940e5f61934ddf5bea30c8d462cf60c6f6251c45b575"
     }
   }
 }
